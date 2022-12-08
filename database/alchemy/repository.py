@@ -6,9 +6,8 @@ from database.alchemy.exceptions import NotFoundError
 
 
 class AlchemyRepository(BaseRepository):
-    def __init__(self, session, lazy: bool = False, initial_query: Query = None):
+    def __init__(self, session, initial_query: Query = None):
         super(AlchemyRepository, self).__init__(session)
-        self.lazy = lazy
         self.initial_query = initial_query
 
     def get_initial_query(self):
@@ -21,20 +20,26 @@ class AlchemyRepository(BaseRepository):
     def _execute_query(self, query):
         return self.session.execute(query)
 
-    def get(self, *specification):
+    def get(self, *specification, lazy=False):
         try:
-            if self.lazy:
+            if lazy:
                 return super(AlchemyRepository, self).get(*specification)
             else:
                 return self._execute_query(super(AlchemyRepository, self).get(*specification)).one()[0]
         except NoResultFound as exc:
             raise NotFoundError(exc)
 
-    def filter(self, *specifications):
-        if self.lazy:
+    def filter(self, *specifications, lazy=False):
+        if lazy:
             return super(AlchemyRepository, self).filter(*specifications)
         else:
             return [result[0] for result in self._execute_query(super(AlchemyRepository, self).filter(*specifications))]
+
+    def update(self, obj):
+        """ We don't do anything, as the object is going to be updated with the obj.key = value """
+
+    def update_many(self, specifications, updated_fields):
+        self.filter(*specifications, lazy=True).update(updated_fields)
 
     def save(self, obj):
         self.session.add(obj)

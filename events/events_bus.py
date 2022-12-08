@@ -1,7 +1,7 @@
 from events.events import Event
 
 
-class EventManager:
+class EventBus:
     def __init__(self, event_storage):
         self.event_storage = event_storage
 

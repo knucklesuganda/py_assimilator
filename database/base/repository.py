@@ -23,12 +23,16 @@ class BaseRepository(ABC):
     def get(self, *specifications: Specification):
         return self.apply_specifications(specifications)
 
-    def filter(self, *specifications: Specification) -> Iterable:
+    def filter(self, *specifications: Specification):
         return self.apply_specifications(specifications)
 
     @abstractmethod
     def save(self, obj):
         raise NotImplementedError("save() is not implemented in the repository")
+
+    @abstractmethod
+    def update_many(self, specifications: Iterable[Specification], updated_fields):
+        raise NotImplementedError("update_many() is not implemented in the repository")
 
     @abstractmethod
     def delete(self, obj):
