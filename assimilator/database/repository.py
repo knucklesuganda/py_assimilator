@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
 
-from database.base.specification import Specification
+from assimilator.database.specification import Specification
 
 
 class BaseRepository(ABC):

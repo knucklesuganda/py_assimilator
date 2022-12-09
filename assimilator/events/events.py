@@ -3,11 +3,14 @@ from datetime import datetime
 
 
 class Event:
+    id: int
     event_name: str
     event_date: datetime
 
     def __init__(self, **kwargs):
-        for key, value in kwargs:
+        self.event_date = datetime.now()
+
+        for key, value in kwargs.items():
             setattr(self, key, value)
 
     def dict(self):

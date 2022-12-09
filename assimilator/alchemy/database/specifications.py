@@ -1,4 +1,4 @@
-from database.base.specification import Specification
+from assimilator.database.specification import Specification
 
 
 class FilterSpecification(Specification):

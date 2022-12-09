@@ -1,8 +1,8 @@
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Query
 
-from database.base.repository import BaseRepository
-from database.alchemy.exceptions import NotFoundError
+from assimilator.database.repository import BaseRepository
+from assimilator.alchemy.database.exceptions import NotFoundError
 
 
 class AlchemyRepository(BaseRepository):
