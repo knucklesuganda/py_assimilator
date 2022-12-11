@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from assimilator.events.events import Event
-from assimilator.patterns.context_managers import ContextManagedConnection
+from assimilator.core.events.events import Event
+from assimilator.core.patterns.context_managers import ContextManagedConnection
 
 
 class EventConsumer(ContextManagedConnection):

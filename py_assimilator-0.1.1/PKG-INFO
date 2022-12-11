@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: py_assimilator
+Version: 0.1.1
+Summary: The best python patterns for your projects
+Home-page: https://pypi.python.org/pypi/py_assimilator/
+Author: Andrey Ivanov
+Author-email: python.on.papyrus@gmail.com
+License: LICENSE.md
+Project-URL: Documentation, https://github.com/knucklesuganda/py_assimilator
+Project-URL: Funding, https://github.com/knucklesuganda/py_assimilator
+Project-URL: Say Thanks!, https://github.com/knucklesuganda/py_assimilator
+Project-URL: Source, https://github.com/knucklesuganda/py_assimilator
+Project-URL: Tracker, https://github.com/knucklesuganda/py_assimilator
+Platform: UNKNOWN
+Provides-Extra: database
+Provides-Extra: kafka
+Provides-Extra: full
+License-File: LICENSE.md
+
+# Python assimilator - the best patterns for your projects
+
+

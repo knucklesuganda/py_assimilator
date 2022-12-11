@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from assimilator.database.repository import BaseRepository
+from assimilator.core.database.repository import BaseRepository
 
 
 class UnitOfWork(ABC):

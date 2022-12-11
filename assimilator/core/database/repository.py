@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
 
-from assimilator.database.specification import Specification
+from assimilator.core.database.specification import Specification
 
 
 class BaseRepository(ABC):
@@ -20,10 +20,10 @@ class BaseRepository(ABC):
 
         return query
 
-    def get(self, *specifications: Specification):
+    def get(self, *specifications: Specification, lazy: bool = False):
         return self.apply_specifications(specifications)
 
-    def filter(self, *specifications: Specification):
+    def filter(self, *specifications: Specification, lazy: bool = False):
         return self.apply_specifications(specifications)
 
     @abstractmethod

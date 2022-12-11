@@ -1,7 +1,7 @@
 from abc import ABC
 
-from assimilator.database.unit_of_work import UnitOfWork
-from assimilator.events.events_bus import EventBus
+from assimilator.core.database.unit_of_work import UnitOfWork
+from assimilator.core.events.events_bus import EventBus
 
 
 class OutboxRelay(ABC):
