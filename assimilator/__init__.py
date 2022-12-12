@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 
-import assimilator.core.database
-import assimilator.core.patterns
+import assimilator.core
 import assimilator.internal
 
 
@@ -23,3 +22,7 @@ with optional_dependencies():
 
 with optional_dependencies():
     import assimilator.kafka
+
+
+with optional_dependencies():
+    import assimilator.redis

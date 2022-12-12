@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='py_assimilator',
-    version='0.1.3',
+    version='0.1.4',
     author='Andrey Ivanov',
     author_email='python.on.papyrus@gmail.com',
     url='https://pypi.python.org/pypi/py_assimilator/',
@@ -18,6 +18,7 @@ setup(
     description='The best python patterns for your projects',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
+    requires=['pydantic'],
     extras_require={
         'database': ['SQLAlchemy'],
         'kafka': ['kafka-python'],

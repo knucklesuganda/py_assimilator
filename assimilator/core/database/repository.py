@@ -20,9 +20,11 @@ class BaseRepository(ABC):
 
         return query
 
+    @abstractmethod
     def get(self, *specifications: Specification, lazy: bool = False):
         return self.apply_specifications(specifications)
 
+    @abstractmethod
     def filter(self, *specifications: Specification, lazy: bool = False):
         return self.apply_specifications(specifications)
 
