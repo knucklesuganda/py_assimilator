@@ -23,7 +23,7 @@ class DictRepository(BaseRepository):
 
     def get(self, *specifications: DictSpecification, lazy: bool = False):
         try:
-            key = super(DictRepository, self).get(*specifications, lazy=lazy)
+            key = self.apply_specifications(specifications)
             value = self.session[key]
             return self.model(value=value, key=key)
         except (KeyError, TypeError) as exc:
