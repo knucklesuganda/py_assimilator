@@ -4,7 +4,7 @@ from typing import Iterable, Type
 import redis
 
 from assimilator.core.database.repository import BaseRepository
-from assimilator.core.database.specification import Specification
+from assimilator.core.database.specifications import Specification
 from assimilator.redis.database.models import RedisModel
 from assimilator.redis.database.specifications import FilterSpecification
 
@@ -19,8 +19,12 @@ class RedisLazyCommand:
 
 
 class RedisRepository(BaseRepository):
-    def __init__(self, session: redis.Redis, model: Type[RedisModel],
-                 lazy_command_cls: Type[RedisLazyCommand] = RedisLazyCommand):
+    def __init__(
+        self,
+        session: redis.Redis,
+        model: Type[RedisModel],
+        lazy_command_cls: Type[RedisLazyCommand] = RedisLazyCommand,
+    ):
         super(RedisRepository, self).__init__(session)
         self.lazy_command_cls = lazy_command_cls
         self.model = model
@@ -30,10 +34,7 @@ class RedisRepository(BaseRepository):
         Redis specifications get a str filter and return a new one.
         That is why the initial_query is an empty str.
         """
-        return ""
-
-    def _parse_model(self, data):
-        return self.model.from_orm(json.loads(data))
+        return ''
 
     def get(self, *specifications: Specification, lazy: bool = False):
         key_name = self.apply_specifications(specifications)
@@ -41,7 +42,7 @@ class RedisRepository(BaseRepository):
         if lazy:
             return self.lazy_command_cls(self.session.get, key_name)
         else:
-            return self._parse_model(self.session.get(key_name))
+            return self.model.from_json(self.session.get(key_name))
 
     def filter(self, *specifications: Specification, lazy: bool = False):
         key_name = self.apply_specifications(specifications)
@@ -50,7 +51,7 @@ class RedisRepository(BaseRepository):
             return self.lazy_command_cls(self.session.keys, key_name)
 
         keys = self.session.keys(key_name)
-        return [self._parse_model(value) for value in self.session.mget(*keys)]
+        return [self.model.from_json(value) for value in self.session.mget(*keys)]
 
     def save(self, obj: RedisModel):
         self.session.set(str(obj.id), obj.json())

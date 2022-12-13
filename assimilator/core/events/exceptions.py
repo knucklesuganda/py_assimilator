@@ -1,8 +1,13 @@
+from assimilator.core.database.exceptions import ParsingError
 
 
-class EventParsingError(ValueError):
+class EventError(Exception):
     pass
 
 
-class EventProducingError(ValueError):
+class EventParsingError(ParsingError, EventError):
+    pass
+
+
+class EventProducingError(EventError):
     pass

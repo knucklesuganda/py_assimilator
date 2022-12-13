@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ContextManagedConnection(ABC):
+class StartCloseContextMixin(ABC):
     @abstractmethod
     def close(self):
         raise NotImplementedError("close() is not implemented")

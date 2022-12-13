@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
 
-from assimilator.core.database.specification import Specification
+from assimilator.core.database.specifications import Specification
 
 
 class BaseRepository(ABC):
@@ -22,18 +22,18 @@ class BaseRepository(ABC):
 
     @abstractmethod
     def get(self, *specifications: Specification, lazy: bool = False):
-        return self.apply_specifications(specifications)
+        raise NotImplementedError("get() is not implemented()")
 
     @abstractmethod
     def filter(self, *specifications: Specification, lazy: bool = False):
-        return self.apply_specifications(specifications)
+        raise NotImplementedError("filter() is not implemented()")
 
     @abstractmethod
     def save(self, obj):
         raise NotImplementedError("save() is not implemented in the repository")
 
     @abstractmethod
-    def update_many(self, specifications: Iterable[Specification], updated_fields):
+    def update_many(self, specifications: Iterable[Specification], updated_fields: dict):
         raise NotImplementedError("update_many() is not implemented in the repository")
 
     @abstractmethod

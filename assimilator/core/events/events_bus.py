@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
 
 from assimilator.core.events.events import Event
-from assimilator.core.patterns.context_managers import ContextManagedConnection
+from assimilator.core.patterns.context_managers import StartCloseContextMixin
 
 
-class EventConsumer(ContextManagedConnection):
+class EventConsumer(StartCloseContextMixin):
     @abstractmethod
     def consume(self):
         raise NotImplementedError("consume() is not implemented")
 
 
-class EventProducer(ContextManagedConnection):
+class EventProducer(StartCloseContextMixin):
     @abstractmethod
     def produce(self, event: Event):
         raise NotImplementedError("produce() is not implemented")

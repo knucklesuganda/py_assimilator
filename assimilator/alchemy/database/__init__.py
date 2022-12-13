@@ -1,4 +1,3 @@
-import assimilator.alchemy.database.repository
-import assimilator.alchemy.database.exceptions
-import assimilator.alchemy.database.specifications
-import assimilator.alchemy.database.unit_of_work
+from assimilator.alchemy.database.repository import *
+from assimilator.alchemy.database.specifications import *
+from assimilator.alchemy.database.unit_of_work import *

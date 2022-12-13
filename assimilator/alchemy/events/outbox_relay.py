@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, Text, DateTime, func
+from sqlalchemy import Column, BigInteger, Text, DateTime
 
 from assimilator.core.events import Event
 from assimilator.core.database.unit_of_work import UnitOfWork
@@ -10,10 +10,15 @@ def create_outbox_event_model(Base):
     class OutboxEvent(Base):
         id = Column(BigInteger())
         event_data = Column(Text())
-        event_date = Column(DateTime(timezone=True), server_default=func.now())
+        event_date = Column(DateTime(timezone=True))
 
         def __init__(self, event: Event, *args, **kwargs):
-            super(OutboxEvent, self).__init__(event_data=event.json(), *args, **kwargs)
+            super(OutboxEvent, self).__init__(
+                event_data=event.json(),
+                event_date=event.event_date,
+                *args,
+                **kwargs,
+            )
 
     return OutboxEvent
 
@@ -29,7 +34,7 @@ class AlchemyOutboxRelay(OutboxRelay):
                 events = self.uow.repository.filter()
 
                 for event in events:
-                    self.event_bus.emit(event)
+                    self.event_bus.produce(event)
 
                 self.acknowledge(events)
                 self.uow.commit()
