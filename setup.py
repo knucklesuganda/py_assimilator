@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='py_assimilator',
-    version='0.1.6',
+    version='0.1.8',
     author='Andrey Ivanov',
     author_email='python.on.papyrus@gmail.com',
     url='https://pypi.python.org/pypi/py_assimilator/',

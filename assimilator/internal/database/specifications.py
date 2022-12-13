@@ -7,8 +7,8 @@ class DictSpecification(Specification):
 
 
 class DictKeySpecification(DictSpecification):
-    def __init__(self, key: str):
-        self.key = key
+    def __init__(self, id: str):
+        self.id = id
 
     def apply(self, query):
-        return f"{query}{self.key}"
+        return f"{query}{self.id}"
