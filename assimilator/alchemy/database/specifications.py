@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Query
 
-from assimilator.core.database.specifications import Specification
+from assimilator.core.database.specifications import Specification, specification
 
 
 class AlchemySpecification(Specification):
@@ -8,10 +8,6 @@ class AlchemySpecification(Specification):
         return super(AlchemySpecification, self).apply(query)
 
 
-class AlchemyFilterSpecification(AlchemySpecification):
-    def __init__(self, *filters, **filters_by):
-        self.filters = filters
-        self.filters_by = filters_by
-
-    def apply(self, query):
-        return query.filter(*self.filters).filter_by(**self.filters_by)
+@specification
+def alchemy_filter(query: Query, *filters, **filters_by):
+    return query.filter(*filters).filter_by(**filters_by)

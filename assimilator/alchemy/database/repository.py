@@ -1,29 +1,20 @@
-from sqlalchemy.exc import NoResultFound, SQLAlchemyError
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Query
 
 from assimilator.core.database import BaseRepository, Specification
-from assimilator.core.database.exceptions import NotFoundError, DataLayerError
+from assimilator.core.database.exceptions import NotFoundError
 
 
 class AlchemyRepository(BaseRepository):
     def __init__(self, session, initial_query: Query = None):
-        super(AlchemyRepository, self).__init__(session)
-        self.initial_query = initial_query
-
-    def get_initial_query(self):
-        if self.initial_query is not None:
-            return self.initial_query
-        else:
-            raise NotImplementedError("You must either pass the initial query "
-                                      "to the constructor or define get_initial_query()")
+        super(AlchemyRepository, self).__init__(session=session, initial_query=initial_query)
 
     def _execute_query(self, query):
         return self.session.execute(query)
 
     def get(self, *specifications: Specification, lazy=False):
         try:
-            applied_specifications = self.apply_specifications(specifications)
-
+            applied_specifications = self._apply_specifications(specifications)
             if lazy:
                 return applied_specifications
 
@@ -33,20 +24,14 @@ class AlchemyRepository(BaseRepository):
             raise NotFoundError(exc)
 
     def filter(self, *specifications: Specification, lazy=False):
-        applied_specifications = self.apply_specifications(specifications)
-
+        applied_specifications = self._apply_specifications(specifications)
         if lazy:
             return applied_specifications
+
         return [result[0] for result in self._execute_query(applied_specifications)]
 
     def update(self, obj):
         """ We don't do anything, as the object is going to be updated with the obj.key = value """
-
-    def update_many(self, specifications, updated_fields):
-        try:
-            self.filter(*specifications, lazy=True).update(updated_fields)
-        except SQLAlchemyError as exc:
-            raise DataLayerError(exc)
 
     def save(self, obj):
         self.session.add(obj)

@@ -37,7 +37,7 @@ class RedisRepository(BaseRepository):
         return ''
 
     def get(self, *specifications: Specification, lazy: bool = False):
-        key_name = self.apply_specifications(specifications)
+        key_name = self._apply_specifications(specifications)
 
         if lazy:
             return self.lazy_command_cls(self.session.get, key_name)
@@ -45,7 +45,7 @@ class RedisRepository(BaseRepository):
             return self.model.from_json(self.session.get(key_name))
 
     def filter(self, *specifications: Specification, lazy: bool = False):
-        key_name = self.apply_specifications(specifications)
+        key_name = self._apply_specifications(specifications)
 
         if lazy:
             return self.lazy_command_cls(self.session.keys, key_name)
@@ -55,9 +55,6 @@ class RedisRepository(BaseRepository):
 
     def save(self, obj: RedisModel):
         self.session.set(str(obj.id), obj.json())
-
-    def update_many(self, specifications: Iterable[Specification], updated_fields):
-        raise NotImplementedError()     # TODO: implement
 
     def delete(self, obj: RedisModel):
         self.session.delete(str(obj.id))

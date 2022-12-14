@@ -3,9 +3,8 @@ from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 
 class InternalEventConsumer(EventConsumer):
-    def __init__(self, event_storage: list, listeners: dict):
+    def __init__(self, event_storage: list):
         self.event_storage = event_storage
-        self.listeners = listeners
 
     def close(self):
         pass
@@ -14,11 +13,7 @@ class InternalEventConsumer(EventConsumer):
         pass
 
     def consume(self):
-        for _ in range(len(self.event_storage)):
-            event = self.event_storage.pop()
-
-            for listener in self.listeners:
-                listener(event)
+        yield self.event_storage.pop()
 
 
 class InternalEventProducer(EventProducer):

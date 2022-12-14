@@ -1,18 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
 
 from assimilator.core.database.specifications import Specification
 
 
 class BaseRepository(ABC):
-    def __init__(self, session):
+    def __init__(self, session, initial_query=None):
         self.session = session
+        self.initial_query = initial_query
 
-    @abstractmethod
     def get_initial_query(self):
-        raise NotImplementedError("get_initial_query() must be implemented")
+        if self.initial_query is not None:
+            return self.initial_query
+        else:
+            raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 
-    def apply_specifications(self, specifications):
+    def _apply_specifications(self, specifications):
         query = self.get_initial_query()
 
         for specification in specifications:
@@ -31,10 +33,6 @@ class BaseRepository(ABC):
     @abstractmethod
     def save(self, obj):
         raise NotImplementedError("save() is not implemented in the repository")
-
-    @abstractmethod
-    def update_many(self, specifications: Iterable[Specification], updated_fields: dict):
-        raise NotImplementedError("update_many() is not implemented in the repository")
 
     @abstractmethod
     def delete(self, obj):

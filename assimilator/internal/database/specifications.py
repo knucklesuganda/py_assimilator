@@ -1,14 +1,11 @@
-from assimilator.core.database import Specification
+from assimilator.core.database import Specification, specification
 
 
-class DictSpecification(Specification):
-    def apply(self, query: str) -> str:     # returns the key
-        return super(DictSpecification, self).apply(query)
+class InternalSpecification(Specification):
+    def apply(self, query: str) -> str:     # returns the str key
+        return super(InternalSpecification, self).apply(query)
 
 
-class DictKeySpecification(DictSpecification):
-    def __init__(self, id: str):
-        self.id = id
-
-    def apply(self, query):
-        return f"{query}{self.id}"
+@specification
+def key_specification(query, key: str):
+    return f"{query}{key}"

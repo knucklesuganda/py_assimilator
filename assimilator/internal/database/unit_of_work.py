@@ -2,9 +2,9 @@ from assimilator.core.database import UnitOfWork
 from assimilator.core.database.repository import BaseRepository
 
 
-class DictUnitOfWork(UnitOfWork):
+class InternalUnitOfWork(UnitOfWork):
     def __init__(self, repository: BaseRepository):
-        super(DictUnitOfWork, self).__init__(repository)
+        super(InternalUnitOfWork, self).__init__(repository)
         self._saved_data = None
 
     def begin(self):
