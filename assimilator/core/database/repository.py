@@ -19,14 +19,14 @@ class BaseRepository(ABC):
         self.session = session
         self.initial_query = initial_query
 
-    def get_initial_query(self):
+    def _get_initial_query(self):
         if self.initial_query is not None:
             return self.initial_query
         else:
             raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 
     def _apply_specifications(self, specifications: Iterable[Specification]) -> Any:
-        query = self.get_initial_query()
+        query = self._get_initial_query()
 
         for specification in specifications:
             query = specification(query)

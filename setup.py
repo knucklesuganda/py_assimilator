@@ -22,6 +22,6 @@ setup(
     extras_require={
         'database': ['SQLAlchemy'],
         'kafka': ['kafka-python'],
-        'full': ['SQLAlchemy', 'kafka-python'],
+        'redis': ['redis'],
     },
 )

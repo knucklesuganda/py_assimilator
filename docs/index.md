@@ -24,5 +24,7 @@ These are different use cases for the patterns implemented.
 Providers are different patterns for external modules like SQLAlchemy or 
 FastAPI.
 
-- Alchemy(Database, Events) - patterns for SQLAlchemy for both database and events
-- Kafka(Events) - patterns for kafka-python for events
+- Alchemy(Database, Events) - patterns for [SQLAlchemy](https://docs.sqlalchemy.org/en/20/) for both database and events
+- Kafka(Events) - patterns in [Kafka](https://kafka.apache.org/) related to events
+- Internal(Database, Events) - internal is the type of provider that saves everything in memory(dict, list and all the tools within your app)
+- Redis(Database, Events) - redis allows us to work with [Redis](https://redis.io/) memory database

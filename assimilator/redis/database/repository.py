@@ -2,9 +2,9 @@ from typing import Type
 
 import redis
 
+from assimilator.redis.database import RedisModel
 from assimilator.core.database.repository import BaseRepository, LazyCommand
 from assimilator.internal.database.specifications import key_specification, InternalSpecification
-from assimilator.redis.database import RedisModel
 
 
 class RedisRepository(BaseRepository):
