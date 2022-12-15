@@ -3,7 +3,7 @@ from typing import Type
 
 from pydantic import ValidationError, BaseModel
 
-from assimilator.core.database.exceptions import ParsingError
+from assimilator.core.exceptions import ParsingError
 
 
 class JSONParsedMixin:

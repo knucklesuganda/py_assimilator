@@ -1,4 +1,4 @@
-from assimilator.core.database.exceptions import ParsingError
+from assimilator.core.exceptions import ParsingError
 
 
 class EventError(Exception):

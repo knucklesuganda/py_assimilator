@@ -1,10 +1,10 @@
 import json
-from collections.abc import Iterable
+from typing import Iterable
 
 from kafka import KafkaConsumer, KafkaProducer
 from kafka.errors import KafkaError
 
-from assimilator.core.events import Event, UnknownEvent
+from assimilator.core.events import Event, ExternalEvent
 from assimilator.core.events import EventParsingError, EventProducingError
 from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
@@ -20,12 +20,12 @@ class KafkaEventConsumer(EventConsumer):
     def start(self):
         """ Connected by default """
 
-    def consume(self) -> Iterable[UnknownEvent]:
+    def consume(self) -> Iterable[ExternalEvent]:
         self.consumer.subscribe(self.topics)
 
         for message in self.consumer:
             try:
-                yield UnknownEvent.from_json(message.value)
+                yield ExternalEvent.from_json(message.value)
             except json.JSONDecoder as exc:
                 raise EventParsingError(exc)
 

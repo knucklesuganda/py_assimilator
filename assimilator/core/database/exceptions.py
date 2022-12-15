@@ -10,7 +10,3 @@ class NotFoundError(DataLayerError):
 
 class InvalidQueryError(DataLayerError):
     pass
-
-
-class ParsingError(DataLayerError):
-    pass

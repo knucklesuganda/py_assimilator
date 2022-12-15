@@ -12,7 +12,7 @@ class Event(JSONParsedMixin, BaseModel):
     event_date: datetime = Field(default_factory=datetime.now)
 
 
-class UnknownEvent(Event):
+class ExternalEvent(Event):
     """ The event type is unknown, so all the fields are in data """
     data: Any
 

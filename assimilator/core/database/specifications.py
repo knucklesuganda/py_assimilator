@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from functools import wraps
 
 
 class Specification(ABC):
@@ -12,6 +13,8 @@ class Specification(ABC):
 
 def specification(func: callable):
     def create_specification(*args, **kwargs):
+
+        @wraps(func)
         def created_specification(query):
             return func(query=query, *args, **kwargs)
 
