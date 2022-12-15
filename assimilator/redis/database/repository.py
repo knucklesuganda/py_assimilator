@@ -26,7 +26,7 @@ class RedisRepository(BaseRepository):
         return [self.model.from_json(value) for value in self.session.mget(self.session.keys(key_name))]
 
     def save(self, obj: RedisModel):
-        self.session.set(str(obj.id), obj.json())
+        self.session.set(str(obj.id), obj.json(), ex=obj.expire_in)
 
     def delete(self, obj: RedisModel):
         self.session.delete(str(obj.id))
