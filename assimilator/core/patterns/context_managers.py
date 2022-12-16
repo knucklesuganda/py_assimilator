@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 
 class StartCloseContextMixin(ABC):
     @abstractmethod
-    def close(self):
+    def close(self) -> None:
         raise NotImplementedError("close() is not implemented")
 
     @abstractmethod
-    def start(self):
+    def start(self) -> None:
         raise NotImplementedError("start() is not implemented")
 
     def __enter__(self):
