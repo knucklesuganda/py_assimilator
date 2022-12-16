@@ -6,17 +6,20 @@ from assimilator.core.events import OutboxRelay
 from assimilator.core.events.events_bus import EventBus
 
 
-def create_outbox_event_model(Base):
+def create_outbox_event_model(tablename: str, Base):
     class OutboxEvent(Base):
+        __tablename__ = tablename
+
         id = Column(BigInteger(), primary_key=True)
         event_data = Column(Text())
         event_date = Column(DateTime(timezone=True))
 
         def __init__(self, event: Event, *args, **kwargs):
             super(OutboxEvent, self).__init__(
+                *args,
+                id=event.id,
                 event_data=event.json(),
                 event_date=event.event_date,
-                *args,
                 **kwargs,
             )
 
@@ -31,12 +34,11 @@ class AlchemyOutboxRelay(OutboxRelay):
     def start(self):
         while True:
             with self.uow:
-                events = self.uow.repository.filter()
+                objects = self.uow.repository.filter()
 
-                for event in events:
-                    self.event_bus.produce(event)
-
-                self.acknowledge(events)
+                for event in objects:
+                    self.event_bus.produce(event.event)
+                    self.acknowledge(event.event)
                 self.uow.commit()
 
             self.delay_function()
@@ -46,4 +48,4 @@ class AlchemyOutboxRelay(OutboxRelay):
 
     def acknowledge(self, events):
         for event in events:
-            self.uow.repository.delete(event)
+            self.uow.repository.delete(event.event)
