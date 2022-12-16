@@ -138,6 +138,8 @@ venv.bak/
 # mkdocs documentation
 /site
 .idea/
+py_assimilator-0.1.1/
+py_assimilator.egg-info/
 
 # mypy
 .mypy_cache/

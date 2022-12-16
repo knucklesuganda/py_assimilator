@@ -1,0 +1,22 @@
+site_name: Assimilator - the best Python patterns
+theme:
+  name: material
+nav:
+  - Introduction: index.md
+  - Concepts: concepts.md
+  - Patterns types:
+    - Database: patterns/database.md
+    - Events: patterns/events.md
+  - Internal:
+    - Database: internal/database.md
+    - Events: internal/events.md
+  - Alchemy:
+    - Database: alchemy/database.md
+    - Events: alchemy/events.md
+  - Kafka:
+    - Events: kafka/events.md
+  - Redis:
+    - Database: redis/database.md
+    - Events: redis/events.md
+  - Advanced topics:
+    - Core: core/core.md

@@ -1,7 +1,7 @@
-from sqlalchemy import exc
+from sqlalchemy.exc import IntegrityError
 
-from database.base.unit_of_work import UnitOfWork
-from database.alchemy.exceptions import InvalidQueryError
+from assimilator.core.database.unit_of_work import UnitOfWork
+from assimilator.core.database.exceptions import InvalidQueryError
 
 
 class AlchemyUnitOfWork(UnitOfWork):
@@ -17,5 +17,5 @@ class AlchemyUnitOfWork(UnitOfWork):
     def commit(self):
         try:
             self.repository.session.commit()
-        except exc.IntegrityError:
-            raise InvalidQueryError()
+        except IntegrityError as exc:
+            raise InvalidQueryError(exc)
