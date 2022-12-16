@@ -20,3 +20,6 @@ nav:
     - Events: redis/events.md
   - Advanced topics:
     - Core: core/core.md
+repo_url: https://github.com/knucklesuganda/py_assimilator
+site_description: PyAssimilator allows you to write the best patterns in your projects.
+site_author: Andrey Ivanov
