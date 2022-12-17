@@ -47,3 +47,9 @@ class AlchemyOutboxRelay(OutboxRelay):
     def acknowledge(self, events):
         for event in events:
             self.uow.repository.delete(event)
+
+
+__all__ = [
+    'create_outbox_event_model',
+    'AlchemyOutboxRelay',
+]

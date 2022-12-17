@@ -18,7 +18,21 @@ def specification(func: Callable):
 
         @wraps(func)
         def created_specification(query):
-            return func(query=query, *args, **kwargs)
+            return func(*args, query=query, **kwargs)
 
         return created_specification
     return create_specification
+
+
+class SpecificationList:
+    filter: Specification
+    order: Specification
+    paginate: Specification
+    join: Specification
+
+
+__all__ = [
+    'SpecificationList',
+    'Specification',
+    'specification',
+]

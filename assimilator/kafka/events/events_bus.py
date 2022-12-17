@@ -51,3 +51,9 @@ class KafkaEventProducer(EventProducer):
 
     def close(self):
         self.producer.close()
+
+
+__all__ = [
+    'KafkaEventConsumer',
+    'KafkaEventProducer',
+]

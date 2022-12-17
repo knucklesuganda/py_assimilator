@@ -14,3 +14,8 @@ class OutboxRelay(ABC):
 
     def acknowledge(self, events):
         raise NotImplementedError("acknowledge() is not implemented")
+
+
+__all__ = [
+    'OutboxRelay',
+]

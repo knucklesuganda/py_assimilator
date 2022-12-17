@@ -34,3 +34,8 @@ class UnitOfWork(ABC):
             raise exc_val
         else:
             self.close()
+
+
+__all__ = [
+    'UnitOfWork',
+]

@@ -13,3 +13,8 @@ class JSONParsedMixin:
             return cls(**json.loads(data))
         except ValidationError as exc:
             raise ParsingError(exc)
+
+
+__all__ = [
+    'JSONParsedMixin',
+]

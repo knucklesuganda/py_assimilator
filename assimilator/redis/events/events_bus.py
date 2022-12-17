@@ -48,3 +48,9 @@ class RedisEventProducer(EventProducer):
 
     def close(self):
         self.close()
+
+
+__all__ = [
+    'RedisEventConsumer',
+    'RedisEventProducer',
+]

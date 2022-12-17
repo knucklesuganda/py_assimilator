@@ -19,3 +19,8 @@ class StartCloseContextMixin(ABC):
 
         if exc_type is not None:
             raise exc_val
+
+
+__all__ = [
+    'StartCloseContextMixin',
+]

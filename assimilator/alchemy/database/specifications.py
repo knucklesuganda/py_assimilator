@@ -1,6 +1,8 @@
+from typing import Iterable, Collection
+
 from sqlalchemy.orm import Query
 
-from assimilator.core.database.specifications import Specification, specification
+from assimilator.core.database.specifications import Specification, specification, SpecificationList
 
 
 class AlchemySpecification(Specification):
@@ -9,5 +11,43 @@ class AlchemySpecification(Specification):
 
 
 @specification
-def alchemy_filter(query: Query, *filters, **filters_by):
+def alchemy_filter(query: Query, filters: Iterable, **filters_by) -> Query:
     return query.filter(*filters).filter_by(**filters_by)
+
+
+@specification
+def alchemy_order(query: Query, clauses: Iterable[str]) -> Query:
+    return query.order_by(*clauses)
+
+
+@specification
+def alchemy_paginate(query: Query, limit: int, offset: int) -> Query:
+    return query.limit(limit).offset(offset)
+
+
+@specification
+def alchemy_join(query: Query, targets: Collection, join_args: Collection[dict]) -> Query:
+    if len(join_args) < len(targets):
+        join_args += [dict() for _ in range(len(targets) - len(join_args))]
+
+    for target, join_data in zip(targets, join_args):
+        query = query.join(target, **join_data)
+
+    return query
+
+
+class AlchemySpecificationList(SpecificationList):
+    filter = alchemy_filter
+    order = alchemy_order
+    paginate = alchemy_paginate
+    join = alchemy_join
+
+
+__all__ = [
+    'AlchemySpecificationList',
+    'AlchemySpecification',
+    'alchemy_filter',
+    'alchemy_order',
+    'alchemy_paginate',
+    'alchemy_join',
+]
