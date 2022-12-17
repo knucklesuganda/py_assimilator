@@ -1,11 +1,15 @@
 # Assimilator - the best Python patterns for the best projects
 
-## Installation
+## Install now
 * `pip install py_assimilator`
 
 ## Source
 * [Github](https://github.com/knucklesuganda/py_assimilator)
 * [PyPI](https://pypi.org/project/py-assimilator/)
+* [Documentation](https://knucklesuganda.github.io/py_assimilator/)
+* [Github](https://github.com/knucklesuganda/py_assimilator)
+* [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
+* [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
 
 ## About patterns in coding
 They are useful, but only to some extent. Most of them are not suitable for 

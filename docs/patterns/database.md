@@ -346,3 +346,4 @@ def create_user(username: str, uow: UnitOfWork):
         1 / 0   # ZeroDivisionError. UnitOfWork calls rollback automatically.
         uow.commit()    # nothing is saved, since the rollback was called.
 ```
+p
