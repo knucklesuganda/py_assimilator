@@ -7,22 +7,22 @@ class InternalSpecification(Specification):
 
 
 @specification
-def internal_filter(query: str, key: str) -> str:
+def internal_filter(key: str, query: str) -> str:
     return f"{query}{key}"
 
 
 @specification
-def internal_order(query: str) -> str:
+def internal_order(*args, query: str, **kwargs) -> str:
     return query
 
 
 @specification
-def internal_paginate(query: str) -> str:
+def internal_paginate(*args, query: str, **kwargs) -> str:
     return query
 
 
 @specification
-def internal_join(query: str) -> str:
+def internal_join(*args, query: str, **kwargs) -> str:
     return query
 
 

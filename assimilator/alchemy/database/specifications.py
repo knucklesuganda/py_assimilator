@@ -11,22 +11,22 @@ class AlchemySpecification(Specification):
 
 
 @specification
-def alchemy_filter(query: Query, filters: Iterable, **filters_by) -> Query:
+def alchemy_filter(*filters, query: Query, **filters_by) -> Query:
     return query.filter(*filters).filter_by(**filters_by)
 
 
 @specification
-def alchemy_order(query: Query, clauses: Iterable[str]) -> Query:
+def alchemy_order(*clauses: str, query: Query) -> Query:
     return query.order_by(*clauses)
 
 
 @specification
-def alchemy_paginate(query: Query, limit: int, offset: int) -> Query:
+def alchemy_paginate(limit: int, offset: int, query: Query) -> Query:
     return query.limit(limit).offset(offset)
 
 
 @specification
-def alchemy_join(query: Query, targets: Collection, join_args: Collection[dict]) -> Query:
+def alchemy_join(targets: Collection, join_args: Collection[dict], query: Query) -> Query:
     if len(join_args) < len(targets):
         join_args += [dict() for _ in range(len(targets) - len(join_args))]
 
