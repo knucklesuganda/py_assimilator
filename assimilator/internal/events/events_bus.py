@@ -28,3 +28,9 @@ class InternalEventProducer(EventProducer):
 
     def close(self):
         pass
+
+
+__all__ = [
+    'InternalEventConsumer',
+    'InternalEventProducer',
+]

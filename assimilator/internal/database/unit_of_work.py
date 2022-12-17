@@ -15,7 +15,13 @@ class InternalUnitOfWork(UnitOfWork):
         self.repository.session = self._saved_data
 
     def commit(self):
-        self._saved_data = self.repository.session
+        self._saved_data = dict(self.repository.session)
+        self.repository.session = self._saved_data
 
     def close(self):
-        pass
+        self._saved_data = None
+
+
+__all__ = [
+    'InternalUnitOfWork',
+]

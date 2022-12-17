@@ -11,3 +11,10 @@ class EventParsingError(ParsingError, EventError):
 
 class EventProducingError(EventError):
     pass
+
+
+__all__ = [
+    'EventError',
+    'EventParsingError',
+    'EventProducingError',
+]

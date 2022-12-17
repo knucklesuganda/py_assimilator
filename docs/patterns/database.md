@@ -8,9 +8,10 @@ functions that help us change and query our data from any source. The beauty of 
 is that you can use it with SQL, text files, cache, S3, external API's or any kind of data storage.
 
 
-###### `__init__(session, initial_query)`
+###### `__init__(session, specifications: SpecificationList, initial_query)`
 - `session` - each repository has a session that works as the primary data source. It can be your database connection, a text file or a data structure.
 - `initial_query` - the initial query that you use in the data storage. We will show how it works later. It can be an SQL query, a key in the dictionary or anything else.
+- `specifications: SpecificationList` - an object that contains links to the specifications that are used to create your queries
 
 ###### `_get_initial_query()`
 returns the initial query used in the `_apply_specifications()`
@@ -21,7 +22,7 @@ specifications gets a list of specifications and applies them to the query retur
 in _get_initial_query(). The idea is the following: each specification gets a query and
 adds some filters to it. At the end we get a fully working query modified with the
 specifications provided by the user.
-- `specifications` - an iterable of specifications that can be used to specify some conditions in the query
+- `specifications: Iterable[Specifications]` - an iterable of specifications that can be used to specify some conditions in the query
 > Specification is a pattern that adds filters or anything
 else that specifies what kind of data we want.
 
@@ -196,6 +197,87 @@ user = repository.get(
 ```
 
 
+## SpecificationList
+SpecificationList is a static class that contains basic specifications
+for our repository.
+Specifications:
+- `filter()` - filters the data
+- `order()` - filters the data
+- `paginate()` - paginates the data(limits the results, offsets them)
+- `join()` - joins entities together(join a table, get related data)
+
+
+The reason we use `SpecificationList` is because we want to have an abstraction for our specifications.
+Take two examples:
+
+```python
+from dependencies import UserRepository
+from assimilator.alchemy.database import alchemy_filter
+
+
+def get_user(id: int, repository: UserRepository):
+    return repository.get(alchemy_filter(id=id)) # we use alchemy_filter() directly 
+```
+In that example, we use `alchemy_filter()` directly, which may not seem as an issue, however,
+if we would want to change our `UserRepository` to work with `RedisRepository`, then we would
+have to change all of our specifications ourselves.
+
+In order to fix this, we can use SpecificationList:
+```python
+from dependencies import UserRepository
+
+
+def get_user(id: int, repository: UserRepository):
+    return repository.get(repository.specifications.filter(id=id))
+    # we call the filter from repository specifications. 
+```
+Now, we only have to change the repository without worrying about other parts of the code.
+
+Here is how you can create your own SpecificationList:
+
+```python
+from assimilator.core.database import SpecificationList, specification, Specification
+from pagination_func import paginate_data
+
+
+@specification
+def filter_specification(filters, query):
+    return query.do_filter(filters)
+
+
+@specification
+def join_specification(query):
+    return query    # we do not need joins in our data structure, so we leave it
+
+
+class OrderSpecification(Specification):
+    def __init__(self, orders):
+        self.orders = orders
+
+    def apply(self, query):
+        return query.make_order(self.orders)
+
+
+class MySpecificationList(SpecificationList):
+    filter = filter_specification  # we use function name as the specification
+    order = OrderSpecification  # lambda specification
+    paginate = paginate_data  # imported specification
+    join = join_specification
+```
+Notice that we never call the functions, cause the only thing we need are links to the 
+specifications.
+
+Then, when you build your Repository:
+```python
+from specifications import MySpecificationList
+
+repository = MyRepository(session=session, specifications=MySpecificationList)
+```
+Once you have done that, the repository will use your specifications.
+
+> Of course, you can still use specifications directly, but if you ever need to change
+> the repository, then it may be a problem.
+
 ## Unit of Work
 Unit of work allows us to work with transactions and repositories that change the data.
 The problem with repository is the transaction management. We want to make our transaction management
@@ -264,3 +346,4 @@ def create_user(username: str, uow: UnitOfWork):
         1 / 0   # ZeroDivisionError. UnitOfWork calls rollback automatically.
         uow.commit()    # nothing is saved, since the rollback was called.
 ```
+p

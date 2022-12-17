@@ -7,7 +7,7 @@ setup(
     author_email='python.on.papyrus@gmail.com',
     url='https://pypi.python.org/pypi/py_assimilator/',
     project_urls={
-        'Documentation': 'https://github.com/knucklesuganda/py_assimilator',
+        'Documentation': 'https://knucklesuganda.github.io/py_assimilator/',
         'Github': 'https://github.com/knucklesuganda/py_assimilator',
         'Youtube RU': 'https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw',
         'Youtube ENG': 'https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA',

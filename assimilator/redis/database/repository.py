@@ -2,14 +2,20 @@ from typing import Type
 
 import redis
 
+from assimilator.core.database import SpecificationList
 from assimilator.redis.database import RedisModel
 from assimilator.core.database.repository import BaseRepository, LazyCommand
-from assimilator.internal.database.specifications import key_specification, InternalSpecification
+from assimilator.internal.database.specifications import InternalSpecification, InternalSpecificationList
 
 
 class RedisRepository(BaseRepository):
-    def __init__(self, session: redis.Redis, model: Type[RedisModel]):
-        super(RedisRepository, self).__init__(session, initial_query='')
+    def __init__(
+        self,
+        session: redis.Redis,
+        model: Type[RedisModel],
+        specifications: Type[SpecificationList] = InternalSpecificationList,
+    ):
+        super(RedisRepository, self).__init__(session, initial_query='', specifications=specifications)
         self.model = model
 
     def get(self, *specifications: InternalSpecification, lazy: bool = False):
@@ -35,10 +41,15 @@ class RedisRepository(BaseRepository):
         self.save(obj)
 
     def is_modified(self, obj: RedisModel):
-        return self.get(key_specification(obj.id), lazy=False) == obj
+        return self.get(self.specifications.filter(obj.id), lazy=False) == obj
 
     def refresh(self, obj: RedisModel):
-        fresh_obj = self.get(key_specification(obj.id), lazy=False)
+        fresh_obj = self.get(self.specifications.filter(obj.id), lazy=False)
 
         for key, value in fresh_obj.dict().items():
             setattr(obj, key, value)
+
+
+__all__ = [
+    'RedisRepository',
+]

@@ -19,3 +19,8 @@ class AlchemyUnitOfWork(UnitOfWork):
             self.repository.session.commit()
         except IntegrityError as exc:
             raise InvalidQueryError(exc)
+
+
+__all__ = [
+    'AlchemyUnitOfWork',
+]

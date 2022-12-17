@@ -18,3 +18,8 @@ class RedisUnitOfWork(UnitOfWork):
         self.repository.session.reset()
         self.repository.session = self._saved_session
         self._saved_session = None
+
+
+__all__ = [
+    'RedisUnitOfWork',
+]

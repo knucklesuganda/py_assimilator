@@ -9,3 +9,8 @@ class AlchemyOutboxRepository(AlchemyRepository):
     def save(self, obj):
         super(AlchemyOutboxRepository, self).save(obj)
         super(AlchemyOutboxRepository, self).save(self.event_model(obj.outbox_event))
+
+
+__all__ = [
+    'AlchemyOutboxRepository',
+]

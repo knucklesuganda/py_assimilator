@@ -27,3 +27,10 @@ class EventBus:
 
     def consume(self) -> Iterator[Event]:
         return self.consumer.consume()
+
+
+__all__ = [
+    'EventConsumer',
+    'EventProducer',
+    'EventBus',
+]

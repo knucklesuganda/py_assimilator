@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Union, Any, Optional, Callable, Iterable
+from typing import Union, Any, Optional, Callable, Iterable, Type
 
-from assimilator.core.database.specifications import Specification
+from assimilator.core.database.specifications import Specification, SpecificationList
 
 
 class LazyCommand:
@@ -15,9 +15,10 @@ class LazyCommand:
 
 
 class BaseRepository(ABC):
-    def __init__(self, session: Any, initial_query: Optional[Any] = None):
+    def __init__(self, session: Any, specifications: Type[SpecificationList], initial_query: Optional[Any] = None):
         self.session = session
         self.initial_query = initial_query
+        self.specifications = specifications
 
     def _get_initial_query(self):
         if self.initial_query is not None:
@@ -60,3 +61,9 @@ class BaseRepository(ABC):
     @abstractmethod
     def refresh(self, obj) -> None:
         raise NotImplementedError("refresh() is not implemented in the repository")
+
+
+__all__ = [
+    'LazyCommand',
+    'BaseRepository',
+]
