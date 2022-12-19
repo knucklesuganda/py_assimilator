@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Callable, Union
 from functools import wraps
 
 
@@ -23,15 +23,19 @@ def specification(func: Callable):
     return create_specification
 
 
+SpecificationType = Union[Specification, Callable]
+
+
 class SpecificationList:
-    filter: Specification
-    order: Specification
-    paginate: Specification
-    join: Specification
+    filter: SpecificationType
+    order: SpecificationType
+    paginate: SpecificationType
+    join: SpecificationType
 
 
 __all__ = [
     'SpecificationList',
     'Specification',
     'specification',
+    'SpecificationType',
 ]

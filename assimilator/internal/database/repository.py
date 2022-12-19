@@ -34,15 +34,13 @@ class InternalRepository(BaseRepository):
         return models
 
     def save(self, obj):
-        obj_copy = obj.copy()
-        self.session[str(obj_copy.id)] = obj_copy
+        self.session[str(obj.id)] = obj
 
     def delete(self, obj):
         del self.session[str(obj.id)]
 
     def update(self, obj):
-        obj_copy = obj.copy()
-        self.session[str(obj_copy.id)] = obj_copy
+        self.session[str(obj.id)] = obj
 
     def is_modified(self, obj):
         return self.get(self.specifications.filter(obj.id)) == obj

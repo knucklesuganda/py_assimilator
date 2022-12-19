@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Union, Any, Optional, Callable, Iterable, Type
 
-from assimilator.core.database.specifications import Specification, SpecificationList
+from assimilator.core.database.specifications import SpecificationList, SpecificationType
 
 
 class LazyCommand:
@@ -26,7 +26,7 @@ class BaseRepository(ABC):
         else:
             raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 
-    def _apply_specifications(self, specifications: Iterable[Specification]) -> Any:
+    def _apply_specifications(self, specifications: Iterable[SpecificationType]) -> Any:
         query = self._get_initial_query()
 
         for specification in specifications:
@@ -35,11 +35,11 @@ class BaseRepository(ABC):
         return query
 
     @abstractmethod
-    def get(self, *specifications: Specification, lazy: bool = False) -> Union[LazyCommand, Any]:
+    def get(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand, Any]:
         raise NotImplementedError("get() is not implemented()")
 
     @abstractmethod
-    def filter(self, *specifications: Specification, lazy: bool = False) -> Union[LazyCommand, Iterable]:
+    def filter(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand, Iterable]:
         raise NotImplementedError("filter() is not implemented()")
 
     @abstractmethod
