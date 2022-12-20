@@ -23,21 +23,21 @@ class AlchemyRepository(BaseRepository):
 
     def get(self, *specifications: Specification, lazy=False):
         try:
-            query = self._apply_specifications(specifications)
+            data = self._execute_query(self._apply_specifications(specifications))
             if lazy:
-                return query
+                return data
 
-            return self._execute_query(query).one()[0]
+            return data.one()[0]
 
         except NoResultFound as exc:
             raise NotFoundError(exc)
 
     def filter(self, *specifications: Specification, lazy=False):
-        query = self._apply_specifications(specifications)
+        data = self._execute_query(self._apply_specifications(specifications))
         if lazy:
-            return query
+            return data
 
-        return [result[0] for result in self._execute_query(query)]
+        return [result[0] for result in self._execute_query(data)]
 
     def update(self, obj):
         """ We don't do anything, as the object is going to be updated with the obj.key = value """
