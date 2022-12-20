@@ -37,7 +37,7 @@ class AlchemyRepository(BaseRepository):
         if lazy:
             return data
 
-        return [result[0] for result in self._execute_query(data)]
+        return [result[0] for result in data]
 
     def update(self, obj):
         """ We don't do anything, as the object is going to be updated with the obj.key = value """
