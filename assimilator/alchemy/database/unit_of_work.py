@@ -12,7 +12,7 @@ class AlchemyUnitOfWork(UnitOfWork):
         self.repository.session.rollback()
 
     def close(self):
-        self.repository.session.close()
+        pass
 
     def commit(self):
         try:
