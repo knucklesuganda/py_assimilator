@@ -6,6 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="PyAssimilator allows you to write the best patterns in your projects.">
+      
+      
+        <meta name="author" content="Andrey Ivanov">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -138,6 +142,18 @@
 </div>
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/knucklesuganda/py_assimilator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -170,6 +186,18 @@
     </a>
     Assimilator - the best Python patterns
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/knucklesuganda/py_assimilator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -281,8 +309,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#__init__session-specifications-specificationlist-initial_query" class="md-nav__link">
-    __init__(session, specifications: SpecificationList, initial_query)
+  <a href="#__init__" class="md-nav__link">
+    __init__()
   </a>
   
 </li>
@@ -295,57 +323,64 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_apply_specificationsspecifications-iterablespecifications-query" class="md-nav__link">
-    _apply_specifications(specifications: Iterable[Specifications]) -&gt; query
+  <a href="#_apply_specifications" class="md-nav__link">
+    _apply_specifications()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#getspecifications-specification-lazy-bool-false-unionlazycommand-any" class="md-nav__link">
-    get(*specifications: Specification, lazy: bool = False) -&gt; Union[LazyCommand, Any]:
+  <a href="#get" class="md-nav__link">
+    get()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#filterself-specifications-specification-lazy-bool-false-unionlazycommand-iterable" class="md-nav__link">
-    filter(self, *specifications: Specification, lazy: bool = False) -&gt; Union[LazyCommand, Iterable]:
+  <a href="#filter" class="md-nav__link">
+    filter()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#saveself-obj-none" class="md-nav__link">
-    save(self, obj) -&gt; None:
+  <a href="#save" class="md-nav__link">
+    save()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#deleteself-obj-none" class="md-nav__link">
-    delete(self, obj) -&gt; None:
+  <a href="#delete" class="md-nav__link">
+    delete()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#updateself-obj-none" class="md-nav__link">
-    update(self, obj) -&gt; None:
+  <a href="#update" class="md-nav__link">
+    update()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#is_modifiedself-obj-bool" class="md-nav__link">
-    is_modified(self, obj) -&gt; bool:
+  <a href="#is_modified" class="md-nav__link">
+    is_modified()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#refreshself-obj-none" class="md-nav__link">
-    refresh(self, obj) -&gt; None:
+  <a href="#refresh" class="md-nav__link">
+    refresh()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    count()
   </a>
   
 </li>
@@ -401,6 +436,47 @@
     SpecificationList
   </a>
   
+    <nav class="md-nav" aria-label="SpecificationList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter_1" class="md-nav__link">
+    filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order" class="md-nav__link">
+    order()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paginate" class="md-nav__link">
+    paginate()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join" class="md-nav__link">
+    join()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazycommand" class="md-nav__link">
+    LazyCommand
+  </a>
+  
 </li>
       
         <li class="md-nav__item">
@@ -412,8 +488,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#__init__repository-baserepository" class="md-nav__link">
-    __init__(repository: BaseRepository)
+  <a href="#__init___1" class="md-nav__link">
+    __init__()
   </a>
   
 </li>
@@ -473,7 +549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../events.md" class="md-nav__link">
+      <a href="../events/" class="md-nav__link">
         Events
       </a>
     </li>
@@ -804,8 +880,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#__init__session-specifications-specificationlist-initial_query" class="md-nav__link">
-    __init__(session, specifications: SpecificationList, initial_query)
+  <a href="#__init__" class="md-nav__link">
+    __init__()
   </a>
   
 </li>
@@ -818,57 +894,64 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_apply_specificationsspecifications-iterablespecifications-query" class="md-nav__link">
-    _apply_specifications(specifications: Iterable[Specifications]) -&gt; query
+  <a href="#_apply_specifications" class="md-nav__link">
+    _apply_specifications()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#getspecifications-specification-lazy-bool-false-unionlazycommand-any" class="md-nav__link">
-    get(*specifications: Specification, lazy: bool = False) -&gt; Union[LazyCommand, Any]:
+  <a href="#get" class="md-nav__link">
+    get()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#filterself-specifications-specification-lazy-bool-false-unionlazycommand-iterable" class="md-nav__link">
-    filter(self, *specifications: Specification, lazy: bool = False) -&gt; Union[LazyCommand, Iterable]:
+  <a href="#filter" class="md-nav__link">
+    filter()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#saveself-obj-none" class="md-nav__link">
-    save(self, obj) -&gt; None:
+  <a href="#save" class="md-nav__link">
+    save()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#deleteself-obj-none" class="md-nav__link">
-    delete(self, obj) -&gt; None:
+  <a href="#delete" class="md-nav__link">
+    delete()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#updateself-obj-none" class="md-nav__link">
-    update(self, obj) -&gt; None:
+  <a href="#update" class="md-nav__link">
+    update()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#is_modifiedself-obj-bool" class="md-nav__link">
-    is_modified(self, obj) -&gt; bool:
+  <a href="#is_modified" class="md-nav__link">
+    is_modified()
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#refreshself-obj-none" class="md-nav__link">
-    refresh(self, obj) -&gt; None:
+  <a href="#refresh" class="md-nav__link">
+    refresh()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    count()
   </a>
   
 </li>
@@ -924,6 +1007,47 @@
     SpecificationList
   </a>
   
+    <nav class="md-nav" aria-label="SpecificationList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter_1" class="md-nav__link">
+    filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order" class="md-nav__link">
+    order()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paginate" class="md-nav__link">
+    paginate()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join" class="md-nav__link">
+    join()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazycommand" class="md-nav__link">
+    LazyCommand
+  </a>
+  
 </li>
       
         <li class="md-nav__item">
@@ -935,8 +1059,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#__init__repository-baserepository" class="md-nav__link">
-    __init__(repository: BaseRepository)
+  <a href="#__init___1" class="md-nav__link">
+    __init__()
   </a>
   
 </li>
@@ -995,6 +1119,11 @@
                 
                   
 
+  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/patterns/database.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
 
 <h1 id="database-patterns">Database patterns</h1>
 <h2 id="repository">Repository</h2>
@@ -1003,7 +1132,7 @@ When we use a database we often have some kind of library, language or protocol.
 If we want to make the database abstract, we use the repository pattern. It has basic
 functions that help us change and query our data from any source. The beauty of the pattern
 is that you can use it with SQL, text files, cache, S3, external API's or any kind of data storage.</p>
-<h6 id="__init__session-specifications-specificationlist-initial_query"><code>__init__(session, specifications: SpecificationList, initial_query)</code></h6>
+<h6 id="__init__"><code>__init__()</code></h6>
 <ul>
 <li><code>session</code> - each repository has a session that works as the primary data source. It can be your database connection, a text file or a data structure.</li>
 <li><code>initial_query</code> - the initial query that you use in the data storage. We will show how it works later. It can be an SQL query, a key in the dictionary or anything else.</li>
@@ -1011,7 +1140,7 @@ is that you can use it with SQL, text files, cache, S3, external API's or any ki
 </ul>
 <h6 id="_get_initial_query"><code>_get_initial_query()</code></h6>
 <p>returns the initial query used in the <code>_apply_specifications()</code></p>
-<h6 id="_apply_specificationsspecifications-iterablespecifications-query"><code>_apply_specifications(specifications: Iterable[Specifications]) -&gt; query</code></h6>
+<h6 id="_apply_specifications"><code>_apply_specifications()</code></h6>
 <p>Applies Specifications to the query. <strong>Must not be used directly.</strong> apply
 specifications gets a list of specifications and applies them to the query returned
 in _get_initial_query(). The idea is the following: each specification gets a query and
@@ -1022,32 +1151,39 @@ specifications provided by the user.
 <p>Specification is a pattern that adds filters or anything
 else that specifies what kind of data we want.</p>
 </blockquote>
-<h6 id="getspecifications-specification-lazy-bool-false-unionlazycommand-any"><code>get(*specifications: Specification, lazy: bool = False) -&gt; Union[LazyCommand, Any]:</code></h6>
+<h6 id="get"><code>get()</code></h6>
 <p>get is the function used to query the data storage and return one entity. You supply a list
 of specifications that get you the entity from the storage.
 - <code>specifications: Specifications</code> - specifications that can be used to specify some conditions in the query
-- <code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future</p>
-<h6 id="filterself-specifications-specification-lazy-bool-false-unionlazycommand-iterable"><code>filter(self, *specifications: Specification, lazy: bool = False) -&gt; Union[LazyCommand, Iterable]:</code></h6>
+- <code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future
+- <code>initial_query = None</code> - if you want to change the initial query for this query only, then you can provide it as an argument</p>
+<h6 id="filter"><code>filter()</code></h6>
 <p>filters is the function used to query the data storage and return many entities. You supply a list
 of specifications that filter entities in the storage.
 - <code>specifications: Specifications</code> - specifications that can be used to specify some conditions in the query
-- <code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future</p>
-<h6 id="saveself-obj-none"><code>save(self, obj) -&gt; None:</code></h6>
+- <code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future
+- <code>initial_query = None</code> - if you want to change the initial query for this query only, then you can provide it as an argument</p>
+<h6 id="save"><code>save()</code></h6>
 <p>Adds the objects to the session, so you can commit it latter. This method
 should not change the final state of the storage, we have UnitOfWork for this(<em>do not commit your changes, just add them</em>).</p>
-<h6 id="deleteself-obj-none"><code>delete(self, obj) -&gt; None:</code></h6>
+<h6 id="delete"><code>delete()</code></h6>
 <p>Deletes the objects from the session, so you can commit it latter. This method
 should not change the final state of the storage, we have UnitOfWork for this(<em>do not commit your changes, just delete them from your session</em>).</p>
-<h6 id="updateself-obj-none"><code>update(self, obj) -&gt; None:</code></h6>
+<h6 id="update"><code>update()</code></h6>
 <p>Updates the objects in the session, so you can commit it latter. This method
 should not change the final state of the storage, we have UnitOfWork for this(<em>do not commit your changes, just update them in your session</em>).</p>
-<h6 id="is_modifiedself-obj-bool"><code>is_modified(self, obj) -&gt; bool:</code></h6>
+<h6 id="is_modified"><code>is_modified()</code></h6>
 <p>Checks whether an obj was modified or not. If any value changes within the object,
 then it must return True</p>
-<h6 id="refreshself-obj-none"><code>refresh(self, obj) -&gt; None:</code></h6>
+<h6 id="refresh"><code>refresh()</code></h6>
 <p>Updates the object values with the values in the data storage. That can be useful if
 you want to create an object and get its id that was generated in the storage, or if you
 just want to have the latest saved version of the object.</p>
+<h6 id="count"><code>count()</code></h6>
+<p>Counts the objects while applying specifications to the query. Give no specifications to 
+count the whole data storage.
+- <code>specifications: Specifications</code> - specifications that can be used to specify some conditions in the query
+- <code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future</p>
 <h3 id="creating-your-own-repository">Creating your own repository:</h3>
 <p>If you want to create your own repository, then you are going to have to override all the functions above.
 But, please, do not make new functions available to the outer world.</p>
@@ -1075,7 +1211,7 @@ from users.repository import UserRepository
 from products.repository import ProductRepository
 
 
-def get_by_id(id, repository: BaseRepository)
+def get_by_id(id, repository: BaseRepository):
     return repository.get(filter_specification(id=1))
 
 
@@ -1154,12 +1290,16 @@ user = repository.get(
 </code></pre>
 <h2 id="specificationlist">SpecificationList</h2>
 <p>SpecificationList is a static class that contains basic specifications
-for our repository.
-Specifications:
-- <code>filter()</code> - filters the data
-- <code>order()</code> - filters the data
-- <code>paginate()</code> - paginates the data(limits the results, offsets them)
-- <code>join()</code> - joins entities together(join a table, get related data)</p>
+for our repository.</p>
+<p>Specifications:</p>
+<h6 id="filter_1"><code>filter()</code></h6>
+<p>filters the data</p>
+<h6 id="order"><code>order()</code></h6>
+<p>orders the data</p>
+<h6 id="paginate"><code>paginate()</code></h6>
+<p>paginates the data(limits the results, offsets them).</p>
+<h6 id="join"><code>join()</code></h6>
+<p>joins entities together(join a table, get related data).</p>
 <p>The reason we use <code>SpecificationList</code> is because we want to have an abstraction for our specifications.
 Take two examples:</p>
 <pre><code class="language-python">from dependencies import UserRepository
@@ -1222,6 +1362,30 @@ repository = MyRepository(session=session, specifications=MySpecificationList)
 <p>Of course, you can still use specifications directly, but if you ever need to change
 the repository, then it may be a problem.</p>
 </blockquote>
+<h2 id="lazycommand">LazyCommand</h2>
+<p>Sometimes we don't want to execute the query right away. For example, for optimization purposes or 
+some other purpose that requires us to delay the execution. In that case, you want to find <code>lazy</code> argument
+in the function that you are calling and set it to <code>True</code>. After that, a <code>LazyCommand</code> is going to be returned. That
+object allows you to call it as a function or iterate over it to get the results:</p>
+<pre><code class="language-python">from assimilator.core.database import BaseRepository
+
+
+def print_all_usernames(repository: BaseRepository):
+    for user in repository.filter(lazy=True):
+        print(user.username)
+        # we don't want to receive a list of all the users, but want to iterate
+        # through it and only get 1 user at a time
+
+
+def count_users_if_argument_true(do_count, repository: BaseRepository):
+    count_command = repository.count(lazy=True)
+    # turn on lazy and get LazyCommand
+
+    if do_count:
+        return count_command()  # call for the result
+    return -1
+
+</code></pre>
 <h2 id="unit-of-work">Unit of Work</h2>
 <p>Unit of work allows us to work with transactions and repositories that change the data.
 The problem with repository is the transaction management. We want to make our transaction management
@@ -1233,9 +1397,11 @@ have units of work.</p>
 3. If there are exceptions, errors, issues with the client code, rollback the transaction and remove all the changes
 4. If everything is good, the client code calls the <code>commit()</code> function and finishes the data change
 5. Unit of work closes the transaction</p>
-<h6 id="__init__repository-baserepository"><code>__init__(repository: BaseRepository)</code></h6>
-<p>The repository is provided in the UnitOfWork when we create it. The session
-to the data storage is going to be taken from the repository.</p>
+<h6 id="__init___1"><code>__init__()</code></h6>
+<ul>
+<li><code>repository: BaseRepository</code> - The repository is provided in the UnitOfWork when we create it. The session
+to the data storage is going to be taken from the repository.</li>
+</ul>
 <h6 id="begin"><code>begin()</code></h6>
 <p>Starts the transaction. The function is called automatically.</p>
 <h6 id="rollback"><code>rollback()</code></h6>
@@ -1245,7 +1411,7 @@ as it is called automatically if there is an error in your code.</p>
 <p>Saves the changes to the data storage. While the repository only adds the temporary, this
 function is responsible for the final save. <em>You need to call it yourself, it will not be called automatically like rollback()</em> </p>
 <h6 id="close"><code>close()</code></h6>
-<p>closes the transaction. The function is called automatically.</p>
+<p>Closes the transaction. The function is called automatically.</p>
 <h4 id="here-is-how-you-can-use-unitofwork-in-your-code">Here is how you can use UnitOfWork in your code:</h4>
 <pre><code class="language-python">from assimilator.core.database import UnitOfWork
 
@@ -1276,7 +1442,6 @@ def create_user(username: str, uow: UnitOfWork):
         1 / 0   # ZeroDivisionError. UnitOfWork calls rollback automatically.
         uow.commit()    # nothing is saved, since the rollback was called.
 </code></pre>
-<p>p</p>
 
 
 
@@ -1313,13 +1478,13 @@ def create_user(username: str, uow: UnitOfWork):
       
       
         
-        <a href="../../alchemy/database/" class="md-footer__link md-footer__link--next" aria-label="Next: Database" rel="next">
+        <a href="../events/" class="md-footer__link md-footer__link--next" aria-label="Next: Events" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Database
+              Events
             </div>
           </div>
           <div class="md-footer__button md-icon">
