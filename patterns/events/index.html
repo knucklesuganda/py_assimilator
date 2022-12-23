@@ -499,6 +499,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#event-fails-and-transaction-management" class="md-nav__link">
+    Event fails and transaction management
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outboxrelay" class="md-nav__link">
+    OutboxRelay
+  </a>
+  
+    <nav class="md-nav" aria-label="OutboxRelay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#__init___1" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_2" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledge" class="md-nav__link">
+    acknowledge()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1007,6 +1048,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#event-fails-and-transaction-management" class="md-nav__link">
+    Event fails and transaction management
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outboxrelay" class="md-nav__link">
+    OutboxRelay
+  </a>
+  
+    <nav class="md-nav" aria-label="OutboxRelay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#__init___1" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_2" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledge" class="md-nav__link">
+    acknowledge()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1253,6 +1335,33 @@ classes separately, but sometimes you need one object that combines them.</p>
 </ul>
 <h6 id="consume_1"><code>consume()</code></h6>
 <p>consumes the events using <code>consumer</code>. Returns an <code>Iterator[Event]</code></p>
+<h2 id="event-fails-and-transaction-management">Event fails and transaction management</h2>
+<p>Sometimes we want to be sure that our events are emitted. But, if we use normal
+event producers and Unit Of Work separately, we may run into a problem:</p>
+<p>1) User is created(added in the database and unit of work committed it)
+2) Event producer encounters an error(the event is not published)
+3) Inconsistency: User exists, but consumers do not know about that</p>
+<p>Because of that, we may employ Outbox Relay. It is a pattern that allows us
+to save all the events in the database in the same transaction as the main entity. Then,
+another program(thread, task, function) gets all the events from the database and ensures that
+they are published. We basically save the events to the database in one transaction, emit them in a separate
+thing and delete them afterwards.</p>
+<h2 id="outboxrelay">OutboxRelay</h2>
+<p>This class gets all the events using <code>UnitOfWork</code> provided, emits all events, and acknowledges them.</p>
+<h6 id="__init___1"><code>__init__()</code></h6>
+<ul>
+<li><code>uow: UnitOfWork</code> - unit of work that is used in order to get the events, acknowledge them</li>
+<li><code>producer: EventProducer</code> - event producer that we use to publish the events</li>
+</ul>
+<h6 id="start_2"><code>start()</code></h6>
+<p>Start the relay. This function must run forever, must get the events from the repository from unit of work,
+and produce the events. After that, it must call <code>acknowledge()</code> to show that these events are produced.</p>
+<h6 id="acknowledge">acknowledge()</h6>
+<p>Acknowledges the events in the database. It might change a boolean column for these events,
+might delete them, but the idea is that those events will not be produced twice.</p>
+<ul>
+<li><code>events: Iterable[Event]</code> - events that must be acknowledged</li>
+</ul>
 
 
 
