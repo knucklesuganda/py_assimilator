@@ -256,3 +256,35 @@ produces the event using `producer`
 
 ###### `consume()`
 consumes the events using `consumer`. Returns an `Iterator[Event]`
+
+
+## Event fails and transaction management
+Sometimes we want to be sure that our events are emitted. But, if we use normal
+event producers and Unit Of Work separately, we may run into a problem:
+
+1) User is created(added in the database and unit of work committed it)
+2) Event producer encounters an error(the event is not published)
+3) Inconsistency: User exists, but consumers do not know about that
+
+Because of that, we may employ Outbox Relay. It is a pattern that allows us
+to save all the events in the database in the same transaction as the main entity. Then,
+another program(thread, task, function) gets all the events from the database and ensures that
+they are published. We basically save the events to the database in one transaction, emit them in a separate
+thing and delete them afterwards.
+
+## OutboxRelay
+This class gets all the events using `UnitOfWork` provided, emits all events, and acknowledges them.
+
+###### `__init__()`
+- `uow: UnitOfWork` - unit of work that is used in order to get the events, acknowledge them
+- `producer: EventProducer` - event producer that we use to publish the events
+
+###### `start()`
+Start the relay. This function must run forever, must get the events from the repository from unit of work,
+and produce the events. After that, it must call `acknowledge()` to show that these events are produced.
+
+###### acknowledge()
+Acknowledges the events in the database. It might change a boolean column for these events,
+might delete them, but the idea is that those events will not be produced twice.
+
+- `events: Iterable[Event]` - events that must be acknowledged
