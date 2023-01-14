@@ -1,6 +1,6 @@
 from sqlalchemy import Column, BigInteger, Text, DateTime
 
-from assimilator.core.events import Event
+from assimilator.core.events.events import Event
 from assimilator.core.database.unit_of_work import UnitOfWork
 from assimilator.core.events import OutboxRelay
 from assimilator.core.events.events_bus import EventProducer

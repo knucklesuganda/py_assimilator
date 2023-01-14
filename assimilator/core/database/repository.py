@@ -31,14 +31,26 @@ class LazyCommand:
 
 
 class BaseRepository(ABC):
-    def __init__(self, session: Any, specifications: Type[SpecificationList], initial_query: Optional[Any] = None):
+    def __init__(
+        self,
+        session: Any,
+        model: Type,
+        specifications: Type[SpecificationList],
+        initial_query: Optional[Any] = None,
+    ):
         self.session = session
-        self.initial_query = initial_query
+        self.model = model
+        self.__initial_query = initial_query
         self.specifications = specifications
 
+    @property
+    def specs(self):
+        """ That property is used to shorten the full name of the self.specifications. You can use any of them """
+        return self.specifications
+
     def _get_initial_query(self):
-        if self.initial_query is not None:
-            return self.initial_query
+        if self.__initial_query is not None:
+            return self.__initial_query
         else:
             raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 

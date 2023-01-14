@@ -1,4 +1,4 @@
-from typing import Iterable, Collection
+from typing import Collection
 
 from sqlalchemy.orm import Query
 

@@ -2,7 +2,7 @@ from abc import ABC
 from typing import Iterable
 
 from assimilator.core.database.unit_of_work import UnitOfWork
-from assimilator.core.events import Event
+from assimilator.core.events.events import Event
 from assimilator.core.events.events_bus import EventProducer
 
 
