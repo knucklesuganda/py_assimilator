@@ -9,6 +9,7 @@ from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.specifications import AlchemySpecificationList
 from assimilator.core.database import BaseRepository, Specification, \
     SpecificationList, LazyCommand, SpecificationType
+from assimilator.core.database.repository import make_lazy
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
 
@@ -29,19 +30,15 @@ class AlchemyRepository(BaseRepository):
         )
         self.error_wrapper = error_wrapper if error_wrapper is not None else AlchemyErrorWrapper()
 
+    @make_lazy
     def get(self, *specifications: SpecificationType, lazy: bool = False, initial_query=None):
         with self.error_wrapper:
-            if lazy:
-                return LazyCommand(self.get, *specifications, initial_query=initial_query, lazy=False)
-
             query = self._apply_specifications(specifications, initial_query=initial_query)
             return self.session.execute(query).one()[0]
 
+    @make_lazy
     def filter(self, *specifications: Specification, lazy: bool = False, initial_query=None):
         with self.error_wrapper:
-            if lazy:
-                return LazyCommand(self.filter, *specifications, initial_query=initial_query, lazy=False)
-
             query = self._apply_specifications(specifications, initial_query=initial_query)
             return [result[0] for result in self.session.execute(query)]
 
@@ -60,6 +57,7 @@ class AlchemyRepository(BaseRepository):
     def is_modified(self, obj) -> bool:
         return self.session.is_modified(obj)
 
+    @make_lazy
     def count(self, *specifications, lazy: bool = False) -> Union[LazyCommand, int]:
         with self.error_wrapper:
             primary_keys = inspect(self.model).primary_key
@@ -69,7 +67,7 @@ class AlchemyRepository(BaseRepository):
 
             return self.get(
                 *specifications,
-                lazy=lazy,
+                lazy=False,
                 initial_query=select(func.count(getattr(self.model, primary_keys[0].name))),
             )
 

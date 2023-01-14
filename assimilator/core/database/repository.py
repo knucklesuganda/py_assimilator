@@ -1,5 +1,6 @@
+import functools
 from abc import ABC, abstractmethod
-from typing import Union, Any, Optional, Callable, Iterable, Type, Container
+from typing import Union, Any, Optional, Callable, Iterable, Type, Container, Collection
 
 from assimilator.core.database.specifications import SpecificationList, SpecificationType
 
@@ -30,11 +31,24 @@ class LazyCommand:
         return bool(self())
 
 
+def make_lazy(func: callable):
+
+    @functools.wraps(func)
+    def make_lazy_wrapper(self, *args, **kwargs):
+        if kwargs.get('lazy') is True:
+            kwargs['lazy'] = False
+            return LazyCommand(command=func, *args, **kwargs)
+
+        return func(self, *args, **kwargs)
+
+    return make_lazy_wrapper
+
+
 class BaseRepository(ABC):
     def __init__(
         self,
         session: Any,
-        model: Type,
+        model: Type[Any],
         specifications: Type[SpecificationList],
         initial_query: Optional[Any] = None,
     ):
@@ -69,7 +83,7 @@ class BaseRepository(ABC):
 
     @abstractmethod
     def filter(self, *specifications: SpecificationType, lazy: bool = False, initial_query=None)\
-            -> Union[LazyCommand, Container]:
+            -> Union[LazyCommand, Collection]:
         raise NotImplementedError("filter() is not implemented()")
 
     @abstractmethod
@@ -100,4 +114,5 @@ class BaseRepository(ABC):
 __all__ = [
     'LazyCommand',
     'BaseRepository',
+    'make_lazy',
 ]

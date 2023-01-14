@@ -1,12 +1,9 @@
 from typing import Optional
 
-from pydantic import BaseModel
-
-from assimilator.core.patterns.mixins import JSONParsedMixin
+from assimilator.internal.database.models import InternalModel
 
 
-class RedisModel(JSONParsedMixin, BaseModel):
-    id: int
+class RedisModel(InternalModel):
     expire_in: Optional[int] = None
 
 

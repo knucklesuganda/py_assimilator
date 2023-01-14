@@ -1,38 +1,56 @@
-from typing import Type, Union, Iterable
+from typing import Type, Union, Iterable, Optional
 
-import redis
+from redis import Redis
 
-from assimilator.core.database import SpecificationList, SpecificationType
 from assimilator.redis.database import RedisModel
-from assimilator.core.database.repository import BaseRepository, LazyCommand
+from assimilator.core.database.exceptions import DataLayerError
+from assimilator.core.patterns.error_wrapper import ErrorWrapper
+from assimilator.core.database import SpecificationList, SpecificationType
+from assimilator.core.database.repository import BaseRepository, LazyCommand, make_lazy
 from assimilator.internal.database.specifications import InternalSpecification, InternalSpecificationList
 
 
 class RedisRepository(BaseRepository):
+    model: Type[RedisModel]
+
     def __init__(
         self,
-        session: redis.Redis,
+        session: Redis,
         model: Type[RedisModel],
+        initial_query: str = '',
         specifications: Type[SpecificationList] = InternalSpecificationList,
+        error_wrapper: Optional[ErrorWrapper] = None,
     ):
-        super(RedisRepository, self).__init__(session, initial_query='', specifications=specifications)
-        self.model = model
+        super(RedisRepository, self).__init__(
+            session=session,
+            model=model,
+            initial_query=initial_query,
+            specifications=specifications,
+        )
+        self.error_wrapper = error_wrapper if not error_wrapper else ErrorWrapper(default_error=DataLayerError)
 
-    def get(self, *specifications: InternalSpecification, lazy: bool = False, initial_query=None)\
-            -> Union[LazyCommand, RedisModel]:
+    @make_lazy
+    def get(
+        self,
+        *specifications: InternalSpecification,
+        lazy: bool = False,
+        initial_query: str = None,
+    ) -> Union[LazyCommand, RedisModel]:
+        query = self._apply_specifications(specifications, initial_query=initial_query)
+        return self.model.from_json(self.session.get(query))
+
+    @make_lazy
+    def filter(
+        self,
+        *specifications: InternalSpecification,
+        lazy: bool = False,
+        initial_query: str = None,
+    ) -> Union[LazyCommand, Iterable[RedisModel]]:
         key_name = self._apply_specifications(specifications, initial_query=initial_query)
-        if lazy:
-            return LazyCommand(lambda: self.model.from_json(self.session.get(key_name)))
-
-        return self.model.from_json(self.session.get(key_name))
-
-    def filter(self, *specifications: InternalSpecification, lazy: bool = False, initial_query=None)\
-            -> Union[LazyCommand, Iterable['RedisModel']]:
-        if lazy:
-            return LazyCommand(self.filter, *specifications, lazy=False, initial_query=initial_query)
-
-        key_name = self._apply_specifications(specifications, initial_query=initial_query)
-        return [self.model.from_json(value) for value in self.session.mget(self.session.keys(key_name))]
+        return [
+            self.model.from_json(value)
+            for value in self.session.mget(self.session.keys(key_name))
+        ]
 
     def save(self, obj: RedisModel):
         self.session.set(str(obj.id), obj.json(), ex=obj.expire_in)
@@ -52,13 +70,11 @@ class RedisRepository(BaseRepository):
         for key, value in fresh_obj.dict().items():
             setattr(obj, key, value)
 
+    @make_lazy
     def count(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand, int]:
-        if lazy:
-            return LazyCommand(self.count, *specifications, lazy=False)
-        elif not specifications:
+        if specifications:
             return self.session.dbsize()
-        else:
-            return len(self.session.keys(self._apply_specifications(specifications)))
+        return len(self.session.keys(self._apply_specifications(specifications)))
 
 
 __all__ = [

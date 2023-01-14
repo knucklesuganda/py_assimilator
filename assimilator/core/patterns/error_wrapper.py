@@ -4,10 +4,10 @@ from typing import Dict, Type, Optional
 class ErrorWrapper:
     def __init__(
         self,
-        error_mappings: Dict[Type[Exception], Type[Exception]],
+        error_mappings: Dict[Type[Exception], Type[Exception]] = None,
         default_error: Optional[Type[Exception]] = None,
     ):
-        self.error_mappings = error_mappings
+        self.error_mappings = error_mappings or {}
         self.default_error = default_error
 
     def __enter__(self):
