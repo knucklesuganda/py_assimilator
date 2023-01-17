@@ -5,7 +5,7 @@ from assimilator.core.database.repository import make_lazy
 from assimilator.internal.database.models import InternalModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
-from assimilator.internal.database.specifications import InternalSpecificationList
+from assimilator.internal.database.specifications import InternalSpecificationList, internal_filter
 from assimilator.core.database import BaseRepository, SpecificationList, SpecificationType, LazyCommand
 
 
@@ -14,7 +14,7 @@ class InternalRepository(BaseRepository):
         self,
         session: dict,
         model: Type[InternalModel],
-        initial_query: str = '',
+        initial_query: Optional[str] = '',
         specifications: Type[SpecificationList] = InternalSpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
@@ -26,11 +26,15 @@ class InternalRepository(BaseRepository):
         )
         self.error_wrapper = error_wrapper if error_wrapper is not None else InternalErrorWrapper()
 
+    def check_before_specification(self, specification: SpecificationType):
+        """ Checks that the specification provided is a specification that must be run before the query """
+        return specification is internal_filter
+
     def __parse_specifications(self, specifications: Tuple):
         before_specs, after_specs = [], []
 
         for specification in specifications:
-            if specification is self.specs.filter:
+            if self.check_before_specification(specification):
                 before_specs.append(specification)
             else:
                 after_specs.append(specification)
@@ -40,26 +44,31 @@ class InternalRepository(BaseRepository):
     @make_lazy
     def get(self, *specifications: SpecificationType, lazy: bool = False, initial_query=None):
         with self.error_wrapper:
-            return self.session[self._apply_specifications(specifications, initial_query=initial_query)]
+            query = self._apply_specifications(
+                query=self.get_initial_query(initial_query),
+                specifications=specifications,
+            )
+            return self.session[query]
 
     @make_lazy
     def filter(self, *specifications: SpecificationType, lazy: bool = False, initial_query=None):
         with self.error_wrapper:
             before_specs, after_specs = self.__parse_specifications(specifications)
 
-            if before_specs:
+            if not before_specs:
+                models = list(self.session.values())
+            else:
                 models = []
-                key_mask = self._apply_specifications(specifications=before_specs, initial_query=initial_query)
+                key_mask = self._apply_specifications(
+                    query=self.get_initial_query(initial_query),
+                    specifications=before_specs
+                )
+
                 for key, value in self.session.items():
                     if re.match(key_mask, key):
                         models.append(value)
 
-            else:
-                models = list(self.session.values())
-
-            for specification in after_specs:
-                models = specification(models)
-            return models
+            return self._apply_specifications(query=models, specifications=after_specs)
 
     def save(self, obj):
         self.session[obj.id] = obj

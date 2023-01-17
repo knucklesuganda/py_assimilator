@@ -25,3 +25,6 @@ class ErrorWrapper:
             raise self.default_error(exc_val)
 
         raise exc_val   # No wrapping error was found
+
+
+__all__ = ['ErrorWrapper']

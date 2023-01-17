@@ -8,8 +8,7 @@ from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.specifications import AlchemySpecificationList
 from assimilator.core.database import BaseRepository, Specification, \
-    SpecificationList, LazyCommand, SpecificationType
-from assimilator.core.database.repository import make_lazy
+    SpecificationList, LazyCommand, SpecificationType, make_lazy
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
 
@@ -33,16 +32,22 @@ class AlchemyRepository(BaseRepository):
     @make_lazy
     def get(self, *specifications: SpecificationType, lazy: bool = False, initial_query=None):
         with self.error_wrapper:
-            query = self._apply_specifications(specifications, initial_query=initial_query)
+            query = self._apply_specifications(
+                query=self.get_initial_query(initial_query),
+                specifications=specifications,
+            )
             return self.session.execute(query).one()[0]
 
     @make_lazy
     def filter(self, *specifications: Specification, lazy: bool = False, initial_query=None):
         with self.error_wrapper:
-            query = self._apply_specifications(specifications, initial_query=initial_query)
+            query = self._apply_specifications(
+                query=self.get_initial_query(initial_query),
+                specifications=specifications,
+            )
             return [result[0] for result in self.session.execute(query)]
 
-    def update(self, obj):
+    def update(self, obj) -> None:
         """ We don't do anything, as the object is going to be updated with the obj.key = value """
 
     def save(self, obj):
@@ -68,7 +73,7 @@ class AlchemyRepository(BaseRepository):
             return self.get(
                 *specifications,
                 lazy=False,
-                initial_query=select(func.count(getattr(self.model, primary_keys[0].name))),
+                query=select(func.count(getattr(self.model, primary_keys[0].name))),
             )
 
 

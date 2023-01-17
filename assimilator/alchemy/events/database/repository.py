@@ -3,7 +3,7 @@ from typing import Type, Optional
 from sqlalchemy import Table
 from sqlalchemy.orm import Query
 
-from assimilator.alchemy import AlchemySpecificationList
+from assimilator.alchemy.database.specifications import AlchemySpecificationList
 from assimilator.alchemy.database.repository import AlchemyRepository
 from assimilator.core.database import SpecificationList
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
