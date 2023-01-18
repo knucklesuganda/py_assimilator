@@ -74,20 +74,24 @@ If you want to create your own repository, then you are going to have to overrid
 But, please, do not make new functions available to the outer world.
 
 You can do this:
-```python
-from assimilator.core.database import BaseRepository
 
-class UserRepository(BaseRepository):
+```python
+from assimilator.core.database import Repository
+
+
+class UserRepository(Repository):
     def _users_private_func(self):
         # Cannot be called outside
         return 'Do something'
 
 ```
 And call that function inside of your repository. But, never do this:
-```python
-from assimilator.core.database import BaseRepository
 
-class UserRepository(BaseRepository):
+```python
+from assimilator.core.database import Repository
+
+
+class UserRepository(Repository):
     def get_ser_by_id(self):
         # Cannot be called outside
         return self.get(filter_specification(id=1))
@@ -95,19 +99,18 @@ class UserRepository(BaseRepository):
 ```
 Since it is going to be really hard for you to replace one repository to another. Example:
 
-
 ```python
-from assimilator.core.database import BaseRepository
+from assimilator.core.database import Repository
 from users.repository import UserRepository
 from products.repository import ProductRepository
 
 
-def get_by_id(id, repository: BaseRepository):
+def get_by_id(id, repository: Repository):
     return repository.get(filter_specification(id=1))
 
 
 get_by_id(UserRepository())
-get_by_id(ProductRepository()) 
+get_by_id(ProductRepository())
 # You can call the function with both repositories, and it will probably work fine
 ```
 
@@ -297,17 +300,17 @@ in the function that you are calling and set it to `True`. After that, a `LazyCo
 object allows you to call it as a function or iterate over it to get the results:
 
 ```python
-from assimilator.core.database import BaseRepository
+from assimilator.core.database import Repository
 
 
-def print_all_usernames(repository: BaseRepository):
+def print_all_usernames(repository: Repository):
     for user in repository.filter(lazy=True):
         print(user.username)
         # we don't want to receive a list of all the users, but want to iterate
         # through it and only get 1 user at a time
 
 
-def count_users_if_argument_true(do_count, repository: BaseRepository):
+def count_users_if_argument_true(do_count, repository: Repository):
     count_command = repository.count(lazy=True)
     # turn on lazy and get LazyCommand
 

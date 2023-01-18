@@ -1,17 +1,15 @@
-import re
-from typing import Type, Union, Optional, Iterable, TypeVar, List, Tuple
+from typing import Type, Union, Optional, TypeVar, List
 
-from assimilator.core.database.repository import make_lazy
 from assimilator.internal.database.models import InternalModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
+from assimilator.core.database import Repository, SpecificationType, LazyCommand, make_lazy
 from assimilator.internal.database.specifications import InternalSpecificationList, internal_filter
-from assimilator.core.database import BaseRepository, SpecificationType, LazyCommand, SpecificationSplitMixin
 
 ModelT = TypeVar("ModelT", bound=InternalModel)
 
 
-class InternalRepository(SpecificationSplitMixin, BaseRepository):
+class InternalRepository(Repository):
     session: dict
     model: Type[ModelT]
 
@@ -31,9 +29,6 @@ class InternalRepository(SpecificationSplitMixin, BaseRepository):
             error_wrapper=error_wrapper or InternalErrorWrapper(),
         )
 
-    def _is_before_specification(self, specification: SpecificationType) -> bool:
-        return specification is internal_filter or specification is self.specs.filter
-
     @make_lazy
     def get(
         self,
@@ -41,11 +36,9 @@ class InternalRepository(SpecificationSplitMixin, BaseRepository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[ModelT], ModelT]:
-        before_specs, _ = self._split_specifications(specifications, no_after_specs=True)
-
         query = self._apply_specifications(
             query=self.get_initial_query(initial_query),
-            specifications=before_specs,
+            specifications=specifications,
         )
         return self.session[query]
 
@@ -56,22 +49,10 @@ class InternalRepository(SpecificationSplitMixin, BaseRepository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[List[ModelT]], List[ModelT]]:
-        before_specs, after_specs = self._split_specifications(specifications)
-
-        if not before_specs:    # No filters, get all the data from the session
-            models = list(self.session.values())
-        else:
-            models = []
-            key_mask = self._apply_specifications(
-                query=self.get_initial_query(initial_query),
-                specifications=before_specs,
-            )
-
-            for key, value in self.session.items():
-                if re.match(key_mask, key):
-                    models.append(value)
-
-        return self._apply_specifications(query=models, specifications=after_specs)
+        return self._apply_specifications(
+            query=list(self.session.values()),
+            specifications=specifications,
+        )
 
     def save(self, obj: ModelT) -> None:
         self.session[obj.id] = obj

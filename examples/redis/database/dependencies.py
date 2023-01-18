@@ -10,8 +10,8 @@ def create_repository():    # factory for RedisRepository
     return RedisRepository(session=session, model=RedisUser)
 
 
-def create_unit_of_work():  # factory for RedisUnitOfWork
+def create_uow():  # factory for RedisUnitOfWork
     return RedisUnitOfWork(repository=create_repository())
 
 
-__all__ = ['create_repository', 'create_unit_of_work']
+__all__ = ['create_repository', 'create_uow']

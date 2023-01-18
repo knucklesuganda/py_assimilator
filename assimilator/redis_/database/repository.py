@@ -9,17 +9,16 @@ from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
     SpecificationList,
     SpecificationType,
-    SpecificationSplitMixin,
-    BaseRepository,
+    Repository,
     LazyCommand,
     make_lazy,
 )
-from assimilator.internal.database.specifications import InternalSpecificationList, internal_filter
+from assimilator.internal.database.specifications import InternalSpecificationList
 
 RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
 
 
-class RedisRepository(SpecificationSplitMixin, BaseRepository):
+class RedisRepository(Repository):
     session: Redis
     transaction: Union[Pipeline, Redis]
     model: Type[RedisModelT]
@@ -31,18 +30,20 @@ class RedisRepository(SpecificationSplitMixin, BaseRepository):
         initial_query: Optional[str] = '',
         specifications: Type[SpecificationList] = InternalSpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
+        use_double_filter: bool = True,
     ):
         super(RedisRepository, self).__init__(
             session=session,
             model=model,
             initial_query=initial_query,
             specifications=specifications,
-            error_wrapper=error_wrapper or ErrorWrapper(default_error=DataLayerError)
+            error_wrapper=error_wrapper or ErrorWrapper(
+                default_error=DataLayerError,
+                skipped_errors=(NotFoundError,)
+            )
         )
         self.transaction = session
-
-    def _is_before_specification(self, specification: SpecificationType) -> bool:
-        return True
+        self.use_double_specifications = use_double_filter
 
     @make_lazy
     def get(
@@ -51,11 +52,9 @@ class RedisRepository(SpecificationSplitMixin, BaseRepository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[RedisModelT], RedisModelT]:
-        before_specs, _ = self._split_specifications(specifications, no_after_specs=True)
-
         query = self._apply_specifications(
             query=self.get_initial_query(initial_query),
-            specifications=before_specs,
+            specifications=specifications,
         )
 
         found_obj = self.session.get(query)
@@ -71,27 +70,20 @@ class RedisRepository(SpecificationSplitMixin, BaseRepository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[Collection[RedisModelT]], Collection[RedisModelT]]:
-        if not specifications:
-            return [
-                self.model.from_json(value)
-                for value in self.session.mget(self.session.keys("*"))
-            ]
-
-        before_specs, after_specs = self._split_specifications(specifications)
-
-        if before_specs:
+        if self.use_double_specifications and specifications:
             key_name = self._apply_specifications(
                 query=self.get_initial_query(initial_query),
-                specifications=before_specs,
-            )
+                specifications=specifications,
+            ) or "*"
         else:
             key_name = "*"
 
-        models = [
-            self.model.from_json(value)
-            for value in self.session.mget(self.session.keys(key_name))
-        ]
-        return self._apply_specifications(query=models, specifications=after_specs)
+        key_name = key_name or "*"
+
+        models = self.session.mget(self.session.keys(key_name))
+        return list(self._apply_specifications(specifications=specifications, query=[
+            self.model.from_json(value) for value in models
+        ]))
 
     def save(self, obj: RedisModelT) -> None:
         self.transaction.set(
@@ -124,10 +116,9 @@ class RedisRepository(SpecificationSplitMixin, BaseRepository):
         if specifications:
             return self.session.dbsize()
 
-        before_specs, _ = self._split_specifications(specifications, no_after_specs=True)
         filter_query = self._apply_specifications(
             query=self.get_initial_query(),
-            specifications=before_specs,
+            specifications=specifications,
         )
         return len(self.session.keys(filter_query))
 

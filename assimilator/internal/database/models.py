@@ -1,7 +1,7 @@
-from typing import TypeVar, Callable
+from typing import TypeVar
 from uuid import uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from assimilator.core.patterns.mixins import JSONParsedMixin
 

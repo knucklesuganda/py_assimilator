@@ -7,7 +7,7 @@ from sqlalchemy.inspection import inspect
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.specifications import AlchemySpecificationList
-from assimilator.core.database import BaseRepository, SpecificationList, \
+from assimilator.core.database import Repository, SpecificationList, \
     LazyCommand, SpecificationType, make_lazy
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
@@ -15,7 +15,7 @@ from assimilator.core.patterns.error_wrapper import ErrorWrapper
 AlchemyModelT = TypeVar("AlchemyModelT")
 
 
-class AlchemyRepository(BaseRepository):
+class AlchemyRepository(Repository):
     session: Session
     model: Type[AlchemyModelT]
 
@@ -68,6 +68,13 @@ class AlchemyRepository(BaseRepository):
         self.session.add(obj)
 
     def refresh(self, obj: AlchemyModelT) -> None:
+        inspection = inspect(obj)
+
+        if inspection.transient or inspection.pending:
+            return
+        elif inspection.detached:
+            self.session.add(obj)
+
         self.session.refresh(obj)
 
     def delete(self, obj: AlchemyModelT) -> None:

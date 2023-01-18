@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from assimilator.core.database.repository import BaseRepository
+from assimilator.core.database.repository import Repository
 from assimilator.core.patterns import ErrorWrapper
 
 
 class UnitOfWork(ABC):
     error_wrapper: ErrorWrapper = ErrorWrapper()
 
-    def __init__(self, repository: BaseRepository, error_wrapper: Optional[ErrorWrapper] = None):
+    def __init__(self, repository: Repository, error_wrapper: Optional[ErrorWrapper] = None):
         self.repository = repository
         if error_wrapper is not None:
             self.error_wrapper = error_wrapper

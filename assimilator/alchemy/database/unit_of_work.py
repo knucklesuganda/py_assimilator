@@ -5,6 +5,8 @@ from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
 
 class AlchemyUnitOfWork(UnitOfWork):
+    repository: AlchemyRepository
+
     def __init__(self, repository: AlchemyRepository, error_wrapper: ErrorWrapper = None):
         super(AlchemyUnitOfWork, self).__init__(
             repository=repository,

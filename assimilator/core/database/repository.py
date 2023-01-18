@@ -1,7 +1,7 @@
 from functools import wraps
-from typing import TypeVar, Callable, Generic, final
 from abc import ABC, abstractmethod
-from typing import Union, Optional, Iterable, Type, Collection
+from typing import TypeVar, Callable, Generic, final, \
+    Union, Optional, Iterable, Type, Collection
 
 from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
@@ -29,7 +29,7 @@ ModelT = TypeVar("ModelT")
 SessionT = TypeVar("SessionT")
 
 
-class BaseRepository(Generic[SessionT, ModelT, QueryT], ABC):
+class Repository(Generic[SessionT, ModelT, QueryT], ABC):
     def __init__(
         self,
         session: SessionT,
@@ -122,6 +122,6 @@ class BaseRepository(Generic[SessionT, ModelT, QueryT], ABC):
 
 __all__ = [
     'LazyCommand',
-    'BaseRepository',
+    'Repository',
     'make_lazy',
 ]
