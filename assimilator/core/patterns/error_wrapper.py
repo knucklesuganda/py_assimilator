@@ -18,11 +18,11 @@ class ErrorWrapper:
         if exc_val is None:
             return
 
-        for initial_error, wrapped_error in self.error_mappings.items():
-            if isinstance(exc_val, initial_error):
-                raise wrapped_error(exc_val)
+        wrapped_error = self.error_mappings.get(exc_type)
 
-        if self.default_error is not None:
+        if wrapped_error is not None:
+            raise wrapped_error(exc_val)
+        elif self.default_error is not None:
             raise self.default_error(exc_val)
 
         raise exc_val   # No wrapping error was found

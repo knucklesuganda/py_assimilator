@@ -33,3 +33,6 @@ class LazyCommand(Generic[T]):
 
     def __repr__(self):
         return str(self)
+
+
+__all__ = ['LazyCommand']
