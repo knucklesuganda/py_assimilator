@@ -1,14 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Union
+from typing import Callable, Union, TypeVar
 from functools import wraps
+
+
+QueryT = TypeVar("QueryT")
 
 
 class Specification(ABC):
     @abstractmethod
-    def apply(self, query):
+    def apply(self, query: QueryT) -> QueryT:
         raise NotImplementedError("Specification must specify apply()")
 
-    def __call__(self, query):
+    def __call__(self, query: QueryT) -> QueryT:
         return self.apply(query)
 
 
@@ -16,10 +19,11 @@ def specification(func: Callable):
     def create_specification(*args, **kwargs):
 
         @wraps(func)
-        def created_specification(query):
+        def created_specification(query: QueryT) -> QueryT:
             return func(*args, **kwargs, query=query)
 
         return created_specification
+
     return create_specification
 
 

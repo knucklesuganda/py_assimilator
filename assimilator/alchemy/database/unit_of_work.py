@@ -6,23 +6,22 @@ from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
 class AlchemyUnitOfWork(UnitOfWork):
     def __init__(self, repository: AlchemyRepository, error_wrapper: ErrorWrapper = None):
-        super(AlchemyUnitOfWork, self).__init__(repository)
-        self.error_wrapper = error_wrapper if error_wrapper is not None else AlchemyErrorWrapper()
+        super(AlchemyUnitOfWork, self).__init__(
+            repository=repository,
+            error_wrapper=error_wrapper or AlchemyErrorWrapper(),
+        )
 
     def begin(self):
-        with self.error_wrapper:
-            self.repository.session.begin()
+        self.repository.session.begin()
 
     def rollback(self):
-        with self.error_wrapper:
-            self.repository.session.rollback()
+        self.repository.session.rollback()
 
     def close(self):
         pass
 
     def commit(self):
-        with self.error_wrapper:
-            self.repository.session.commit()
+        self.repository.session.commit()
 
 
 __all__ = [

@@ -1,4 +1,4 @@
-from sqlalchemy.exc import NoResultFound, IntegrityError, SQLAlchemyError, MultipleResultsFound
+from sqlalchemy.exc import NoResultFound, IntegrityError, SQLAlchemyError
 
 from assimilator.core.database.exceptions import DataLayerError, NotFoundError, InvalidQueryError
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
@@ -11,3 +11,6 @@ class AlchemyErrorWrapper(ErrorWrapper):
             IntegrityError: InvalidQueryError,
             SQLAlchemyError: DataLayerError,
         }, default_error=DataLayerError)
+
+
+__all__ = ['AlchemyErrorWrapper']

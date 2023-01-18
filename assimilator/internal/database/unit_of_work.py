@@ -3,11 +3,15 @@ from typing import Optional
 
 from assimilator.core.database import UnitOfWork
 from assimilator.core.database.repository import BaseRepository
+from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 
 
 class InternalUnitOfWork(UnitOfWork):
     def __init__(self, repository: BaseRepository):
-        super(InternalUnitOfWork, self).__init__(repository)
+        super(InternalUnitOfWork, self).__init__(
+            repository=repository,
+            error_wrapper=InternalErrorWrapper(),
+        )
         self._saved_data: Optional[dict] = None
 
     def begin(self):

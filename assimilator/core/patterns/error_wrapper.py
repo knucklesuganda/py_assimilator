@@ -1,4 +1,5 @@
-from typing import Dict, Type, Optional
+from functools import wraps
+from typing import Dict, Type, Optional, Callable
 
 
 class ErrorWrapper:
@@ -18,13 +19,22 @@ class ErrorWrapper:
             return
 
         for initial_error, wrapped_error in self.error_mappings.items():
-            if isinstance(exc_type, initial_error):
+            if isinstance(exc_val, initial_error):
                 raise wrapped_error(exc_val)
 
         if self.default_error is not None:
             raise self.default_error(exc_val)
 
         raise exc_val   # No wrapping error was found
+
+    def decorate(self, func: Callable) -> Callable:
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            with self:
+                return func(*args, **kwargs)
+
+        return wrapper
 
 
 __all__ = ['ErrorWrapper']

@@ -8,3 +8,6 @@ class InternalErrorWrapper(ErrorWrapper):
             KeyError: NotFoundError,
             TypeError: NotFoundError,
         }, default_error=DataLayerError)
+
+
+__all__ = ['InternalErrorWrapper']

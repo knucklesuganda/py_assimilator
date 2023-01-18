@@ -1,11 +1,22 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from assimilator.core.database.repository import BaseRepository
+from assimilator.core.patterns import ErrorWrapper
 
 
 class UnitOfWork(ABC):
-    def __init__(self, repository: BaseRepository):
+    error_wrapper: ErrorWrapper = ErrorWrapper()
+
+    def __init__(self, repository: BaseRepository, error_wrapper: Optional[ErrorWrapper] = None):
         self.repository = repository
+        if error_wrapper is not None:
+            self.error_wrapper = error_wrapper
+
+        self.begin = self.error_wrapper.decorate(self.begin)
+        self.rollback = self.error_wrapper.decorate(self.rollback)
+        self.commit = self.error_wrapper.decorate(self.commit)
+        self.close = self.error_wrapper.decorate(self.close)
 
     @abstractmethod
     def begin(self):

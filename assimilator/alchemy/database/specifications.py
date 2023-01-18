@@ -2,12 +2,7 @@ from typing import Collection
 
 from sqlalchemy.orm import Query
 
-from assimilator.core.database.specifications import Specification, specification, SpecificationList
-
-
-class AlchemySpecification(Specification):
-    def apply(self, query: Query) -> Query:
-        return super(AlchemySpecification, self).apply(query)
+from assimilator.core.database.specifications import specification, SpecificationList
 
 
 @specification
@@ -45,7 +40,6 @@ class AlchemySpecificationList(SpecificationList):
 
 __all__ = [
     'AlchemySpecificationList',
-    'AlchemySpecification',
     'alchemy_filter',
     'alchemy_order',
     'alchemy_paginate',

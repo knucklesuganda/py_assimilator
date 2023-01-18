@@ -3,6 +3,7 @@ from typing import TypeVar, Callable, Generic, final
 from abc import ABC, abstractmethod
 from typing import Union, Optional, Iterable, Type, Collection
 
+from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
 from assimilator.core.database.specifications import SpecificationList, SpecificationType
 
@@ -18,7 +19,7 @@ def make_lazy(func: Callable):
     ):
         if lazy:
             return LazyCommand(func, self, *specifications, lazy=False, initial_query=initial_query)
-        return func(*specifications, lazy=False, initial_query=initial_query)
+        return func(self, *specifications, lazy=False, initial_query=initial_query)
 
     return make_lazy_wrapper
 
@@ -35,11 +36,22 @@ class BaseRepository(Generic[SessionT, ModelT, QueryT], ABC):
         model: Type[ModelT],
         specifications: Type[SpecificationList],
         initial_query: Optional[SessionT] = None,
+        error_wrapper: Optional[ErrorWrapper] = None,
     ):
         self.session = session
         self.model = model
         self.__initial_query: QueryT = initial_query
         self.specifications = specifications
+
+        self.error_wrapper = error_wrapper or ErrorWrapper()
+        self.get = self.error_wrapper.decorate(self.get)
+        self.filter = self.error_wrapper.decorate(self.filter)
+        self.save = self.error_wrapper.decorate(self.save)
+        self.delete = self.error_wrapper.decorate(self.delete)
+        self.update = self.error_wrapper.decorate(self.update)
+        self.is_modified = self.error_wrapper.decorate(self.is_modified)
+        self.refresh = self.error_wrapper.decorate(self.refresh)
+        self.count = self.error_wrapper.decorate(self.count)
 
     @property
     def specs(self) -> Type[SpecificationList]:
