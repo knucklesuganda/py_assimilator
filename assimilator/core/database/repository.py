@@ -92,15 +92,15 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         raise NotImplementedError("filter() is not implemented()")
 
     @abstractmethod
-    def save(self, obj: ModelT) -> None:
+    def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         raise NotImplementedError("save() is not implemented in the repository")
 
     @abstractmethod
-    def delete(self, obj: ModelT) -> None:
+    def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
         raise NotImplementedError("delete() is not implemented in the repository")
 
     @abstractmethod
-    def update(self, obj: ModelT) -> None:
+    def update(self, obj: Optional[ModelT] = None, *specifications: SpecificationType, **update_values) -> None:
         raise NotImplementedError("update() is not implemented in the repository")
 
     @abstractmethod

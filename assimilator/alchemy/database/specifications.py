@@ -2,37 +2,36 @@ from typing import Collection, Optional
 
 from sqlalchemy.orm import Query
 from sqlalchemy.sql.operators import is_
-from sqlalchemy import not_, column, desc
+from sqlalchemy import column, desc
 
-from assimilator.core.database.specifications import specification, SpecificationList
+from assimilator.core.database.specifications import specification, SpecificationList,\
+    filter_parameter_parser
+
+
+alchemy_filter_mappings = {
+    "__gt": lambda field_, val: column(field_) > val,
+    "__gte": lambda field_, val: column(field_) >= val,
+    "__lt": lambda field_, val: column(field_) < val,
+    "__lte": lambda field_, val: column(field_) <= val,
+    "__not": lambda field_, val: column(field_) != val,
+    "__is": lambda field_, val: is_(column(field_, val)),
+}
 
 
 @specification
 def alchemy_filter(*filters, query: Query, **filters_by) -> Query:
     filters = list(filters)
-    removed_filters_by = []
 
-    for field, value in filters_by.items():
-        if field.endswith("__gt"):
-            filter_ = column(field.replace("__gt", "")) > value
-        elif field.endswith("__gte"):
-            filter_ = column(field.replace("__gte", "")) >= value
-        elif field.endswith("__lt"):
-            filter_ = column(field.replace("__lt", "")) < value
-        elif field.endswith("__lte"):
-            filter_ = column(field.replace("__lte", "")) <= value
-        elif field.endswith("__not"):
-            filter_ = not_(column(field.replace("__not", "")))
-        elif field.endswith("__is"):
-            filter_ = is_(column(field.replace("__is", "")))
-        else:
-            continue
+    for field, value in dict(filters_by).items():
+        _, parsed_filter = filter_parameter_parser(
+            field=field,
+            value=value,
+            filter_mappings=alchemy_filter_mappings,
+        )
 
-        filters.append(filter_)
-        removed_filters_by.append(field)
-
-    for removed_filter in removed_filters_by:
-        del filters_by[removed_filter]
+        if parsed_filter is not None:
+            filters.append(parsed_filter)
+            del filters_by[field]
 
     return query.filter(*filters).filter_by(**filters_by)
 

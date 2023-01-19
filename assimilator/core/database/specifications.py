@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Union, TypeVar
+from typing import Callable, Union, TypeVar, Dict, Any, Tuple, Optional
 from functools import wraps
 
 
@@ -13,6 +13,18 @@ class Specification(ABC):
 
     def __call__(self, query: QueryT) -> QueryT:
         return self.apply(query)
+
+
+def filter_parameter_parser(
+    field: str,
+    value: Any,
+    filter_mappings: Dict[str, Callable],
+) -> Tuple[Optional[str], Optional[Any]]:
+    for filter_ending, filter_func in filter_mappings.items():
+        if field.endswith(filter_ending):
+            return filter_ending, filter_func(field.replace(filter_ending, ""), value)
+
+    return None, None
 
 
 def specification(func: Callable):
@@ -42,4 +54,5 @@ __all__ = [
     'Specification',
     'specification',
     'SpecificationType',
+    'filter_parameter_parser',
 ]

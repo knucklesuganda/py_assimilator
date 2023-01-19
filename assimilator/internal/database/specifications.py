@@ -1,45 +1,43 @@
 import operator
 from typing import List, Iterable, Any, Union, Callable, Optional
 
-from assimilator.core.database import specification, SpecificationList
+from assimilator.core.database import specification, SpecificationList, filter_parameter_parser
 from assimilator.internal.database.models import InternalModel
 
 
 QueryT = Union[str, List[InternalModel]]
+internal_filter_mappings = {
+    "__gt": lambda field, value: operator.gt,
+    "__gte": lambda field, value: operator.ge,
+    "__lt": lambda field, value: operator.lt,
+    "__lte": lambda field, value: operator.le,
+    "__not": lambda field, value: operator.not_,
+    "__is": lambda field, value: operator.is_,
+}
 
 
 @specification
-def internal_filter(*args, query: QueryT, **kwargs) -> Iterable[InternalModel]:
-    if isinstance(query, str):
-        return f"{query}{''.join(args)}"
-    elif not (kwargs or args):    # no filters present
+def internal_filter(*filters, query: QueryT, **filters_by) -> Iterable[InternalModel]:
+    if not (filters_by or filters):  # no filters present
         return query
+    elif isinstance(query, str):
+        id_ = filters_by.get('id')
+        return f'{query}{"".join(filters)}{id_ if id_ else ""}'
 
     parsed_arguments: List[(str, Callable, Any)] = []
 
-    for field, value in kwargs.items():
-        operation = operator.eq
+    for field, value in dict(filters_by).items():
+        ending, parsed_filter = filter_parameter_parser(
+            field=field,
+            value=value,
+            filter_mappings=internal_filter_mappings,
+        )
 
-        if field.endswith("__gt"):
-            operation = operator.gt
-            field = field.replace("__gt", "")
-        elif field.endswith("__gte"):
-            operation = operator.ge
-            field = field.replace("__gte", "")
-        elif field.endswith("__lt"):
-            operation = operator.lt
-            field = field.replace("__lt", "")
-        elif field.endswith("__lte"):
-            operation = operator.le
-            field = field.replace("__lte", "")
-        elif field.endswith("__not"):
-            operation = operator.not_
-            field = field.replace("__not", "")
-        elif field.endswith("__is"):
-            operation = operator.is_
-            field = field.replace("__is", "")
-
-        parsed_arguments.append((field, operation, value))
+        parsed_arguments.append((
+            field.replace(ending, "") if (ending is not None) else field,
+            parsed_filter or operator.eq,
+            value,
+        ))
 
     return list(filter(
         lambda model: all(

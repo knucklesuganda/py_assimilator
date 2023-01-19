@@ -3,8 +3,9 @@ from typing import Type, Union, Optional, TypeVar, List
 from assimilator.internal.database.models import InternalModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
-from assimilator.core.database import Repository, SpecificationType, LazyCommand, make_lazy
-from assimilator.internal.database.specifications import InternalSpecificationList, internal_filter
+from assimilator.core.database import Repository, SpecificationType, LazyCommand, \
+    make_lazy, InvalidQueryError
+from assimilator.internal.database.specifications import InternalSpecificationList
 
 ModelT = TypeVar("ModelT", bound=InternalModel)
 
@@ -54,14 +55,36 @@ class InternalRepository(Repository):
             specifications=specifications,
         )
 
-    def save(self, obj: ModelT) -> None:
+    def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
+        if obj is None:
+            obj = self.model(**obj_data)
+
         self.session[obj.id] = obj
+        return obj
 
-    def delete(self, obj: ModelT) -> None:
-        del self.session[obj.id]
+    def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
+        if specifications:
+            for model in self.filter(*specifications, lazy=True):
+                del self.session[model.id]
+        elif obj is not None:
+            del self.session[obj.id]
 
-    def update(self, obj: ModelT) -> None:
-        self.save(obj)
+    def update(
+        self, obj: Optional[ModelT] = None, *specifications: SpecificationType, **update_values,
+    ) -> None:
+        if specifications:
+            if not update_values:
+                raise InvalidQueryError(
+                    "You did not provide any update_values "
+                    "to the update() yet provided specifications"
+                )
+
+            for model in self.filter(*specifications, lazy=True):
+                model.__dict__.update(update_values)
+                self.save(model)
+
+        elif obj is not None:
+            self.save(obj)
 
     def is_modified(self, obj: ModelT) -> bool:
         return self.get(self.specs.filter(id=obj.id)) == obj
@@ -71,7 +94,9 @@ class InternalRepository(Repository):
         obj.__dict__.update(fresh_obj.__dict__)
 
     @make_lazy
-    def count(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand[int], int]:
+    def count(
+        self, *specifications: SpecificationType, lazy: bool = False,
+    ) -> Union[LazyCommand[int], int]:
         if specifications:
             return len(self.filter(*specifications, lazy=False))
         return len(self.session)

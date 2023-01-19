@@ -4,7 +4,7 @@ from redis import Redis
 from redis.client import Pipeline
 
 from assimilator.redis_.database import RedisModel
-from assimilator.core.database.exceptions import DataLayerError, NotFoundError
+from assimilator.core.database.exceptions import DataLayerError, NotFoundError, InvalidQueryError
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
     SpecificationList,
@@ -85,7 +85,10 @@ class RedisRepository(Repository):
             self.model.from_json(value) for value in models
         ]))
 
-    def save(self, obj: RedisModelT) -> None:
+    def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
+        if obj is None:
+            obj = self.model(**obj_data)
+
         self.transaction.set(
             name=obj.id,
             value=obj.json(),
@@ -95,12 +98,40 @@ class RedisRepository(Repository):
             xx=obj.only_update,
             keepttl=obj.keep_ttl,
         )
+        return obj
 
-    def delete(self, obj: RedisModelT) -> None:
-        self.transaction.delete(obj.id)
+    def delete(self, obj: Optional[RedisModelT] = None, *specifications: SpecificationType) -> None:
+        if specifications:
+            models = self.filter(*specifications)   # TODO: ADD ONLY SPECIFICATIONS
+            self.transaction.delete(*[str(model.id) for model in models])
+        elif obj is not None:
+            self.transaction.delete(obj.id)
 
-    def update(self, obj: RedisModelT) -> None:
-        self.save(obj)
+    def update(
+        self,
+        obj: Optional[RedisModelT] = None,
+        *specifications: SpecificationType,
+        **update_values,
+    ) -> None:
+        if specifications:
+            if not update_values:
+                raise InvalidQueryError(
+                    "You did not provide any update_values "
+                    "to the update() yet provided specifications"
+                )
+
+            models = self.filter(*specifications, lazy=False)
+            updated_models = {}
+
+            for model in models:
+                model.__dict__.update(update_values)
+                updated_models = {model.id: model}
+
+            self.transaction.mset(updated_models)
+
+        elif obj is not None:
+            obj.only_update = True
+            self.save(obj)
 
     def is_modified(self, obj: RedisModelT) -> None:
         return self.get(self.specifications.filter(obj.id), lazy=False) == obj

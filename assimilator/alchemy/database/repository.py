@@ -1,6 +1,6 @@
-from typing import Type, Union, Optional, TypeVar, Collection
+from typing import Type, Union, Optional, TypeVar, Collection, Dict
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update, delete
 from sqlalchemy.orm import Session, Query
 from sqlalchemy.inspection import inspect
 
@@ -61,11 +61,28 @@ class AlchemyRepository(Repository):
         )
         return [result[0] for result in self.session.execute(query)]
 
-    def update(self, obj: AlchemyModelT) -> None:
-        """ We don't do anything, as the object is going to be updated with the obj.key = value """
+    def update(self, obj: Optional[AlchemyModelT] = None, *specifications, **update_values) -> None:
+        if specifications:
+            if not update_values:
+                raise InvalidQueryError(
+                    "You did not provide any update_values "
+                    "to the update() yet provided specifications"
+                )
 
-    def save(self, obj: AlchemyModelT) -> None:
+            query: Query = self._apply_specifications(
+                query=self.get_initial_query(update(self.model)),
+                specifications=specifications,
+            )
+            self.session.execute(query.values(update_values))
+        elif obj is not None:
+            self.session.add(obj)
+
+    def save(self, obj: Optional[AlchemyModelT] = None, **data) -> AlchemyModelT:
+        if obj is None:
+            obj = self.model(**data)
+
         self.session.add(obj)
+        return obj
 
     def refresh(self, obj: AlchemyModelT) -> None:
         inspection = inspect(obj)
@@ -77,8 +94,15 @@ class AlchemyRepository(Repository):
 
         self.session.refresh(obj)
 
-    def delete(self, obj: AlchemyModelT) -> None:
-        self.session.delete(obj)
+    def delete(self, obj: Optional[AlchemyModelT] = None, *specifications: SpecificationType) -> None:
+        if specifications:
+            query: Query = self._apply_specifications(
+                query=self.get_initial_query(delete(self.model)),
+                specifications=specifications,
+            )
+            self.session.execute(query)
+        elif obj is not None:
+            self.session.delete(obj)
 
     def is_modified(self, obj: AlchemyModelT) -> bool:
         return self.session.is_modified(obj)

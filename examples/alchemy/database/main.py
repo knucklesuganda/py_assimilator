@@ -3,7 +3,7 @@ import string
 
 from assimilator.core.database import UnitOfWork, Repository, NotFoundError
 from assimilator.core.patterns import LazyCommand
-from core.database import DataLayerError
+from assimilator.core.database import DataLayerError
 
 from dependencies import create_uow
 from examples.alchemy.database.models import User
