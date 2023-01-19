@@ -1,9 +1,9 @@
 from sqlalchemy import Column, BigInteger, Text, DateTime
 
-from assimilator.core.events import Event
+from assimilator.core.events.events import Event
 from assimilator.core.database.unit_of_work import UnitOfWork
 from assimilator.core.events import OutboxRelay
-from assimilator.core.events.events_bus import EventBus
+from assimilator.core.events.events_bus import EventProducer
 
 
 def create_outbox_event_model(Base):
@@ -24,22 +24,23 @@ def create_outbox_event_model(Base):
 
 
 class AlchemyOutboxRelay(OutboxRelay):
-    def __init__(self, outbox_event_model, uow: UnitOfWork, event_bus: EventBus):
-        super(AlchemyOutboxRelay, self).__init__(uow=uow, event_bus=event_bus)
+    def __init__(self, outbox_event_model, uow: UnitOfWork, producer: EventProducer):
+        super(AlchemyOutboxRelay, self).__init__(uow=uow, producer=producer)
         self.outbox_event_model = outbox_event_model
 
     def start(self):
-        while True:
-            with self.uow:
-                events = self.uow.repository.filter()
+        with self.producer:
+            while True:
+                with self.uow:
+                    events = self.uow.repository.filter()
 
-                for event in events:
-                    self.event_bus.produce(event)
+                    for event in events:
+                        self.producer.produce(event)
 
-                self.acknowledge(events)
-                self.uow.commit()
+                    self.acknowledge(events)
+                    self.uow.commit()
 
-            self.delay_function()
+                self.delay_function()
 
     def delay_function(self):
         raise NotImplementedError("delay_function() is not implemented")

@@ -24,4 +24,4 @@ with optional_dependencies():
     import assimilator.kafka
 
 with optional_dependencies():
-    import assimilator.redis
+    import assimilator.redis_ as redis

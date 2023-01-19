@@ -1,5 +1,7 @@
 # Assimilator - the best Python patterns for the best projects
 
+![](/images/logo.png)
+
 ## Install now
 * `pip install py_assimilator`
 

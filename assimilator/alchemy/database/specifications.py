@@ -1,28 +1,68 @@
-from typing import Iterable, Collection
+from typing import Collection, Optional
 
 from sqlalchemy.orm import Query
+from sqlalchemy.sql.operators import is_
+from sqlalchemy import column, desc
 
-from assimilator.core.database.specifications import Specification, specification, SpecificationList
+from assimilator.core.database.specifications import specification, SpecificationList,\
+    filter_parameter_parser
 
 
-class AlchemySpecification(Specification):
-    def apply(self, query: Query) -> Query:
-        return super(AlchemySpecification, self).apply(query)
+alchemy_filter_mappings = {
+    "__gt": lambda field_, val: column(field_) > val,
+    "__gte": lambda field_, val: column(field_) >= val,
+    "__lt": lambda field_, val: column(field_) < val,
+    "__lte": lambda field_, val: column(field_) <= val,
+    "__not": lambda field_, val: column(field_) != val,
+    "__is": lambda field_, val: is_(column(field_, val)),
+}
 
 
 @specification
 def alchemy_filter(*filters, query: Query, **filters_by) -> Query:
+    filters = list(filters)
+
+    for field, value in dict(filters_by).items():
+        _, parsed_filter = filter_parameter_parser(
+            field=field,
+            value=value,
+            filter_mappings=alchemy_filter_mappings,
+        )
+
+        if parsed_filter is not None:
+            filters.append(parsed_filter)
+            del filters_by[field]
+
     return query.filter(*filters).filter_by(**filters_by)
 
 
 @specification
 def alchemy_order(*clauses: str, query: Query) -> Query:
-    return query.order_by(*clauses)
+    parsed_clauses = []
+
+    for clause in clauses:
+        if clause.startswith("-"):
+            parsed_clauses.append(desc(column(clause[1:])))
+        else:
+            parsed_clauses.append(clause)
+
+    return query.order_by(*parsed_clauses)
 
 
 @specification
-def alchemy_paginate(limit: int, offset: int, query: Query) -> Query:
-    return query.limit(limit).offset(offset)
+def alchemy_paginate(
+    *,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+    query: Query,
+) -> Query:
+
+    if limit is not None:
+        query = query.limit(limit)
+    if offset is not None:
+        query = query.offset(offset)
+
+    return query
 
 
 @specification
@@ -45,7 +85,6 @@ class AlchemySpecificationList(SpecificationList):
 
 __all__ = [
     'AlchemySpecificationList',
-    'AlchemySpecification',
     'alchemy_filter',
     'alchemy_order',
     'alchemy_paginate',

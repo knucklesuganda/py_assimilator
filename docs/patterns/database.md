@@ -8,7 +8,7 @@ functions that help us change and query our data from any source. The beauty of 
 is that you can use it with SQL, text files, cache, S3, external API's or any kind of data storage.
 
 
-###### `__init__(session, specifications: SpecificationList, initial_query)`
+###### `__init__()`
 - `session` - each repository has a session that works as the primary data source. It can be your database connection, a text file or a data structure.
 - `initial_query` - the initial query that you use in the data storage. We will show how it works later. It can be an SQL query, a key in the dictionary or anything else.
 - `specifications: SpecificationList` - an object that contains links to the specifications that are used to create your queries
@@ -16,7 +16,7 @@ is that you can use it with SQL, text files, cache, S3, external API's or any ki
 ###### `_get_initial_query()`
 returns the initial query used in the `_apply_specifications()`
 
-###### `_apply_specifications(specifications: Iterable[Specifications]) -> query`
+###### `_apply_specifications()`
 Applies Specifications to the query. **Must not be used directly.** apply
 specifications gets a list of specifications and applies them to the query returned
 in _get_initial_query(). The idea is the following: each specification gets a query and
@@ -27,39 +27,46 @@ specifications provided by the user.
 else that specifies what kind of data we want.
 
 
-###### `get(*specifications: Specification, lazy: bool = False) -> Union[LazyCommand, Any]:`
+###### `get()`
 get is the function used to query the data storage and return one entity. You supply a list
 of specifications that get you the entity from the storage.
 - `specifications: Specifications` - specifications that can be used to specify some conditions in the query
 - `lazy: bool` - whether you want to execute your query straight away or just build it  for the future
+- `initial_query = None` - if you want to change the initial query for this query only, then you can provide it as an argument
 
-###### `filter(self, *specifications: Specification, lazy: bool = False) -> Union[LazyCommand, Iterable]:`
+###### `filter()`
 filters is the function used to query the data storage and return many entities. You supply a list
 of specifications that filter entities in the storage.
 - `specifications: Specifications` - specifications that can be used to specify some conditions in the query
 - `lazy: bool` - whether you want to execute your query straight away or just build it  for the future
+- `initial_query = None` - if you want to change the initial query for this query only, then you can provide it as an argument
 
-
-###### `save(self, obj) -> None:`
+###### `save()`
 Adds the objects to the session, so you can commit it latter. This method
 should not change the final state of the storage, we have UnitOfWork for this(*do not commit your changes, just add them*).
 
-###### `delete(self, obj) -> None:`
+###### `delete()`
 Deletes the objects from the session, so you can commit it latter. This method
 should not change the final state of the storage, we have UnitOfWork for this(*do not commit your changes, just delete them from your session*).
 
-###### `update(self, obj) -> None:`
+###### `update()`
 Updates the objects in the session, so you can commit it latter. This method
 should not change the final state of the storage, we have UnitOfWork for this(*do not commit your changes, just update them in your session*).
 
-###### `is_modified(self, obj) -> bool:`
+###### `is_modified()`
 Checks whether an obj was modified or not. If any value changes within the object,
 then it must return True
 
-###### `refresh(self, obj) -> None:`
+###### `refresh()`
 Updates the object values with the values in the data storage. That can be useful if
 you want to create an object and get its id that was generated in the storage, or if you
 just want to have the latest saved version of the object.
+
+###### `count()`
+Counts the objects while applying specifications to the query. Give no specifications to 
+count the whole data storage.
+- `specifications: Specifications` - specifications that can be used to specify some conditions in the query
+- `lazy: bool` - whether you want to execute your query straight away or just build it  for the future
 
 
 ### Creating your own repository:
@@ -67,20 +74,24 @@ If you want to create your own repository, then you are going to have to overrid
 But, please, do not make new functions available to the outer world.
 
 You can do this:
-```python
-from assimilator.core.database import BaseRepository
 
-class UserRepository(BaseRepository):
+```python
+from assimilator.core.database import Repository
+
+
+class UserRepository(Repository):
     def _users_private_func(self):
         # Cannot be called outside
         return 'Do something'
 
 ```
 And call that function inside of your repository. But, never do this:
-```python
-from assimilator.core.database import BaseRepository
 
-class UserRepository(BaseRepository):
+```python
+from assimilator.core.database import Repository
+
+
+class UserRepository(Repository):
     def get_ser_by_id(self):
         # Cannot be called outside
         return self.get(filter_specification(id=1))
@@ -88,19 +99,18 @@ class UserRepository(BaseRepository):
 ```
 Since it is going to be really hard for you to replace one repository to another. Example:
 
-
 ```python
-from assimilator.core.database import BaseRepository
+from assimilator.core.database import Repository
 from users.repository import UserRepository
 from products.repository import ProductRepository
 
 
-def get_by_id(id, repository: BaseRepository)
+def get_by_id(id, repository: Repository):
     return repository.get(filter_specification(id=1))
 
 
 get_by_id(UserRepository())
-get_by_id(ProductRepository()) 
+get_by_id(ProductRepository())
 # You can call the function with both repositories, and it will probably work fine
 ```
 
@@ -200,12 +210,16 @@ user = repository.get(
 ## SpecificationList
 SpecificationList is a static class that contains basic specifications
 for our repository.
-Specifications:
-- `filter()` - filters the data
-- `order()` - filters the data
-- `paginate()` - paginates the data(limits the results, offsets them)
-- `join()` - joins entities together(join a table, get related data)
 
+Specifications:
+###### `filter()`
+filters the data
+###### `order()`
+orders the data
+###### `paginate()`
+paginates the data(limits the results, offsets them).
+###### `join()`
+joins entities together(join a table, get related data).
 
 The reason we use `SpecificationList` is because we want to have an abstraction for our specifications.
 Take two examples:
@@ -278,6 +292,35 @@ Once you have done that, the repository will use your specifications.
 > Of course, you can still use specifications directly, but if you ever need to change
 > the repository, then it may be a problem.
 
+
+## LazyCommand
+Sometimes we don't want to execute the query right away. For example, for optimization purposes or 
+some other purpose that requires us to delay the execution. In that case, you want to find `lazy` argument
+in the function that you are calling and set it to `True`. After that, a `LazyCommand` is going to be returned. That
+object allows you to call it as a function or iterate over it to get the results:
+
+```python
+from assimilator.core.database import Repository
+
+
+def print_all_usernames(repository: Repository):
+    for user in repository.filter(lazy=True):
+        print(user.username)
+        # we don't want to receive a list of all the users, but want to iterate
+        # through it and only get 1 user at a time
+
+
+def count_users_if_argument_true(do_count, repository: Repository):
+    count_command = repository.count(lazy=True)
+    # turn on lazy and get LazyCommand
+
+    if do_count:
+        return count_command()  # call for the result
+    return -1
+
+```
+
+
 ## Unit of Work
 Unit of work allows us to work with transactions and repositories that change the data.
 The problem with repository is the transaction management. We want to make our transaction management
@@ -292,8 +335,9 @@ They allow us to do the following:
 5. Unit of work closes the transaction
 
 
-###### `__init__(repository: BaseRepository)`
-The repository is provided in the UnitOfWork when we create it. The session
+###### `__init__()`
+
+- `repository: BaseRepository` - The repository is provided in the UnitOfWork when we create it. The session
 to the data storage is going to be taken from the repository.
 
 ###### `begin()`
@@ -308,7 +352,7 @@ Saves the changes to the data storage. While the repository only adds the tempor
 function is responsible for the final save. _You need to call it yourself, it will not be called automatically like rollback()_ 
 
 ###### `close()`
-closes the transaction. The function is called automatically.
+Closes the transaction. The function is called automatically.
 
 
 #### Here is how you can use UnitOfWork in your code: 
@@ -346,4 +390,3 @@ def create_user(username: str, uow: UnitOfWork):
         1 / 0   # ZeroDivisionError. UnitOfWork calls rollback automatically.
         uow.commit()    # nothing is saved, since the rollback was called.
 ```
-p

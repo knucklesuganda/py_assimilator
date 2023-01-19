@@ -1,4 +1,4 @@
-from assimilator.core.events import Event
+from assimilator.core.events.events import Event
 from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 

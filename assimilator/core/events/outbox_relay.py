@@ -1,18 +1,20 @@
 from abc import ABC
+from typing import Iterable
 
 from assimilator.core.database.unit_of_work import UnitOfWork
-from assimilator.core.events.events_bus import EventBus
+from assimilator.core.events.events import Event
+from assimilator.core.events.events_bus import EventProducer
 
 
 class OutboxRelay(ABC):
-    def __init__(self, uow: UnitOfWork, event_bus: EventBus):
+    def __init__(self, uow: UnitOfWork, producer: EventProducer):
         self.uow = uow
-        self.event_bus = event_bus
+        self.producer = producer
 
     def start(self):
         raise NotImplementedError("start() is not implemented")
 
-    def acknowledge(self, events):
+    def acknowledge(self, events: Iterable[Event]):
         raise NotImplementedError("acknowledge() is not implemented")
 
 

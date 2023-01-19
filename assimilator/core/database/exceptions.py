@@ -1,12 +1,12 @@
 
 
 class DataLayerError(Exception):
-    pass
+    """ Any error related to Repository, UnitOfWork, Model """
 
 
 class NotFoundError(DataLayerError):
-    pass
+    """ Results are not found """
 
 
 class InvalidQueryError(DataLayerError):
-    pass
+    """ The query to the data storage supplied was invalid """

@@ -1,6 +1,27 @@
 site_name: Assimilator - the best Python patterns
+site_description: Assimilator Python framework, Domain-Driven Design, DDD, high performance, easy to learn, fast to code
 theme:
   name: material
+  logo: images/logo.png
+  features:
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+  palette:
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
 nav:
   - Introduction: index.md
   - Concepts: concepts.md
@@ -21,5 +42,5 @@ nav:
   - Advanced topics:
     - Core: core/core.md
 repo_url: https://github.com/knucklesuganda/py_assimilator
-site_description: PyAssimilator allows you to write the best patterns in your projects.
-site_author: Andrey Ivanov
+repo_name: knucklesuganda/py_assimilator
+site_author: Andrey Ivanov | Python

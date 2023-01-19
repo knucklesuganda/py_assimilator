@@ -1,52 +1,105 @@
-import re
-from typing import Type
+from typing import Type, Union, Optional, TypeVar, List
 
-from assimilator.core.database import BaseRepository, SpecificationList
-from assimilator.core.database.exceptions import NotFoundError
-from assimilator.internal.database.specifications import InternalSpecification, InternalSpecificationList
+from assimilator.internal.database.models import InternalModel
+from assimilator.core.patterns.error_wrapper import ErrorWrapper
+from assimilator.internal.database.error_wrapper import InternalErrorWrapper
+from assimilator.core.database import Repository, SpecificationType, LazyCommand, \
+    make_lazy, InvalidQueryError
+from assimilator.internal.database.specifications import InternalSpecificationList
+
+ModelT = TypeVar("ModelT", bound=InternalModel)
 
 
-class InternalRepository(BaseRepository):
-    def __init__(self, session: dict, specifications: Type[SpecificationList] = InternalSpecificationList):
-        super(InternalRepository, self).__init__(session=session, initial_query='', specifications=specifications)
+class InternalRepository(Repository):
+    session: dict
+    model: Type[ModelT]
 
-    def get(self, *specifications: InternalSpecification, lazy: bool = False):
-        try:
-            return self.session[self._apply_specifications(specifications)]
-        except (KeyError, TypeError) as exc:
-            raise NotFoundError(exc)
+    def __init__(
+        self,
+        session: dict,
+        model: Type[ModelT],
+        initial_query: Optional[str] = '',
+        specifications: Type[InternalSpecificationList] = InternalSpecificationList,
+        error_wrapper: Optional[ErrorWrapper] = None,
+    ):
+        super(InternalRepository, self).__init__(
+            model=model,
+            session=session,
+            initial_query=initial_query,
+            specifications=specifications,
+            error_wrapper=error_wrapper or InternalErrorWrapper(),
+        )
 
-    def filter(self, *specifications: InternalSpecification, lazy: bool = False):
-        if not specifications:
-            return list(self.session.values())
+    @make_lazy
+    def get(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: Optional[str] = None,
+    ) -> Union[LazyCommand[ModelT], ModelT]:
+        query = self._apply_specifications(
+            query=self.get_initial_query(initial_query),
+            specifications=specifications,
+        )
+        return self.session[query]
 
-        key_mask = self._apply_specifications(specifications)
-        if lazy:
-            return key_mask
+    @make_lazy
+    def filter(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: Optional[str] = None,
+    ) -> Union[LazyCommand[List[ModelT]], List[ModelT]]:
+        return self._apply_specifications(
+            query=list(self.session.values()),
+            specifications=specifications,
+        )
 
-        models = []
-        for key, value in self.session.items():
-            if not re.match(key, key_mask):
-                pass
+    def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
+        if obj is None:
+            obj = self.model(**obj_data)
 
-            models.append(value)
+        self.session[obj.id] = obj
+        return obj
 
-        return models
+    def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
+        if specifications:
+            for model in self.filter(*specifications, lazy=True):
+                del self.session[model.id]
+        elif obj is not None:
+            del self.session[obj.id]
 
-    def save(self, obj):
-        self.session[str(obj.id)] = obj
+    def update(
+        self, obj: Optional[ModelT] = None, *specifications: SpecificationType, **update_values,
+    ) -> None:
+        if specifications:
+            if not update_values:
+                raise InvalidQueryError(
+                    "You did not provide any update_values "
+                    "to the update() yet provided specifications"
+                )
 
-    def delete(self, obj):
-        del self.session[str(obj.id)]
+            for model in self.filter(*specifications, lazy=True):
+                model.__dict__.update(update_values)
+                self.save(model)
 
-    def update(self, obj):
-        self.session[str(obj.id)] = obj
+        elif obj is not None:
+            self.save(obj)
 
-    def is_modified(self, obj):
-        return self.get(self.specifications.filter(obj.id)) == obj
+    def is_modified(self, obj: ModelT) -> bool:
+        return self.get(self.specs.filter(id=obj.id)) == obj
 
-    def refresh(self, obj):
-        obj.value = self.get(self.specifications.filter(obj.id))
+    def refresh(self, obj: ModelT) -> None:
+        fresh_obj = self.get(self.specs.filter(id=obj.id), lazy=False)
+        obj.__dict__.update(fresh_obj.__dict__)
+
+    @make_lazy
+    def count(
+        self, *specifications: SpecificationType, lazy: bool = False,
+    ) -> Union[LazyCommand[int], int]:
+        if specifications:
+            return len(self.filter(*specifications, lazy=False))
+        return len(self.session)
 
 
 __all__ = [

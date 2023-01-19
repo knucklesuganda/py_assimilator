@@ -1,13 +1,13 @@
 from typing import Iterable
 
-import redis
+from redis import Redis
 
 from assimilator.core.events import Event, ExternalEvent
 from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 
 class RedisEventConsumer(EventConsumer):
-    def __init__(self, channels: Iterable[str], session: redis.Redis):
+    def __init__(self, channels: Iterable[str], session: Redis):
         self.session = session
         self.channels = channels
 
@@ -36,7 +36,7 @@ class RedisEventConsumer(EventConsumer):
 
 
 class RedisEventProducer(EventProducer):
-    def __init__(self, channel: str, session: redis.Redis):
+    def __init__(self, channel: str, session: Redis):
         self.session = session
         self.channel = channel
 
