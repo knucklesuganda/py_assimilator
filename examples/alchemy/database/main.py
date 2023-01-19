@@ -76,8 +76,19 @@ def order_users(repository: Repository):
     for i, ordered_user in enumerate(repository.filter(
         repository.specs.order('id', '-balance'),
         repository.specs.paginate(offset=20, limit=40),
+        repository.specs.only('username', 'id', 'balance'),
     )):
         print(f"User {i} ordered by id and balance:", ordered_user.username, ordered_user.balance)
+
+
+def update_poor_users(uow: UnitOfWork):
+    with uow:
+        uow.repository.update(
+            uow.repository.specs.filter(balance__lt=50),
+            balance=100,
+        )
+
+        uow.commit()
 
 
 if __name__ == '__main__':
@@ -109,4 +120,7 @@ if __name__ == '__main__':
     except NotFoundError as error:
         print("User was not found due to his deletion! Error:", error)
 
+    order_users(repository=create_uow().repository)
+
+    update_poor_users(create_uow())
     order_users(repository=create_uow().repository)

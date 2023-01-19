@@ -4,16 +4,12 @@ from redis import Redis
 from redis.client import Pipeline
 
 from assimilator.redis_.database import RedisModel
-from assimilator.core.database.exceptions import DataLayerError, NotFoundError, InvalidQueryError
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
-    SpecificationList,
-    SpecificationType,
-    Repository,
-    LazyCommand,
-    make_lazy,
+    SpecificationList, SpecificationType, Repository, LazyCommand, make_lazy,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
+from assimilator.core.database.exceptions import DataLayerError, NotFoundError, InvalidQueryError
 
 RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
 
@@ -101,8 +97,10 @@ class RedisRepository(Repository):
         return obj
 
     def delete(self, obj: Optional[RedisModelT] = None, *specifications: SpecificationType) -> None:
+        obj, specifications = self._check_obj_is_specification(obj, specifications)
+
         if specifications:
-            models = self.filter(*specifications)   # TODO: ADD ONLY SPECIFICATIONS
+            models = self.filter(*specifications)
             self.transaction.delete(*[str(model.id) for model in models])
         elif obj is not None:
             self.transaction.delete(obj.id)
@@ -113,6 +111,8 @@ class RedisRepository(Repository):
         *specifications: SpecificationType,
         **update_values,
     ) -> None:
+        obj, specifications = self._check_obj_is_specification(obj, specifications)
+
         if specifications:
             if not update_values:
                 raise InvalidQueryError(

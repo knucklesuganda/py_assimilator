@@ -47,6 +47,7 @@ class SpecificationList:
     order: SpecificationType
     paginate: SpecificationType
     join: SpecificationType
+    only: SpecificationType
 
 
 __all__ = [

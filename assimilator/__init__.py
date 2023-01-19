@@ -21,7 +21,7 @@ with optional_dependencies():
     import assimilator.alchemy
 
 with optional_dependencies():
-    import assimilator.kafka
+    import assimilator.kafka_
 
 with optional_dependencies():
     import assimilator.redis_ as redis

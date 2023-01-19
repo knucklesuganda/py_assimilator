@@ -3,8 +3,13 @@ from typing import Type, Union, Optional, TypeVar, List
 from assimilator.internal.database.models import InternalModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
-from assimilator.core.database import Repository, SpecificationType, LazyCommand, \
-    make_lazy, InvalidQueryError
+from assimilator.core.database import (
+    Repository,
+    SpecificationType,
+    LazyCommand,
+    make_lazy,
+    InvalidQueryError,
+)
 from assimilator.internal.database.specifications import InternalSpecificationList
 
 ModelT = TypeVar("ModelT", bound=InternalModel)
@@ -63,6 +68,8 @@ class InternalRepository(Repository):
         return obj
 
     def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
+        obj, specifications = self._check_obj_is_specification(obj, specifications)
+
         if specifications:
             for model in self.filter(*specifications, lazy=True):
                 del self.session[model.id]
@@ -70,8 +77,13 @@ class InternalRepository(Repository):
             del self.session[obj.id]
 
     def update(
-        self, obj: Optional[ModelT] = None, *specifications: SpecificationType, **update_values,
+        self,
+        obj: Optional[ModelT] = None,
+        *specifications: SpecificationType,
+        **update_values,
     ) -> None:
+        obj, specifications = self._check_obj_is_specification(obj, specifications)
+
         if specifications:
             if not update_values:
                 raise InvalidQueryError(
@@ -95,7 +107,9 @@ class InternalRepository(Repository):
 
     @make_lazy
     def count(
-        self, *specifications: SpecificationType, lazy: bool = False,
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
     ) -> Union[LazyCommand[int], int]:
         if specifications:
             return len(self.filter(*specifications, lazy=False))

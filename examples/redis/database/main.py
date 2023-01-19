@@ -50,6 +50,7 @@ def show_rich_users(balance: int, repository: Repository):
     users: LazyCommand[RedisUser] = repository.filter(
         repository.specs.filter(balance__gt=balance),
         repository.specs.paginate(limit=10),
+        repository.specs.only('username', 'balance'),
         lazy=True,
     )
 
