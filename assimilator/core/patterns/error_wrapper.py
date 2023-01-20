@@ -13,8 +13,12 @@ class ErrorWrapper:
         self.default_error = default_error
 
         self.skipped_errors = skipped_errors or set()
-        self.skipped_errors = set(self.skipped_errors)
-        self.skipped_errors.add(BaseException)
+        self.skipped_errors = {
+            *self.skipped_errors,
+            KeyboardInterrupt,
+            SystemExit,
+            *self.error_mappings.values()  # we want to skip all the mapped values as they are already fixed
+        }
 
     def __enter__(self):
         return self
@@ -42,6 +46,9 @@ class ErrorWrapper:
                 return func(*args, **kwargs)
 
         return wrapper
+
+    def __str__(self):
+        return f"{type(self).__name__}({self.error_mappings})"
 
 
 __all__ = ['ErrorWrapper']

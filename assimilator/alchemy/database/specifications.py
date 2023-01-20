@@ -1,6 +1,6 @@
-from typing import Collection, Optional
+from typing import Collection, Optional, Iterable
 
-from sqlalchemy.orm import Query
+from sqlalchemy.orm import Query, load_only
 from sqlalchemy.sql.operators import is_
 from sqlalchemy import column, desc
 
@@ -76,11 +76,17 @@ def alchemy_join(targets: Collection, join_args: Collection[dict], query: Query)
     return query
 
 
+@specification
+def alchemy_only(*only_fields: Iterable[str], query: Query):
+    return query.options(load_only(*(only_field for only_field in only_fields)))
+
+
 class AlchemySpecificationList(SpecificationList):
     filter = alchemy_filter
     order = alchemy_order
     paginate = alchemy_paginate
     join = alchemy_join
+    only = alchemy_only
 
 
 __all__ = [

@@ -1,5 +1,5 @@
 import operator
-from typing import List, Iterable, Any, Union, Callable, Optional
+from typing import List, Iterable, Any, Union, Callable, Optional, Set
 
 from assimilator.core.database import specification, SpecificationList, filter_parameter_parser
 from assimilator.internal.database.models import InternalModel
@@ -86,11 +86,21 @@ def internal_join(*args, query: QueryT, **kwargs) -> Any:
     return query
 
 
+@specification
+def internal_only(*only_fields: Iterable[str], query: QueryT):
+    if isinstance(query, str):
+        return query
+
+    only_fields = set(only_fields)
+    return [model.copy(include=only_fields) for model in query]
+
+
 class InternalSpecificationList(SpecificationList):
     filter = internal_filter
     order = internal_order
     paginate = internal_paginate
     join = internal_join
+    only = internal_only
 
 
 __all__ = [

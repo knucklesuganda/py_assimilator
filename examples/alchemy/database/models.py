@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-engine = create_engine(url="sqlite:///:memory:")
+engine = create_engine(url="sqlite:///:memory:", echo="debug")
 DatabaseSession = sessionmaker(bind=engine)
 Base = declarative_base()
 

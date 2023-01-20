@@ -1,7 +1,7 @@
 from functools import wraps
 from abc import ABC, abstractmethod
 from typing import TypeVar, Callable, Generic, final, \
-    Union, Optional, Iterable, Type, Collection
+    Union, Optional, Iterable, Type, Collection, Tuple
 
 from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
@@ -52,6 +52,22 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self.is_modified = self.error_wrapper.decorate(self.is_modified)
         self.refresh = self.error_wrapper.decorate(self.refresh)
         self.count = self.error_wrapper.decorate(self.count)
+
+    @final
+    def _check_obj_is_specification(
+        self,
+        obj: ModelT,
+        specifications: Iterable[SpecificationType]
+    ) -> Tuple[Optional[ModelT], Iterable[SpecificationType]]:
+        """
+        This function is called for parts of the code that use both obj and *specifications.
+        We check that if the obj is a model
+        """
+
+        if not isinstance(obj, self.model) and (obj is not None):
+            return None, (obj, *specifications)     # obj is specification
+
+        return obj, specifications
 
     @property
     def specs(self) -> Type[SpecificationList]:
