@@ -3,11 +3,11 @@ from typing import Union, Optional, Collection, Type, TypeVar, final
 from pymongo import MongoClient
 
 from assimilator.core.database import make_lazy
-from mongo.database.error_wrapper import MongoErrorWrapper
-from mongo.database.models import MongoModel
+from assimilator.mongo.database.models import MongoModel
 from assimilator.core.patterns import LazyCommand, ErrorWrapper
-from assimilator.core.database import Repository, SpecificationType, SpecificationList
-from mongo.database.specifications.specifications import MongoSpecificationList
+from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
+from assimilator.core.database import Repository, SpecificationType, SpecificationList, NotFoundError
+from assimilator.mongo.database.specifications.specifications import MongoSpecificationList
 
 ModelT = TypeVar("ModelT", bound=MongoModel)
 
@@ -50,7 +50,13 @@ class MongoRepository(Repository):
             query=self.get_initial_query(initial_query),
             specifications=specifications,
         )
-        return self.model(**self._collection.find_one(**query))
+
+        data = self._collection.find_one(**query)
+
+        if data is None:
+            raise NotFoundError()
+
+        return self.model(**data)
 
     @make_lazy
     def filter(

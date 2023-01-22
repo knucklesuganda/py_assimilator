@@ -2,8 +2,8 @@ from bson.errors import BSONError
 from pymongo.errors import DuplicateKeyError, InvalidOperation, WriteError
 
 from assimilator.core.patterns import ErrorWrapper
-from assimilator.core.database import DataLayerError, InvalidQueryError
 from assimilator.core.exceptions import ParsingError
+from assimilator.core.database import DataLayerError, InvalidQueryError, NotFoundError
 
 
 class MongoErrorWrapper(ErrorWrapper):
@@ -15,6 +15,7 @@ class MongoErrorWrapper(ErrorWrapper):
                 InvalidOperation: InvalidQueryError,
                 WriteError: InvalidQueryError,
             },
+            skipped_errors={NotFoundError},
             default_error=DataLayerError,
         )
 
