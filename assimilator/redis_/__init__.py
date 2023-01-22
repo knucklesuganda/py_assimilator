@@ -1,2 +1,2 @@
-from assimilator.redis_.database import *
-from assimilator.redis_.events import *
+import assimilator.redis_.database
+import assimilator.redis_.events

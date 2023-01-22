@@ -1,39 +1,35 @@
-from typing import Collection, Optional, Iterable
+from typing import Collection, Optional, Iterable, Any, Callable
 
 from sqlalchemy.orm import Query, load_only
-from sqlalchemy.sql.operators import is_
-from sqlalchemy import column, desc
+from sqlalchemy.sql.elements import not_
+from sqlalchemy.sql.operators import or_
+from sqlalchemy import column, desc, and_
 
-from assimilator.core.database.specifications import specification, SpecificationList,\
-    filter_parameter_parser
-
-
-alchemy_filter_mappings = {
-    "__gt": lambda field_, val: column(field_) > val,
-    "__gte": lambda field_, val: column(field_) >= val,
-    "__lt": lambda field_, val: column(field_) < val,
-    "__lte": lambda field_, val: column(field_) <= val,
-    "__not": lambda field_, val: column(field_) != val,
-    "__is": lambda field_, val: is_(column(field_, val)),
-}
+from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
+from assimilator.core.database.specifications import specification, SpecificationList, \
+    SpecificationType, FilterSpecification
 
 
-@specification
-def alchemy_filter(*filters, query: Query, **filters_by) -> Query:
-    filters = list(filters)
+class AlchemyFilter(FilterSpecification):
+    filtering_options_cls = AlchemyFilteringOptions
 
-    for field, value in dict(filters_by).items():
-        _, parsed_filter = filter_parameter_parser(
-            field=field,
-            value=value,
-            filter_mappings=alchemy_filter_mappings,
-        )
+    def filter_parsed(self, filter_func: Callable, field: str, value: Any):
+        self.filters.append(filter_func(field, value))
 
-        if parsed_filter is not None:
-            filters.append(parsed_filter)
-            del filters_by[field]
+    def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
+        return AlchemyFilter(or_(*self.filters, *other.filters))
 
-    return query.filter(*filters).filter_by(**filters_by)
+    def __and__(self, other: 'AlchemyFilter') -> SpecificationType:
+        return AlchemyFilter(and_(*self.filters, *other.filters))
+
+    def __invert__(self):
+        return AlchemyFilter(not_(*self.filters))
+
+    def apply(self, query: Query) -> Query:
+        return query.filter(*self.filters)
+
+
+alchemy_filter = AlchemyFilter  # TODO: for old versions support, delete later
 
 
 @specification
@@ -82,7 +78,7 @@ def alchemy_only(*only_fields: Iterable[str], query: Query):
 
 
 class AlchemySpecificationList(SpecificationList):
-    filter = alchemy_filter
+    filter = AlchemyFilter
     order = alchemy_order
     paginate = alchemy_paginate
     join = alchemy_join
@@ -92,6 +88,7 @@ class AlchemySpecificationList(SpecificationList):
 __all__ = [
     'AlchemySpecificationList',
     'alchemy_filter',
+    'AlchemyFilter',
     'alchemy_order',
     'alchemy_paginate',
     'alchemy_join',

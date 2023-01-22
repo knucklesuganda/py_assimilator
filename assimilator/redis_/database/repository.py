@@ -53,11 +53,15 @@ class RedisRepository(Repository):
             specifications=specifications,
         )
 
-        found_obj = self.session.get(query)
-        if found_obj is None:
+        found_objects = self.session.mget(query)
+        if not all(found_objects):
             raise NotFoundError(f"Redis model was not found")
 
-        return self.model.from_json(found_obj)
+        found_objects = list(self._apply_specifications(query=found_objects, specifications=specifications))
+        if len(found_objects) != 1:
+            raise InvalidQueryError("Multiple objects found in get()")
+
+        return self.model.parse(found_objects[0])
 
     @make_lazy
     def filter(
@@ -74,11 +78,9 @@ class RedisRepository(Repository):
         else:
             key_name = "*"
 
-        key_name = key_name or "*"
-
         models = self.session.mget(self.session.keys(key_name))
         return list(self._apply_specifications(specifications=specifications, query=[
-            self.model.from_json(value) for value in models
+            self.model.parse(value) for value in models
         ]))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:

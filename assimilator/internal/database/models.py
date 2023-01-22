@@ -3,14 +3,14 @@ from uuid import uuid4
 
 from pydantic import BaseModel
 
-from assimilator.core.patterns.mixins import JSONParsedMixin
+from assimilator.core.patterns.mixins import ModelParser
 
 
 T = TypeVar("T")
 ComparableT = TypeVar("ComparableT")
 
 
-class InternalModel(JSONParsedMixin, BaseModel):
+class InternalModel(ModelParser, BaseModel):
     id: T
 
     class Meta:

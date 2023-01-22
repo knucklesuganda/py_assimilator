@@ -5,7 +5,7 @@ from typing import TypeVar, Callable, Generic, final, \
 
 from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
-from assimilator.core.database.specifications import SpecificationList, SpecificationType
+from assimilator.core.database.specifications import SpecificationType, SpecificationList
 
 
 def make_lazy(func: Callable):
@@ -41,7 +41,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self.session = session
         self.model = model
         self.__initial_query: QueryT = initial_query
-        self.specifications = specifications
+        self.specifications: Type[SpecificationList] = specifications
 
         self.error_wrapper = error_wrapper or ErrorWrapper()
         self.get = self.error_wrapper.decorate(self.get)

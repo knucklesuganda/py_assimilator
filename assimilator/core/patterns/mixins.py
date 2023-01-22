@@ -9,9 +9,9 @@ from assimilator.core.exceptions import ParsingError
 T = TypeVar("T", bound=BaseModel)
 
 
-class JSONParsedMixin:
+class ModelParser:
     @classmethod
-    def from_json(cls: Type[T], data: str) -> T:
+    def parse(cls: Type[T], data: str) -> T:
         try:
             return cls(**json.loads(data))
         except ValidationError as exc:
@@ -19,5 +19,5 @@ class JSONParsedMixin:
 
 
 __all__ = [
-    'JSONParsedMixin',
+    'ModelParser',
 ]

@@ -1,2 +1,2 @@
-from assimilator.alchemy.events import *
-from assimilator.alchemy.database import *
+import assimilator.alchemy.events
+import assimilator.alchemy.database

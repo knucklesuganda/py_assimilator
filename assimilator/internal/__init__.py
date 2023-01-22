@@ -1,2 +1,2 @@
-from assimilator.internal.events import *
-from assimilator.internal.database import *
+import assimilator.internal.events
+import assimilator.internal.database

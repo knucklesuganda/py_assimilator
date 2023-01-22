@@ -3,10 +3,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from assimilator.core.patterns.mixins import JSONParsedMixin
+from assimilator.core.patterns.mixins import ModelParser
 
 
-class Event(JSONParsedMixin, BaseModel):
+class Event(ModelParser, BaseModel):
     id: int
     event_name: str
     event_date: datetime = Field(default_factory=datetime.now)

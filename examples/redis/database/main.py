@@ -5,7 +5,7 @@ from uuid import UUID
 from assimilator.core.database import UnitOfWork, Repository, NotFoundError
 from assimilator.core.patterns import LazyCommand
 
-from dependencies import create_uow
+from examples.redis.database.dependencies import create_uow
 from examples.redis.database.models import RedisUser
 
 
@@ -69,6 +69,7 @@ def delete_user(id: UUID, uow: UnitOfWork):
 
 def order_users(repository: Repository):
     for i, ordered_user in enumerate(repository.filter(
+        repository.specs.filter(username__like=r"%ey%"),
         repository.specs.order('id', '-balance'),
         repository.specs.paginate(offset=20, limit=40),
     )):

@@ -25,7 +25,7 @@ class KafkaEventConsumer(EventConsumer):
 
         for message in self.consumer:
             try:
-                yield ExternalEvent.from_json(message.value)
+                yield ExternalEvent.parse(message.value)
             except json.JSONDecoder as exc:
                 raise EventParsingError(exc)
 

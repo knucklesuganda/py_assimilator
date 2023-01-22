@@ -23,7 +23,7 @@ class ErrorWrapper:
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Type[Exception], exc_val: Exception, exc_tb):
         if exc_val is None:
             return
         elif exc_type in self.skipped_errors:

@@ -84,7 +84,7 @@ def order_users(repository: Repository):
 def update_poor_users(uow: UnitOfWork):
     with uow:
         uow.repository.update(
-            uow.repository.specs.filter(balance__lt=50),
+            ~(uow.repository.specs.filter(balance__lt=50) & uow.repository.specs.filter(balance__gt=20)),
             balance=100,
         )
 
@@ -123,4 +123,4 @@ if __name__ == '__main__':
     order_users(repository=create_uow().repository)
 
     update_poor_users(create_uow())
-    order_users(repository=create_uow().repository)
+    # order_users(repository=create_uow().repository)

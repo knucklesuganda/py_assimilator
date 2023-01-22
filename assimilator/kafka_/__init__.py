@@ -1,1 +1,1 @@
-from assimilator.kafka_.events.events_bus import *
+import assimilator.kafka_.events

@@ -3,13 +3,10 @@ from typing import Optional
 
 from assimilator.core.database import UnitOfWork
 from assimilator.core.database.repository import Repository
-from assimilator.internal.database.repository import InternalRepository
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 
 
 class InternalUnitOfWork(UnitOfWork):
-    repository: InternalRepository
-
     def __init__(self, repository: Repository):
         super(InternalUnitOfWork, self).__init__(
             repository=repository,
