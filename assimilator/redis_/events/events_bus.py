@@ -28,7 +28,7 @@ class RedisEventConsumer(EventConsumer):
                 self.delay_function()
                 continue
 
-            yield ExternalEvent.parse(message['data'])
+            yield ExternalEvent.loads(message['data'])
             self.delay_function()
 
     def delay_function(self):

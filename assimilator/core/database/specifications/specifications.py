@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 from typing import Callable, Union, TypeVar, Any, Type, final
 
 from assimilator.core.database.specifications.filtering_options import FilteringOptions
-
+from assimilator.core.database.specifications.specifications_protocols import OrderSpecificationProtocol, \
+    PaginateSpecificationProtocol, OnlySpecificationProtocol, JoinSpecificationProtocol
 
 QueryT = TypeVar("QueryT")
 
@@ -27,10 +28,14 @@ class FilterSpecification(Specification, ABC):
 
         for field, value in named_filters.items():
             option, filter_func = self.filtering_options.parse_filter(raw_filter=field)
-            self.filter_parsed(filter_func=filter_func, field=field.replace(option, ""), value=value)
+            self.filters.append(self.get_parsed_filter(
+                filter_func=filter_func,
+                field=field.replace(option, ""),
+                value=value,
+            ))
 
-    def filter_parsed(self, filter_func: Callable, field: str, value: Any):
-        raise NotImplementedError("filter_parsed() is not implemented")
+    def get_parsed_filter(self, filter_func: Callable, field: str, value: Any):
+        return filter_func(field, value)
 
     def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
         raise NotImplementedError("or() is not implemented for FilterSpecification")
@@ -42,15 +47,16 @@ class FilterSpecification(Specification, ABC):
         raise NotImplementedError("invert() is not implemented for FilterSpecification")
 
     def __str__(self):
-        return f'{type(self.__class__).__name__}({self.filters})'
+        return f'filter_specification({self.filters})'
 
 
-def specification(func: Callable) -> Callable[[Any], QueryT]:
+def specification(func: Callable) -> Callable:
     def create_specification(*args, **kwargs):
         @wraps(func)
         def created_specification(query: QueryT) -> QueryT:
             return func(*args, **kwargs, query=query)
 
+        created_specification: func
         return created_specification
 
     return create_specification
@@ -61,10 +67,10 @@ SpecificationType = Union[Type[Specification], Callable]
 
 class SpecificationList:
     filter: Type[FilterSpecification]
-    order: Union[Specification, Callable]
-    paginate: SpecificationType
-    join: SpecificationType
-    only: SpecificationType
+    order: OrderSpecificationProtocol
+    paginate: PaginateSpecificationProtocol
+    join: JoinSpecificationProtocol
+    only: OnlySpecificationProtocol
 
 
 __all__ = [

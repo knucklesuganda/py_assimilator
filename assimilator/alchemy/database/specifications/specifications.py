@@ -1,20 +1,19 @@
 from typing import Collection, Optional, Iterable, Any, Callable
 
+from sqlalchemy import column, desc, and_, or_, not_
 from sqlalchemy.orm import Query, load_only
-from sqlalchemy.sql.elements import not_
-from sqlalchemy.sql.operators import or_
-from sqlalchemy import column, desc, and_
 
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
-from assimilator.core.database.specifications import specification, SpecificationList, \
-    SpecificationType, FilterSpecification
+from assimilator.core.database.specifications import (
+    specification,
+    SpecificationList,
+    SpecificationType,
+    FilterSpecification,
+)
 
 
 class AlchemyFilter(FilterSpecification):
     filtering_options_cls = AlchemyFilteringOptions
-
-    def filter_parsed(self, filter_func: Callable, field: str, value: Any):
-        self.filters.append(filter_func(field, value))
 
     def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
         return AlchemyFilter(or_(*self.filters, *other.filters))
@@ -46,17 +45,11 @@ def alchemy_order(*clauses: str, query: Query) -> Query:
 
 
 @specification
-def alchemy_paginate(
-    *,
-    limit: Optional[int] = None,
-    offset: Optional[int] = None,
-    query: Query,
-) -> Query:
-
-    if limit is not None:
-        query = query.limit(limit)
+def alchemy_paginate(*, limit: Optional[int] = None, offset: Optional[int] = None, query: Query) -> Query:
     if offset is not None:
         query = query.offset(offset)
+    if limit is not None:
+        query = query.limit(limit)
 
     return query
 

@@ -1,29 +1,28 @@
-from typing import List, Iterable, Any, Union, Optional
+from typing import List, Iterable, Union, Optional, Collection
 
-from assimilator.internal.database.models import InternalModel
-from assimilator.core.database import specification, SpecificationList
+from assimilator.core.database import specification, SpecificationList, BaseModel
 from assimilator.internal.database.specifications.filter_specifications import InternalFilter
 
-QueryT = Union[str, List[InternalModel]]
+QueryT = Union[str, List[BaseModel]]
 
 internal_filter = InternalFilter    # TODO: remove in later versions
 
 
 @specification
-def internal_order(*args, query: QueryT, **kwargs) -> Iterable[InternalModel]:
+def internal_order(*clauses, query: QueryT) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 
     query = list(query)
-    fields = (*args, *kwargs.keys())
 
-    if not any(field.startswith("-") for field in fields):
-        query.sort(key=lambda item: [getattr(item, argument) for argument in fields])
-        return query
-
-    for field in fields:
-        reverse = field.startswith("-")
-        query.sort(key=lambda item: getattr(item, field.strip("-")), reverse=reverse)
+    if not any(field.startswith("-") for field in clauses):
+        query.sort(key=lambda item: [getattr(item, argument) for argument in clauses])
+    else:
+        for field in clauses:
+            query.sort(
+                key=lambda item: getattr(item, field.strip("-")),
+                reverse=field.startswith("-"),
+            )
 
     return query
 
@@ -34,16 +33,15 @@ def internal_paginate(
     query: QueryT,
     limit: Optional[int] = None,
     offset: Optional[int] = None,
-) -> Iterable[InternalModel]:
+) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 
-    query = list(query)
-    return query[offset:limit]
+    return list(query)[offset:limit]
 
 
 @specification
-def internal_join(*args, query: QueryT, **kwargs) -> Any:
+def internal_join(targets: Collection, join_args: Collection[dict], query: QueryT) -> QueryT:
     return query
 
 
@@ -52,8 +50,7 @@ def internal_only(*only_fields: Iterable[str], query: QueryT):
     if isinstance(query, str):
         return query
 
-    only_fields = set(only_fields)
-    return [model.copy(include=only_fields) for model in query]
+    return [model.copy(include=set(only_fields)) for model in query]
 
 
 class InternalSpecificationList(SpecificationList):

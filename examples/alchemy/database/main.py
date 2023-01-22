@@ -88,6 +88,8 @@ def update_poor_users(uow: UnitOfWork):
             balance=100,
         )
 
+        uow.repository.specs.only()
+
         uow.commit()
 
 

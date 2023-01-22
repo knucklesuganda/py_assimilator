@@ -61,7 +61,7 @@ class RedisRepository(Repository):
         if len(found_objects) != 1:
             raise InvalidQueryError("Multiple objects found in get()")
 
-        return self.model.parse(found_objects[0])
+        return self.model.loads(found_objects[0])
 
     @make_lazy
     def filter(
@@ -80,7 +80,7 @@ class RedisRepository(Repository):
 
         models = self.session.mget(self.session.keys(key_name))
         return list(self._apply_specifications(specifications=specifications, query=[
-            self.model.parse(value) for value in models
+            self.model.loads(value) for value in models
         ]))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:

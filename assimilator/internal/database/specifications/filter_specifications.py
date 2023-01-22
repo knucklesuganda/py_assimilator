@@ -2,10 +2,10 @@ from typing import Callable, Any, Union, List
 
 from assimilator.core.database.specifications import FilterSpecification
 from assimilator.internal.database.specifications.filtering_options import InternalFilteringOptions
-from assimilator.internal.database.models import InternalModel
+from assimilator.core.database.models import BaseModel
 
 
-QueryT = Union[str, List[InternalModel]]
+QueryT = Union[str, List[BaseModel]]
 
 
 class InternalFilter(FilterSpecification):
@@ -13,10 +13,14 @@ class InternalFilter(FilterSpecification):
 
     def __init__(self, *filters, **named_filters):
         self.text_filters = [filter_ for filter_ in filters if isinstance(filter_, str)]
+
+        if named_filters.get('id'):
+            self.text_filters.append(named_filters.pop('id'))
+
         super(InternalFilter, self).__init__(*(set(filters) - set(self.text_filters)), **named_filters)
 
-    def filter_parsed(self, filter_func: Callable, field: str, value: Any):
-        self.filters.append((filter_func, field, value))
+    def get_parsed_filter(self, filter_func: Callable, field: str, value: Any):
+        return filter_func, field, value
 
     def _check_model_passes(self, filter_func: Callable, field, value):
         return filter_func(field, value)

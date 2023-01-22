@@ -1,7 +1,6 @@
 from typing import Type, Union, Optional, TypeVar, List
 
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
-from assimilator.internal.database.models import InternalModel
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 from assimilator.core.database import (
     Repository,
@@ -9,11 +8,12 @@ from assimilator.core.database import (
     LazyCommand,
     make_lazy,
     InvalidQueryError,
+    BaseModel,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
 
 
-ModelT = TypeVar("ModelT", bound=InternalModel)
+ModelT = TypeVar("ModelT", bound=BaseModel)
 
 
 class InternalRepository(Repository):

@@ -17,10 +17,11 @@ setup(
     description='The best python patterns for your projects',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    requires=['pydantic', 'makefun'],
+    requires=['pydantic>=1.10.2'],
     extras_require={
-        'database': ['SQLAlchemy'],
-        'kafka': ['kafka-python'],
-        'redis': ['redis'],
+        'database': ['SQLAlchemy>=1.4.44'],
+        'kafka': ['kafka-python>=2.0.2'],
+        'redis': ['redis>=4.4.0'],
+        'mongo': ['pymongo>=4.3.3'],    # TODO: fix optional
     },
 )

@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
-from assimilator.core.patterns.mixins import ModelParser
+from core.database.models import BaseModel
 
 
-class Event(ModelParser, BaseModel):
+class Event(BaseModel):
     id: int
     event_name: str
     event_date: datetime = Field(default_factory=datetime.now)

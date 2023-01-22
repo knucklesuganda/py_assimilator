@@ -5,8 +5,9 @@ from uuid import UUID
 from assimilator.core.database import UnitOfWork, Repository, NotFoundError
 from assimilator.core.patterns import LazyCommand
 
-from examples.redis.database.dependencies import create_uow
+from examples.redis.database.dependencies import create_uow, User
 from examples.redis.database.models import RedisUser
+from mongo.database import MongoModel
 
 
 def create_user(username: str, email: str, balance: float, uow: UnitOfWork) -> UUID:
@@ -47,7 +48,7 @@ def create_many_users(uow):
 
 
 def show_rich_users(balance: int, repository: Repository):
-    users: LazyCommand[RedisUser] = repository.filter(
+    users: LazyCommand[User] = repository.filter(
         repository.specs.filter(balance__gt=balance),
         repository.specs.paginate(limit=10),
         repository.specs.only('username', 'balance'),
@@ -68,11 +69,7 @@ def delete_user(id: UUID, uow: UnitOfWork):
 
 
 def order_users(repository: Repository):
-    for i, ordered_user in enumerate(repository.filter(
-        repository.specs.filter(username__like=r"%ey%"),
-        repository.specs.order('id', '-balance'),
-        repository.specs.paginate(offset=20, limit=40),
-    )):
+    for i, ordered_user in enumerate(repository.filter()):
         print(f"User {i} ordered by id and balance:", ordered_user.username, ordered_user.balance)
 
 
@@ -84,7 +81,7 @@ if __name__ == '__main__':
         uow=create_uow(),
     )
 
-    print(f"User with '{new_user_id}' was created")
+    print(f"User with id '{new_user_id}' was created")
 
     user = read_user(id=new_user_id, repository=create_uow().repository)
     print("User returned from Redis:", user)
