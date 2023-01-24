@@ -1,7 +1,7 @@
-from typing import Collection, Optional, Iterable, Any, Callable
+from typing import Collection, Optional, Iterable
 
-from sqlalchemy import column, desc, and_, or_, not_
 from sqlalchemy.orm import Query, load_only
+from sqlalchemy import column, desc, and_, or_, not_
 
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
 from assimilator.core.database.specifications import (

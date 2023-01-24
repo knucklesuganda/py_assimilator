@@ -1,13 +1,11 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy import create_engine, Column, String, Float, Integer
+from sqlalchemy.orm import declarative_base
 
-
-engine = create_engine(url="sqlite:///:memory:", echo="debug")
-DatabaseSession = sessionmaker(bind=engine)
+engine = create_engine(url="sqlite:///:memory:")
 Base = declarative_base()
 
 
-class User(Base):
+class AlchemyUser(Base):
     __tablename__ = "users"
 
     id = Column(Integer(), primary_key=True)
@@ -20,5 +18,3 @@ class User(Base):
 
 
 Base.metadata.create_all(engine)
-
-__all__ = ['User', 'DatabaseSession']

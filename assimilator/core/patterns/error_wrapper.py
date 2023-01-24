@@ -25,7 +25,7 @@ class ErrorWrapper:
         if exc_val is None:
             return True
         elif exc_type in self.skipped_errors:
-            return exc_val
+            return False
 
         wrapped_error = self.error_mappings.get(exc_type)
 

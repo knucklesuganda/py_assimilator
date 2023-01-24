@@ -4,11 +4,16 @@ from sqlalchemy import func, select, update, delete
 from sqlalchemy.orm import Session, Query
 from sqlalchemy.inspection import inspect
 
-from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
+from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
 from assimilator.alchemy.database.specifications import AlchemySpecificationList
-from assimilator.core.database import Repository, SpecificationList, \
-    LazyCommand, SpecificationType, make_lazy
+from assimilator.core.database import (
+    Repository,
+    SpecificationList,
+    LazyCommand,
+    SpecificationType,
+    make_lazy,
+)
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
 
@@ -77,6 +82,9 @@ class AlchemyRepository(Repository):
             )
             self.session.execute(query.values(update_values))
         elif obj is not None:
+            if obj not in self.session:
+                obj = self.session.merge(obj)
+
             self.session.add(obj)
 
     def save(self, obj: Optional[AlchemyModelT] = None, **data) -> AlchemyModelT:
@@ -87,12 +95,8 @@ class AlchemyRepository(Repository):
         return obj
 
     def refresh(self, obj: AlchemyModelT) -> None:
-        inspection = inspect(obj)
-
-        if inspection.transient or inspection.pending:
-            return
-        elif inspection.detached:
-            self.session.add(obj)
+        if obj not in self.session:
+            obj = self.session.merge(obj)
 
         self.session.refresh(obj)
 
@@ -112,7 +116,12 @@ class AlchemyRepository(Repository):
         return self.session.is_modified(obj)
 
     @make_lazy
-    def count(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand[int], int]:
+    def count(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: Query = None
+    ) -> Union[LazyCommand[int], int]:
         primary_keys = inspect(self.model).primary_key
 
         if not primary_keys:
@@ -122,7 +131,7 @@ class AlchemyRepository(Repository):
         return self.get(
             *specifications,
             lazy=False,
-            query=select(func.count(getattr(self.model, primary_keys[0].name))),
+            initial_query=initial_query or select(func.count(getattr(self.model, primary_keys[0].name))),
         )
 
 

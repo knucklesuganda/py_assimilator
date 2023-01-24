@@ -132,6 +132,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self,
         *specifications: SpecificationType,
         lazy: bool = False,
+        initial_query: QueryT = None,
     ) -> Union[LazyCommand[int], int]:
         raise NotImplementedError("count() is not implemented in the repository")
 
