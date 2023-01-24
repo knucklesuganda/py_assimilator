@@ -3,8 +3,12 @@ from abc import ABC, abstractmethod
 from typing import Callable, Union, TypeVar, Any, Type, final
 
 from assimilator.core.database.specifications.filtering_options import FilteringOptions
-from assimilator.core.database.specifications.specifications_protocols import OrderSpecificationProtocol, \
-    PaginateSpecificationProtocol, OnlySpecificationProtocol, JoinSpecificationProtocol
+from assimilator.core.database.specifications.typings import (
+    OrderSpecificationProtocol,
+    PaginateSpecificationProtocol,
+    OnlySpecificationProtocol,
+    JoinSpecificationProtocol,
+)
 
 QueryT = TypeVar("QueryT")
 

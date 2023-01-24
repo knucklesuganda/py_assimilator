@@ -63,6 +63,7 @@ class InternalSpecificationList(SpecificationList):
 
 __all__ = [
     'internal_filter',
+    'InternalFilter',
     'internal_order',
     'internal_paginate',
     'internal_join',

@@ -12,7 +12,7 @@ from assimilator.core.database import (
     NotFoundError,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
-
+from core.database import MultipleResultsError
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -59,6 +59,8 @@ class InternalRepository(Repository):
 
         if not found_models:
             raise NotFoundError()
+        elif len(found_models) != 1:
+            raise MultipleResultsError()
 
         return found_models[0]
 

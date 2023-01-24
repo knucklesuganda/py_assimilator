@@ -80,9 +80,10 @@ class AlchemySpecificationList(SpecificationList):
 
 __all__ = [
     'AlchemySpecificationList',
-    'alchemy_filter',
+    'alchemy_filter',   # TODO: remove in future versions
     'AlchemyFilter',
     'alchemy_order',
     'alchemy_paginate',
     'alchemy_join',
+    'alchemy_only',
 ]

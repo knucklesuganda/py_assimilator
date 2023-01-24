@@ -113,7 +113,7 @@ class AlchemyRepository(Repository):
             self.session.delete(obj)
 
     def is_modified(self, obj: AlchemyModelT) -> bool:
-        return self.session.is_modified(obj)
+        return obj in self.session and self.session.is_modified(obj)
 
     @make_lazy
     def count(
@@ -125,8 +125,9 @@ class AlchemyRepository(Repository):
         primary_keys = inspect(self.model).primary_key
 
         if not primary_keys:
-            raise InvalidQueryError("Your repository model does not have"
-                                    " any primary keys. We cannot use count()")
+            raise InvalidQueryError(
+                "Your repository model does not have any primary keys. We cannot use count()"
+            )
 
         return self.get(
             *specifications,

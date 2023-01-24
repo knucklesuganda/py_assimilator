@@ -1,8 +1,8 @@
 import json
 from typing import Iterable
 
-from kafka_ import KafkaConsumer, KafkaProducer
-from kafka_.errors import KafkaError
+from kafka import KafkaProducer, KafkaConsumer
+from kafka.errors import KafkaError
 
 from assimilator.core.events import Event, ExternalEvent
 from assimilator.core.events import EventParsingError, EventProducingError

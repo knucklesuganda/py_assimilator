@@ -1,10 +1,12 @@
+from pymongo.client_session import ClientSession
+
 from assimilator.core.database import UnitOfWork
 from assimilator.mongo.database.repository import MongoRepository
 
 
 class MongoUnitOfWork(UnitOfWork):
     repository: MongoRepository
-    transaction: str
+    transaction: ClientSession
 
     def begin(self):
         self.transaction = self.repository.session.start_session()

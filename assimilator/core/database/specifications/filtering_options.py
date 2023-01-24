@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Callable, Dict, Tuple
 
 
@@ -25,30 +26,39 @@ class FilteringOptions:
 
         return self.get_default_filter()
 
+    @abstractmethod
     def _eq(self, field: str, value):
         raise NotImplementedError("_eq() is not implemented in the filtering options")
 
+    @abstractmethod
     def _gt(self, field: str, value):
         raise NotImplementedError("_gt() is not implemented in the filtering options")
 
+    @abstractmethod
     def _gte(self, field: str, value):
         raise NotImplementedError("_gte() is not implemented in the filtering options")
 
+    @abstractmethod
     def _lt(self, field: str, value):
         raise NotImplementedError("_lt() is not implemented in the filtering options")
 
+    @abstractmethod
     def _lte(self, field: str, value):
         raise NotImplementedError("_lte() is not implemented in the filtering options")
 
+    @abstractmethod
     def _not(self, field: str, value):
         raise NotImplementedError("_not() is not implemented in the filtering options")
 
+    @abstractmethod
     def _is(self, field: str, value):
         raise NotImplementedError("_is() is not implemented in the filtering options")
 
+    @abstractmethod
     def _like(self, field: str, value):
         raise NotImplementedError("_like() is not implemented in the filtering options")
 
+    @abstractmethod
     def _regex(self, field: str, value):
         raise NotImplementedError("_regex() is not implemented in the filtering options")
 

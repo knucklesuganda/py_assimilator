@@ -4,6 +4,7 @@ from redis import Redis
 from redis.client import Pipeline
 
 from assimilator.redis_.database import RedisModel
+from assimilator.core.exceptions import ParsingError
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
     SpecificationList,
@@ -13,8 +14,12 @@ from assimilator.core.database import (
     make_lazy,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
-from assimilator.core.database.exceptions import DataLayerError, NotFoundError, InvalidQueryError
-from assimilator.core.exceptions import ParsingError
+from assimilator.core.database.exceptions import (
+    DataLayerError,
+    NotFoundError,
+    InvalidQueryError,
+    MultipleResultsError,
+)
 
 RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
 
@@ -64,7 +69,6 @@ class RedisRepository(Repository):
             raise NotFoundError()
 
         parsed_objects = []
-
         for obj in found_objects:
             try:
                 parsed_objects.append(self.model.loads(obj))
@@ -76,8 +80,10 @@ class RedisRepository(Repository):
             specifications=specifications,
         )
 
-        if len(parsed_objects) != 1:
-            raise InvalidQueryError("Multiple objects found in get()")
+        if not parsed_objects:
+            raise NotFoundError()
+        elif len(parsed_objects) != 1:
+            raise MultipleResultsError()
 
         return parsed_objects[0]
 

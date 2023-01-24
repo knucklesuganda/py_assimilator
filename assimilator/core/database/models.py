@@ -38,12 +38,18 @@ class BaseModel(PydanticBaseModel):
 
     def dumps(self, *args, **kwargs):
         if kwargs.get('exclude'):
-            kwargs['exclude'] = set(*kwargs['exclude'], *getattr(self.AssimilatorConfig, 'excluded_dumps', ()))
+            kwargs['exclude'] = set(
+                *kwargs['exclude'],
+                *getattr(self.AssimilatorConfig, 'excluded_dumps', ()),
+            )
         return super(BaseModel, self).json(*args, **kwargs)
 
     def dict(self, *args, **kwargs):
         if kwargs.get('exclude'):
-            kwargs['exclude'] = set(*kwargs['exclude'], *getattr(self.AssimilatorConfig, 'excluded_dumps', ()))
+            kwargs['exclude'] = set(
+                *kwargs['exclude'],
+                *getattr(self.AssimilatorConfig, 'excluded_dumps', ()),
+            )
         return super(BaseModel, self).dict(*args, **kwargs)
 
 
