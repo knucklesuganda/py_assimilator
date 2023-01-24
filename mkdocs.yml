@@ -26,6 +26,7 @@ nav:
   - Introduction: index.md
   - Concepts: concepts.md
   - Patterns types:
+    - Important things: patterns/important.md
     - Database: patterns/database.md
     - Events: patterns/events.md
   - Internal:
@@ -44,3 +45,10 @@ nav:
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator
 site_author: Andrey Ivanov | Python
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg

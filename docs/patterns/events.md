@@ -48,7 +48,7 @@ to a Python object.
 ## Create a custom event
 
 `events.py`: 
-```python
+```Python
 from assimilator.core.events import Event
 
 class UserCreated(Event):
@@ -60,7 +60,7 @@ class UserCreated(Event):
 ```
 
 `logic.py`:
-```python
+```Python
 from assimilator.core.database import UnitOfWork
 
 from events import UserCreated
@@ -103,7 +103,7 @@ Yields incoming events
 Here is an example of how you would create and use your `EventConsumer`:
 
 `events_bus.py`:
-```python
+```Python
 from assimilator.core.events import EventConsumer, ExternalEvent
 
 
@@ -126,7 +126,7 @@ class MyEventConsumer(EventConsumer):
 
 `logic.py`:
 
-```python
+```Python
 from events_bus import MyEventConsumer
 
 
@@ -182,7 +182,7 @@ Sends an event to an external system for it to be consumed.
 Here is an example of how you would create and use your `EventProducer`:
 
 `events_bus.py`:
-```python
+```Python
 from assimilator.core.events import EventProducer
 
 
@@ -204,7 +204,7 @@ class MyEventProducer(EventProducer):
 
 `logic.py`:
 
-```python
+```Python
 from events_bus import MyEventProducer
 from events import UserCreated
 from models import User

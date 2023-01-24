@@ -75,7 +75,7 @@ But, please, do not make new functions available to the outer world.
 
 You can do this:
 
-```python
+```Python
 from assimilator.core.database import Repository
 
 
@@ -87,7 +87,7 @@ class UserRepository(Repository):
 ```
 And call that function inside of your repository. But, never do this:
 
-```python
+```Python
 from assimilator.core.database import Repository
 
 
@@ -99,7 +99,7 @@ class UserRepository(Repository):
 ```
 Since it is going to be really hard for you to replace one repository to another. Example:
 
-```python
+```Python
 from assimilator.core.database import Repository
 from users.repository import UserRepository
 from products.repository import ProductRepository
@@ -128,7 +128,7 @@ Specification is the pattern that adds values, filters, joins or anything else
 to the query in your repository. It can also work as a filter for your objects.
 
 #### Class-based specifications
-```python
+```Python
 class Specification(ABC):
     @abstractmethod
     def apply(self, query):
@@ -144,7 +144,7 @@ in order to specify new things in your query. You get the query in the
 specification and return an updated version of query.
 
 For example, if your query has a filter function, and you want to filter by username, then you can create this:
-```python
+```Python
 from assimilator.core.database import Specification
 
 class UsernameSpecification(Specification):
@@ -162,7 +162,7 @@ Here we do the following:
 
 The usage of this specification will look like this:
 
-```python
+```Python
 repository = UserRepository(session)
 user = repository.get(UsernameSpecification(username="python.on.papyrus"))
 ```
@@ -178,7 +178,7 @@ together.
 If you want to create a functional specification, then you need to use the `@specification`
 decorator:
 
-```python
+```Python
 from assimilator.core.database import specification
 
 @specification
@@ -189,7 +189,7 @@ def username_filter(query, username: str):
 The function above is the equivalent of the `UsernameSpecification` class. Then,
 you are going to use it like this:
 
-```python
+```Python
 repository = UserRepository(session)
 user = repository.get(username_filter(username="python.on.papyrus"))
 ```
@@ -197,7 +197,7 @@ user = repository.get(username_filter(username="python.on.papyrus"))
 Both types work the same, so you can choose the type of specifications that you like.
 But, you can also use them together:
 
-```python
+```Python
 repository = UserRepository(session)
 user = repository.get(
     username_filter(username="python.on.papyrus"),
@@ -224,7 +224,7 @@ joins entities together(join a table, get related data).
 The reason we use `SpecificationList` is because we want to have an abstraction for our specifications.
 Take two examples:
 
-```python
+```Python
 from dependencies import UserRepository
 from assimilator.alchemy.database import alchemy_filter
 
@@ -237,7 +237,7 @@ if we would want to change our `UserRepository` to work with `RedisRepository`, 
 have to change all of our specifications ourselves.
 
 In order to fix this, we can use SpecificationList:
-```python
+```Python
 from dependencies import UserRepository
 
 
@@ -249,7 +249,7 @@ Now, we only have to change the repository without worrying about other parts of
 
 Here is how you can create your own SpecificationList:
 
-```python
+```Python
 from assimilator.core.database import SpecificationList, specification, Specification
 from pagination_func import paginate_data
 
@@ -282,7 +282,7 @@ Notice that we never call the functions, cause the only thing we need are links 
 specifications.
 
 Then, when you build your Repository:
-```python
+```Python
 from specifications import MySpecificationList
 
 repository = MyRepository(session=session, specifications=MySpecificationList)
@@ -299,7 +299,7 @@ some other purpose that requires us to delay the execution. In that case, you wa
 in the function that you are calling and set it to `True`. After that, a `LazyCommand` is going to be returned. That
 object allows you to call it as a function or iterate over it to get the results:
 
-```python
+```Python
 from assimilator.core.database import Repository
 
 
@@ -357,7 +357,7 @@ Closes the transaction. The function is called automatically.
 
 #### Here is how you can use UnitOfWork in your code: 
 
-```python
+```Python
 from assimilator.core.database import UnitOfWork
 
 from users.unit_of_work import UserUnitOfWork
@@ -375,7 +375,7 @@ def create_user(username: str, uow: UnitOfWork):
 As you can see, you do not need to call any function except for `commit()`. You should
 also use context managers(`with uow:`) to start the transaction and rollback if there is an exception:
 
-```python
+```Python
 from assimilator.core.database import UnitOfWork
 
 from users.unit_of_work import UserUnitOfWork
