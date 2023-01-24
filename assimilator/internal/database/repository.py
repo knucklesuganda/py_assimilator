@@ -111,9 +111,10 @@ class InternalRepository(Repository):
         self,
         *specifications: SpecificationType,
         lazy: bool = False,
+        initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[int], int]:
         if specifications:
-            return len(self.filter(*specifications, lazy=False))
+            return len(self.filter(*specifications, lazy=False, initial_query=initial_query))
         return len(self.session)
 
 

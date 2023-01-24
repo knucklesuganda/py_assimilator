@@ -145,12 +145,17 @@ class RedisRepository(Repository):
             setattr(obj, key, value)
 
     @make_lazy
-    def count(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand[int], int]:
+    def count(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: Optional[str] = None,
+    ) -> Union[LazyCommand[int], int]:
         if specifications:
             return self.session.dbsize()
 
         filter_query = self._apply_specifications(
-            query=self.get_initial_query(),
+            query=self.get_initial_query(initial_query),
             specifications=specifications,
         )
         return len(self.session.keys(filter_query))

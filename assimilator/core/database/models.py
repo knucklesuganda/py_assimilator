@@ -1,10 +1,13 @@
 import json
 from uuid import uuid4
-from typing import Type, Set
+from typing import Type, Set, TypeVar
 
 from pydantic import ValidationError, BaseModel as PydanticBaseModel
 
 from assimilator.core.exceptions import ParsingError
+
+
+T = TypeVar("T", bound='BaseModel')
 
 
 class BaseModel(PydanticBaseModel):
@@ -27,7 +30,7 @@ class BaseModel(PydanticBaseModel):
         super(BaseModel, self).__init__(**kwargs)
 
     @classmethod
-    def loads(cls: Type['BaseModel'], data: str) -> 'BaseModel':
+    def loads(cls: Type['T'], data: str) -> 'T':
         try:
             return cls(**json.loads(data))
         except ValidationError as exc:
