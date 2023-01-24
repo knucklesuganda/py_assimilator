@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine, Column, String, Float, Integer
 from sqlalchemy.orm import declarative_base
 
+from core.database import BaseModel
+from redis_.database import RedisModel
+
 engine = create_engine(url="sqlite:///:memory:")
 Base = declarative_base()
 
@@ -18,3 +21,15 @@ class AlchemyUser(Base):
 
 
 Base.metadata.create_all(engine)
+
+
+class InternalUser(BaseModel):
+    username: str
+    email: str
+    balance: float
+
+
+class RedisUser(RedisModel):
+    username: str
+    email: str
+    balance: float

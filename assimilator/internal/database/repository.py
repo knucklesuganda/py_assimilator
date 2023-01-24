@@ -9,6 +9,7 @@ from assimilator.core.database import (
     make_lazy,
     InvalidQueryError,
     BaseModel,
+    NotFoundError,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
 
@@ -47,7 +48,19 @@ class InternalRepository(Repository):
             query=self.get_initial_query(initial_query),
             specifications=specifications,
         )
-        return self.session[query]
+
+        if query:   # Dict key was not provided, we must use other search parameters
+            return self.session[query]
+
+        found_models = self._apply_specifications(
+            query=list(self.session.values()),
+            specifications=specifications,
+        )
+
+        if not found_models:
+            raise NotFoundError()
+
+        return found_models[0]
 
     @make_lazy
     def filter(

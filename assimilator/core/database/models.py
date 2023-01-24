@@ -33,7 +33,7 @@ class BaseModel(PydanticBaseModel):
     def loads(cls: Type['T'], data: str) -> 'T':
         try:
             return cls(**json.loads(data))
-        except ValidationError as exc:
+        except (ValidationError, TypeError) as exc:
             raise ParsingError(exc)
 
     def dumps(self, *args, **kwargs):

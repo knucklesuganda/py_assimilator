@@ -25,13 +25,13 @@ class InternalFilter(FilterSpecification):
     def _check_model_passes(self, filter_func: Callable, field, value):
         return filter_func(field, value)
 
-    def apply(self, query: QueryT) -> Union[str, filter, QueryT]:
+    def apply(self, query: QueryT) -> Union[str, QueryT]:
         if isinstance(query, str):
             return f'{query}{"".join(self.text_filters)}'
         elif not self.filters:
             return query
 
-        return filter(
+        return list(filter(
             lambda model: all(
                 self._check_model_passes(
                     filter_func=filter_func,
@@ -40,7 +40,7 @@ class InternalFilter(FilterSpecification):
                 ) for filter_func, field, value in self.filters
             ),
             query,
-        )
+        ))
 
     def __or__(self, other: 'InternalFilter') -> 'InternalFilter':
         return OrInternalFilter(first_spec=self, second_spec=other)
@@ -71,12 +71,12 @@ class OrInternalFilter(InternalFilter):
         self.first_spec = first_spec
         self.second_spec = second_spec
 
-    def apply(self, query: QueryT) -> Union[str, filter, QueryT]:
+    def apply(self, query: QueryT) -> Union[str, QueryT]:
         if isinstance(query, str):
             return f'{query}{"".join(self.text_filters)}'
 
-        first_filter: filter = self.first_spec.apply(query)
-        second_filter: filter = self.second_spec.apply(query)
+        first_filter = self.first_spec.apply(query)
+        second_filter = self.second_spec.apply(query)
         return list(set(first_filter) | set(second_filter))
 
 

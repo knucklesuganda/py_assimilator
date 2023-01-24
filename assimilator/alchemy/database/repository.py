@@ -80,7 +80,7 @@ class AlchemyRepository(Repository):
                 query=self.get_initial_query(update(self.model)),
                 specifications=specifications,
             )
-            self.session.execute(query.values(update_values))
+            self.session.execute(query.values(update_values).execution_options(synchronize_session=False))
         elif obj is not None:
             if obj not in self.session:
                 obj = self.session.merge(obj)
@@ -108,7 +108,7 @@ class AlchemyRepository(Repository):
                 query=self.get_initial_query(delete(self.model)),
                 specifications=specifications,
             )
-            self.session.execute(query)
+            self.session.execute(query.execution_options(synchronize_session=False))
         elif obj is not None:
             self.session.delete(obj)
 

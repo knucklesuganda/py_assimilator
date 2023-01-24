@@ -30,9 +30,9 @@ class ErrorWrapper:
         wrapped_error = self.error_mappings.get(exc_type)
 
         if wrapped_error is not None:
-            raise wrapped_error() from exc_val
+            raise wrapped_error(exc_val) from exc_val
         elif self.default_error is not None:
-            raise self.default_error() from exc_val
+            raise self.default_error(exc_val) from exc_val
 
         return False   # No wrapping error was found
 
