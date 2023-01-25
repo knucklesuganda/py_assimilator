@@ -1,28 +1,39 @@
-# Database patterns
-
-## Repository
-Repository is the pattern that makes a virtual collection out of the database.
-When we use a database we often have some kind of library, language or protocol.
-If we want to make the database abstract, we use the repository pattern. It has basic
-functions that help us change and query our data from any source. The beauty of the pattern
-is that you can use it with SQL, text files, cache, S3, external API's or any kind of data storage.
-
+### Repository
 
 ###### `__init__()`
-- `session` - each repository has a session that works as the primary data source. It can be your database connection, a text file or a data structure.
-- `initial_query` - the initial query that you use in the data storage. We will show how it works later. It can be an SQL query, a key in the dictionary or anything else.
+- `session: SessionT` - each repository has a session that works as the primary data source. It can be your database connection, a text file or a data structure.
+- `initial_query: Optional[SessionT] = None` - the initial query that you use in the data storage. We will show how it works later. It can be an SQL query, a key in the dictionary or anything else.
 - `specifications: SpecificationList` - an object that contains links to the specifications that are used to create your queries
+- `model: Type[ModelT]` - class of the model that we want to work with. It can be an SQLAlchemy model, Pydantic model, or your custom class. 
+- `specifications: Type[SpecificationList]` - `SpecificationList` class with all the specifications that you need
+- `error_wrapper: Optional[ErrorWrapper] = ErrorWrapper()` - `ErrorWrapper` class that allows you to convert external providers errors to your custom errors. 
 
-###### `_get_initial_query()`
-returns the initial query used in the `_apply_specifications()`
 
-###### `_apply_specifications()`
+###### `_check_obj_is_specification() -> Tuple[Optional[ModelT], Iterable[SpecificationType]]`
+This function is called for parts of the code that use both obj and *specifications.
+We check that if the obj is a model. If that is the case, we swap it around.
+
+- `obj: ModelT`
+- `specifications: Iterable[SpecificationType]`
+
+
+###### `specs -> Type[SpecificationList]`
+Property for a shorter name version of `specifications` attribute.
+
+###### `_get_initial_query() -> QueryT`
+Returns initial query for the data querying. Can return `override_query` as the initial query if it is present.
+
+- `override_query: Optional[QueryT] = None` - overrides the initial query. Used for more flexibility in querying.
+
+###### `_apply_specifications() -> QueryT`
 Applies Specifications to the query. **Must not be used directly.** apply
 specifications gets a list of specifications and applies them to the query returned
 in _get_initial_query(). The idea is the following: each specification gets a query and
 adds some filters to it. At the end we get a fully working query modified with the
 specifications provided by the user.
+
 - `specifications: Iterable[Specifications]` - an iterable of specifications that can be used to specify some conditions in the query
+
 > Specification is a pattern that adds filters or anything
 else that specifies what kind of data we want.
 
@@ -30,6 +41,7 @@ else that specifies what kind of data we want.
 ###### `get()`
 get is the function used to query the data storage and return one entity. You supply a list
 of specifications that get you the entity from the storage.
+
 - `specifications: Specifications` - specifications that can be used to specify some conditions in the query
 - `lazy: bool` - whether you want to execute your query straight away or just build it  for the future
 - `initial_query = None` - if you want to change the initial query for this query only, then you can provide it as an argument
@@ -37,6 +49,7 @@ of specifications that get you the entity from the storage.
 ###### `filter()`
 filters is the function used to query the data storage and return many entities. You supply a list
 of specifications that filter entities in the storage.
+
 - `specifications: Specifications` - specifications that can be used to specify some conditions in the query
 - `lazy: bool` - whether you want to execute your query straight away or just build it  for the future
 - `initial_query = None` - if you want to change the initial query for this query only, then you can provide it as an argument
@@ -65,6 +78,7 @@ just want to have the latest saved version of the object.
 ###### `count()`
 Counts the objects while applying specifications to the query. Give no specifications to 
 count the whole data storage.
+
 - `specifications: Specifications` - specifications that can be used to specify some conditions in the query
 - `lazy: bool` - whether you want to execute your query straight away or just build it  for the future
 
@@ -390,3 +404,4 @@ def create_user(username: str, uow: UnitOfWork):
         1 / 0   # ZeroDivisionError. UnitOfWork calls rollback automatically.
         uow.commit()    # nothing is saved, since the rollback was called.
 ```
+

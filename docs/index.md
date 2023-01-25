@@ -10,7 +10,8 @@
 
 Example usage of the code to create a user using all the DDD patterns:
 ```Python
-from assimilator.alchemy.database import UnitOfWork, AlchemyRepository
+from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
+from assimilator.core.database import UnitOfWork
 
 from sqlalchemy import create_engine, Column, String, Float, Integer
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -45,7 +46,7 @@ def create_user(username: str, email: str, uow: UnitOfWork):
 
 
 user_repository = AlchemyRepository(session=DatabaseSession(), model=User)
-user_uow = UnitOfWork(repository=user_repository)
+user_uow = AlchemyUnitOfWork(repository=user_repository)
 
 create_user(
     username="Andrey", 
@@ -84,4 +85,4 @@ Providers are different patterns for external modules like SQLAlchemy or FastAPI
 - Kafka(Events) - patterns in [Kafka](https://kafka.apache.org/) related to events.
 - Internal(Database, Events) - internal is the type of provider that saves everything in memory(dict, list and all the tools within your app).
 - Redis(Database, Events) - redis_ allows us to work with [Redis](https://redis.io/) memory database.
-- Redis(MongoDB) - mongo allows us to work with [MongoDB](https://www.mongodb.com/) database.
+- MongoDB(Database) - mongo allows us to work with [MongoDB](https://www.mongodb.com/) database.

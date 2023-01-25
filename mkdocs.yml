@@ -3,6 +3,7 @@ site_description: Assimilator Python framework, Domain-Driven Design, DDD, high 
 theme:
   name: material
   logo: images/logo.png
+  favicon: images/logo.png
   features:
     - search.suggest
     - search.highlight
@@ -25,10 +26,10 @@ theme:
 nav:
   - Introduction: index.md
   - Concepts: concepts.md
-  - Patterns types:
-    - Important things: patterns/important.md
-    - Database: patterns/database.md
-    - Events: patterns/events.md
+  - Basic tutorial:
+    - Important things: tutorial/important.md
+    - Database Tutorial: tutorial/database.md
+    - Events: tutorial/events.md
   - Internal:
     - Database: internal/database.md
     - Events: internal/events.md
@@ -40,6 +41,8 @@ nav:
   - Redis:
     - Database: redis/database.md
     - Events: redis/events.md
+  - API Reference:
+    - API Reference | Core Database: api_reference/core.md
   - Advanced topics:
     - Core: core/core.md
 repo_url: https://github.com/knucklesuganda/py_assimilator

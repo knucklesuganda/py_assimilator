@@ -1,5 +1,22 @@
 # Important things related to all patterns
 
+
+## What is a pattern???
+
+Pattern - typical solution to commonly occurring problems. In our case, the problems are:
+
+- Database communication
+- Data integrity
+- Event-based systems
+- Coding speed
+- Good code
+- External dependencies
+- The best code that some people cannot write easily
+
+We solve all of them with different classes like: `Repository`, `UnitOfWork`, `Producer`, and so on. Each
+class is a pattern. Lots of them are used with each other: `Repository` is always used with `UnitOfWork` and `Specification`.
+
+
 ## Indirect vs Direct code
 When you write your code, you can choose two styles: direct and indirect. What does that mean?
 We use different libraries like SQLAlchemy, PyRedis, PyMongo and others to ease the use of our patterns.
@@ -10,7 +27,7 @@ it to Redis 2 minutes later, even if you coded 20 000 lines.
 
 ### Indirect coding style
 - You do not import any functions from assimilator, every useful thing is directly in the pattern.
-- You do not use anything from external libraries(except for pattern creation) in your code. You only use our patterns.
+- You do not use anything from external providers(except for pattern creation) in your code. You only use our patterns.
 
 Indirect coding example:
 ```Python
@@ -28,7 +45,7 @@ def filter_users(repository: Repository):
 
 
 # Patterns Configuration
-# External library is only found in the pattern creation
+# External library(SQLAlchemy) is only found in the pattern creation
 repository = AlchemyRepository(Session(), model=User)
 uow = AlchemyUnitOfWork(repository)
 ```

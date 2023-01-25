@@ -1,7 +1,17 @@
 from functools import wraps
 from abc import ABC, abstractmethod
-from typing import TypeVar, Callable, Generic, final, \
-    Union, Optional, Iterable, Type, Collection, Tuple
+from typing import (
+    TypeVar,
+    Callable,
+    Generic,
+    final,
+    Union,
+    Optional,
+    Iterable,
+    Type,
+    Collection,
+    Tuple,
+)
 
 from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand

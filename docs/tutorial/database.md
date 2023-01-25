@@ -1,0 +1,403 @@
+# Database patterns
+
+
+## What patterns do we use?
+Database, in our case, is any data storage. It can be PostgreSQL, MySQL, Redis, File, external API or others. We use
+5 main patterns with databases:
+
+- `Repository` - works with the data. Saves, reads, updates, deletes, modifies, checks, filters our data.
+- `UnitOfWork` - works with transactions. Ensures data integrity. Only used when the data is changed.
+- `Specification` - some sort of filter for the repository. Filters, paginates, joins, limits the results in `Repository`.
+- `SpecificationList` - contains links to `Specification` patterns to completely remove imports inside of `Repository`.
+- `LazyCommand` - database query that has been created, but not ran yet. Only runs the function when we need the results.
+
+-------------------
+
+## The most simple example😀
+
+Let's say that we use `SQLAlchemy` library in Python. We want to make a program that can save and read our users.
+Each user has a username and balance. The first thing that we do is we need to create SQLAlchemy tables. *There is no
+Assimilator in that step*.
+
+
+```Python
+# models.py
+from sqlalchemy import create_engine, Column, String, Float, Integer
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+engine = create_engine(url="sqlite:///:memory:")    # create engine to the SQLite Database
+Base = declarative_base()   # Create a base class for our tables
+DatabaseSession = sessionmaker(bind=engine)     # create a database connection(session)
+
+
+class User(Base):    # Create user model
+    __tablename__ = "users"
+
+    id = Column(Integer(), primary_key=True)
+    username = Column(String())     # username column
+    balance = Column(Float())       # balance column
+
+
+Base.metadata.create_all(engine)    # Create User table in the database!
+```
+
+Most of you have probably seen that. We just create a new SQLAlchemy model in our project.
+Now, let's add our Assimilator patterns. Two patterns that we are going to use are `Repository` and `UnitOfWork`.
+
+`Repository` is responsible for data management. We use it to save, read, update, delete, modify, check and basically work with our database.
+
+`UnitOfWork` is responsible for transactions. We use it to apply the changes made by `Repository`.
+
+```Python
+# dependencies.py
+
+# We import our patterns from alchemy submodule
+from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
+
+# We also import User and DatabaseSession we created before 
+from models import DatabaseSession, User
+
+user_repository = AlchemyRepository(
+    session=DatabaseSession(),
+    model=User,
+) # We create our repository and pass session and model to it
+
+# UnitOfWork just gets the repository pattern inside it.
+user_uow = AlchemyUnitOfWork(repository=user_repository)
+
+```
+
+Now, we will use those patterns to create a user. We need to do the following things:
+
+- Start a new transaction using `UnitOfWork`.
+- Create new user using `Repository`.
+- Apply the changes using `UnitOfWork`.
+
+The main idea here is that even if we create millions of users, the changes will not be applied to the database until
+`UnitOfWork.commit()` function is called. We do that so that if there is an error during our operations, new changes
+are not applied.
+
+If you still don't get the idea of database transactions - [watch this video on my channel](https://www.youtube.com/watch?v=E8RoCAp1JSA).
+
+```Python
+from assimilator.core.database import UnitOfWork
+from dependencies import user_repository, user_uow
+
+
+def create_user(uow: UnitOfWork):
+    with uow:   # We use that to start the transaction
+        repository = uow.repository   # access the repository from the UnitOfWork
+
+        # Save the user using Repository.save() function and by passing all the arguments inside
+        new_user = repository.save(username="Andrey", balance=1000)
+
+        # WARNING!!! We have not applied any changes up to that point.
+        # We must call UnitOfWork.commit() to change that: 
+        uow.commit() 
+        # Changes are applied and used is in the database!
+
+    return new_user
+
+created_user = create_user(user_uow)
+```
+
+We saved the user in the database. Now, let's read it. We use `Specification` pattern to limit the results using different
+criteria. If we want to filter the results(SQL WHERE), then we must use `filter()` specification. We can either import
+the specifications from the alchemy submodule, or we can access them from the `Repository.specs` property.
+
+> When you are sure that your function is only going to read your database, then you should only use Repository pattern
+> without UnitOfWork. This way, we will not commit any data to our database, and can be sure that the function only
+> reads the data, without changing it.
+
+```Python
+from assimilator.core.database import Repository
+from dependencies import user_repository
+
+
+def get_user(repository: Repository):    # only pass the Repository because we want to read the data
+    return repository.get(  # use get() to query one user from the database
+        repository.specs.filter(    # use filter specification to give your filtering criteria
+            username="Andrey",
+        )
+    )
+
+user = get_user(user_repository)
+```
+
+If you want to import the specification:
+```Python
+from assimilator.core.database import Repository
+from assimilator.alchemy.database import AlchemyFilter  # import AlchemyFilter specification
+from dependencies import user_repository
+
+
+def get_user(repository: Repository):
+    return repository.get(
+        AlchemyFilter(  # everything else is the same except for the specification
+            username="Andrey",
+        )
+    )
+
+user = get_user(user_repository)
+```
+
+As you probably know, those were direct and indirect coding styles. You can read about them [here](/tutorial/important/#indirect-vs-direct-code).
+We would suggest you to use indirect(the first) coding style. You remove a lot of imports and can do pattern substitutions which are going to be
+discussed in the next example.
+
+-------------------
+
+## Pattern substitution example🙂
+
+What is pattern substitution? It is a technique where you can change the external providers in one step. Let's see what that means...
+
+1. When we write code, it is a good idea to not have dependencies. They are really hard to get rid of, hard to update or change. So,
+if we have as little dependencies as possible, this is only going to be better.
+2. Sometimes we want to change our database to another one, or we want to change the ORM(database library) that we are using.
+3. There is a possibility that we need caching in our program, our we want to run tests of our code without using a real database.
+
+All these examples are perfect for pattern substitution. For that case, we will change SQLAlchemy patterns that we wrote in the
+first example to Internal patterns with one line of code.
+
+> Internal patterns work with Python data structures. Your database is a dictionary, list, class or anything else
+> within your program. Internal patterns are really useful for testing!
+
+The first thing that we need to do is change the models in our `models.py` file:
+```Python
+# models.py
+
+from assimilator.core.database import BaseModel     # BaseModel is just a Pydantic model with id
+
+
+class User(BaseModel):  # id is supplied by default
+    username: str
+    balance: float
+
+```
+
+So, we changed our SQLAlchemy models to a `BaseModel`. Then, we need to change the patterns:
+
+```Python
+# dependencies.py
+
+# We import the same patterns from internal submodule
+from assimilator.internal.database import InternalRepository, InternalUnitOfWork
+ 
+from models import User     # import our BaseModel User
+
+# Session is a dictionary in InternalRepository.
+# That means, that we will store all our data in there.
+session = {}
+
+# We create our repository and pass session and model to it
+user_repository = InternalRepository(session=session, model=User)
+
+# UnitOfWork just gets the repository pattern inside it.
+user_uow = InternalUnitOfWork(repository=user_repository)
+
+```
+
+That's it. After you changed that, your other code like `create_user()` and `get_user()` will work with dictionary and
+your new `User` as a data storage! Now, imagine that you have 200 functions, and in order to change one data storage to
+another you just need 1 line of code!
+
+
+### About direct coding
+All of that magic with pattern substitution was possible because we used indirect coding. But, if we use direct coding,
+the situation may not be that sweet:
+
+```Python
+from assimilator.core.database import Repository
+from assimilator.alchemy.database import AlchemyFilter  # import AlchemyFilter specification
+from dependencies import user_repository
+
+
+def get_user(repository: Repository):
+    return repository.get(
+        AlchemyFilter(
+            # We use AlchemyFilter with InternalRepository.
+            # Those do not work together😭
+            username="Andrey",
+        )
+    )
+
+user = get_user(user_repository)
+```
+
+`AlchemyFilter` will not work with `InternalRepository`. We must go into our code and change it to `InternalFilter`.
+That is why we advise you to use indirect coding whenever possible.
+
+-------------------
+
+## Errors example😰
+
+We have already seen perfect examples of working code. But, errors and exceptions happen! That is why we need to ensure
+that the code that we write is error-proof.
+
+**However, we have already done everything to do that😳.**
+
+As I said earlier, `UnitOfWork` pattern is used for transaction management. That means, that we use it to commit the data
+if everything is OK, or rollback the changes if there are errors. When we use context managers(`with uow`) with `UnitOfWork` pattern
+we make it so that if there are errors, all the pending changes are dropped.
+
+So, if you want to add try and except to your code, then just do it like this:
+
+```Python
+from assimilator.core.database import UnitOfWork, InvalidQueryError
+from dependencies import user_repository, user_uow
+
+
+def create_user(uow: UnitOfWork):
+    try:
+        with uow:   # We use that to start the transaction
+            repository = uow.repository
+            new_user = repository.save(username="Andrey", balance=1000) 
+            uow.commit() 
+
+        return new_user
+    except InvalidQueryError:
+        print("Error in user creation")
+        return None     # no user created
+
+created_user = create_user(user_uow)
+```
+
+But, even if you do not use try and except, you are sure that your database does not have any weird changes in it!
+That's the power of `UnitOfWork`.
+
+> If you ever want to rollback yourself, then use UnitOfWork.rollback() function. It will remove all the pending changes.
+> That is the function that is called if there is an exception in the `with uow` block.
+
+-------------------
+
+
+## Typical flows
+
+### Data Creation
+
+1) You create Repository and UnitOfWork.
+
+```Python
+from assimilator.alchemy.database import AlchemyRepository, AlchemyUnitOfWork
+
+user_repository = AlchemyRepository(
+    session=DatabaseSession(),  # your SQLAlchemy session
+    model=User,         # User is your SQLAlchemy model
+)
+user_uow = AlchemyUnitOfWork(repository=user_repository)
+```
+
+2) You provide them in the function as parameters.
+
+```Python
+from assimilator.core.database import UnitOfWork
+
+def create_user(new_username: str, uow: UnitOfWork): ...    # UnitOfWork is a parameter
+```
+
+3) You use context manager(with statement in Python) with UnitOfWork.
+
+```Python
+
+def create_user(new_username: str, uow: UnitOfWork):
+    with uow:      # Start the transaction in the database
+        ...
+
+```
+
+4) You get the repository from UnitOfWork and use `save()` to save the result.
+
+```Python
+
+def create_user(new_username: str, uow: UnitOfWork):
+    with uow:
+        new_user = uow.repository.save(
+            username=new_username,
+            user_balance=0,
+        )  # create new user
+
+```
+
+5) You use UnitOfWork `commit()` to apply the changes to the database.
+
+```Python
+
+def create_user(new_username: str, uow: UnitOfWork):
+    with uow:
+        new_user = uow.repository.save(
+            username=new_username, 
+            user_balance=0,
+        )  # create new user
+        uow.commit()    # Save changes do the database
+
+    return new_user     # return new user
+
+```
+
+-----------------------------------------------
+
+### Data Filtering
+
+1) You create Repository.
+
+```Python
+from assimilator.alchemy.database import AlchemyRepository
+
+user_repository = AlchemyRepository(
+    session=DatabaseSession(),  # your SQLAlchemy session
+    model=User,         # User is your SQLAlchemy model
+)
+```
+
+2) You provide it in the function as a parameter.
+
+```Python
+from assimilator.core.database import Repository
+
+def filter_users(age: int, repository: Repository): ...    # Repository is a parameter
+```
+
+3) You use Repository `filter()` function to filter the results.
+
+```Python
+
+def filter_users(age: int, repository: Repository):
+    return repository.filter(...)
+
+```
+
+4) You use `repository.specs` to access the specifications. Then, you choose filter to filter the users who are
+18 or older:
+
+```Python
+
+def filter_users(age: int, repository: Repository):
+    return repository.filter(
+        repository.specs.filter(age__gte=18)     # age >= 18
+    )
+
+```
+
+5) _Optional step_ You can use direct coding style to use the specification like this:
+
+```Python
+from assimilator.alchemy.database import AlchemyFilter
+
+def filter_users(age: int, repository: Repository):
+    return repository.filter(
+        AlchemyFilter(age__gte=18)     # age >= 18
+    )
+
+```
+
+6) _Optional step_ You use direct coding style with SQLAlchemy filter
+
+```Python
+from assimilator.alchemy.database import AlchemyFilter
+
+def filter_users(age: int, repository: Repository):
+    return repository.filter(
+        User.age >= 18     # Your SQLAlchemy User model. age >= 18
+    )
+
+```
