@@ -13,7 +13,7 @@ Database, in our case, is any data storage. It can be PostgreSQL, MySQL, Redis, 
 
 -------------------
 
-## The most simple example😀
+## Create/Read example😀
 
 Let's say that we use `SQLAlchemy` library in Python. We want to make a program that can save and read our users.
 Each user has a username and balance. The first thing that we do is we need to create SQLAlchemy tables. *There is no
@@ -255,6 +255,7 @@ def create_user(uow: UnitOfWork):
             uow.commit() 
 
         return new_user
+
     except InvalidQueryError:
         print("Error in user creation")
         return None     # no user created
@@ -270,6 +271,134 @@ That's the power of `UnitOfWork`.
 
 -------------------
 
+## Other functions you must know
+
+Here are more short examples regarding Database functions that you might want to use:
+
+### Data querying
+
+```Python
+
+repository.get()    # get one entity from the database
+repository.filter()    # get many entities from the database
+
+# When you use those functions, you can add specifications to limit the results:
+
+adult_users = repository.filter(
+    repository.specs.filter(    # we use filter specification
+        age__gte=18,    # get all the users older than 18 years
+    )
+)
+
+for adult_user in adult_users:
+    print(adult_user.username)
+
+```
+There are different filtering options inside of filter() specification:
+
+- `__eq` = equal to. You can omit it and just use `field=value` as we did before
+- `__gt` = greater than. Example: `age__gt=18 == (age > 18)`
+- `__gte` = greater than equals. Example: `age__gte=18 == (age >= 18)`
+- `__lt` = lower than. Example: `age__lt=18 == (age < 18)`
+- `__lte` = lower than equals. Example: `age__lte=18 == (age <= 18)`
+- `__not` = not equal. Example: `age__not=18 == (age != 18)`
+- `__is` = is True or False. Example: `validated__is=True == (validated is True)`
+- `__like` = like SQL expression. Converted to regex if not supported. Example: `username__like="Andrey%" == all usernames that start with Andrey`
+- `__regex` = regular expression. Example: `username__regex="[1-3]+And.rey\w+" == regular expression, what is there to explain? `
+
+You can use these options like that:
+```Python
+# Get all users between ages 18 to 25 with username
+# that has "And" inside and those who are validated.
+repository.filter(
+    repository.specs.filter(
+        age__gt=18,
+        age__lt=25,
+        username__like="%And%",
+        validated__is=True,
+    )
+)
+```
+
+All the users can be queried with `Repository.filter()` without any specifications:
+```Python
+all_users = repository.filter()     # get all users from the database
+```
+
+Pagination is added with `paginate()` specification:
+```Python
+paginated_users = repository.filter(
+    repository.specs.paginate(
+        limit=10,   # limit the results by 10
+        offset=20,  # offset the results by 20
+    ),
+)
+```
+
+Ordering is added with `order()` specification:
+```Python
+ordered_users = repository.filter(
+    repository.specs.order(
+        'username', # order users by username(Ascending ordering)
+        '-balance', # second order of the users is balance(descending order)
+    )
+)
+# - in front means descending
+```
+
+Entity joins are added with `join()` specification:
+```Python
+users_with_products = repository.filter(
+    repository.specs.join(
+        Order.id,    # another model order that is joined with user     # TODO: check
+        Product.product_id,    # another model product that is joined with user     # TODO: check
+    )
+)
+```
+
+If you want to optimize your queries, you can do so by using `only()`. It will accept fields that will be the only
+ones on your model:
+```Python
+users_with_products = repository.filter(
+    repository.specs.only('id', 'username')
+    # We only query `id` and `username` from the database. That reduces results size and query execution time
+)
+```
+
+### Data changes
+Repository `save()` function can be used with arguments or provided model:
+```Python
+
+user_repository.save(   # indirect method.
+    username="Andrey",
+    balance=1000,
+)
+# OR
+user = User(username="Andrey", balance=1000)
+user_repository.save(user)  # direct method.
+```
+
+Repository `update()` function can be used to update models:
+```Python
+user = user_repository.get(user_repository.specs.limit(limit=1))
+user.balance += 100
+user_repository.update(user)    # update the user
+```
+
+It can also be used to update a lot of entities at once:
+```Python
+user_repository.update(
+    # you provide specifications to filter the results
+    user_repository.specs.filter(age__gt=18),
+    user_repository.specs.limit(limit=100),
+
+    # then, you provide field=new_value pairs to update the fields
+    is_validated=False,
+    updated_field="New value",
+)
+```
+
+-------------------
 
 ## Typical flows
 

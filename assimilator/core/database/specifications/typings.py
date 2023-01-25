@@ -14,7 +14,7 @@ class PaginateSpecificationProtocol(Protocol):
 
 
 class JoinSpecificationProtocol(Protocol):
-    def __call__(self, targets: Collection, join_args: Collection[dict]):
+    def __call__(self, *targets: Collection, query: Query, **join_args: dict):
         ...
 
 

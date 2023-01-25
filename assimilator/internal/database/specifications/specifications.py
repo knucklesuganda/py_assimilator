@@ -41,7 +41,7 @@ def internal_paginate(
 
 
 @specification
-def internal_join(targets: Collection, join_args: Collection[dict], query: QueryT) -> QueryT:
+def internal_join(*targets: Collection, query: QueryT, **join_args: dict) -> QueryT:
     return query
 
 

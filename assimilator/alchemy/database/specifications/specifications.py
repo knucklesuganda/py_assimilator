@@ -1,3 +1,4 @@
+from itertools import zip_longest
 from typing import Collection, Optional, Iterable
 
 from sqlalchemy.orm import Query, load_only
@@ -55,12 +56,10 @@ def alchemy_paginate(*, limit: Optional[int] = None, offset: Optional[int] = Non
 
 
 @specification
-def alchemy_join(targets: Collection, join_args: Collection[dict], query: Query) -> Query:
-    if len(join_args) < len(targets):
-        join_args += [dict() for _ in range(len(targets) - len(join_args))]
-
-    for target, join_data in zip(targets, join_args):
-        query = query.join(target, **join_data)
+def alchemy_join(*targets: Collection, query: Query, **join_args: dict) -> Query:
+    for target, join_data in zip_longest(targets, join_args, fillvalue=dict()):
+        if target is not None:
+            query = query.join(target, **join_data)
 
     return query
 
