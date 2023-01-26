@@ -29,7 +29,7 @@ def make_lazy(func: Callable):
     ):
         if lazy:
             return LazyCommand(func, self, *specifications, lazy=False, initial_query=initial_query)
-        return func(self, *specifications, lazy=False, initial_query=initial_query)
+        return func(self, *specifications, lazy=lazy, initial_query=initial_query)
 
     return make_lazy_wrapper
 
@@ -54,14 +54,16 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self.specifications: Type[SpecificationList] = specifications
 
         self.error_wrapper = error_wrapper or ErrorWrapper()
-        self.get = self.error_wrapper.decorate(self.get)
-        self.filter = self.error_wrapper.decorate(self.filter)
-        self.save = self.error_wrapper.decorate(self.save)
-        self.delete = self.error_wrapper.decorate(self.delete)
-        self.update = self.error_wrapper.decorate(self.update)
-        self.is_modified = self.error_wrapper.decorate(self.is_modified)
-        self.refresh = self.error_wrapper.decorate(self.refresh)
-        self.count = self.error_wrapper.decorate(self.count)
+        self.get = LazyCommand.decorate(
+            self.error_wrapper.decorate(self.get)
+        )
+        self.filter: Repository.filter = LazyCommand.decorate(self.error_wrapper.decorate(self.filter))
+        self.save: Repository.save = self.error_wrapper.decorate(self.save)
+        self.delete: Repository.delete = self.error_wrapper.decorate(self.delete)
+        self.update: Repository.update = self.error_wrapper.decorate(self.update)
+        self.is_modified: Repository.is_modified = self.error_wrapper.decorate(self.is_modified)
+        self.refresh: Repository.refresh = self.error_wrapper.decorate(self.refresh)
+        self.count: Repository.count = LazyCommand.decorate(self.error_wrapper.decorate(self.count))
 
     @final
     def _check_obj_is_specification(

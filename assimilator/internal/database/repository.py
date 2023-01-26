@@ -6,7 +6,6 @@ from assimilator.core.database import (
     Repository,
     SpecificationType,
     LazyCommand,
-    make_lazy,
     InvalidQueryError,
     BaseModel,
     NotFoundError,
@@ -37,7 +36,6 @@ class InternalRepository(Repository):
             error_wrapper=error_wrapper or InternalErrorWrapper(),
         )
 
-    @make_lazy
     def get(
         self,
         *specifications: SpecificationType,
@@ -64,7 +62,6 @@ class InternalRepository(Repository):
 
         return found_models[0]
 
-    @make_lazy
     def filter(
         self,
         *specifications: SpecificationType,
@@ -121,7 +118,6 @@ class InternalRepository(Repository):
         fresh_obj = self.get(self.specs.filter(id=obj.id), lazy=False)
         obj.__dict__.update(fresh_obj.__dict__)
 
-    @make_lazy
     def count(
         self,
         *specifications: SpecificationType,

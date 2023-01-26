@@ -39,7 +39,6 @@ class MongoRepository(Repository):
     def _collection(self):
         return self.session[self.database][self.model.get_collection()]
 
-    @make_lazy
     def get(
         self,
         *specifications: SpecificationType,
@@ -58,7 +57,6 @@ class MongoRepository(Repository):
 
         return self.model(**data)
 
-    @make_lazy
     def filter(
         self,
         *specifications: SpecificationType,
@@ -120,7 +118,6 @@ class MongoRepository(Repository):
         fresh_obj = self.get(self.specs.filter(id=obj.id))
         obj.__dict__.update(fresh_obj.__dict__)
 
-    @make_lazy
     def count(
         self,
         *specifications: SpecificationType,

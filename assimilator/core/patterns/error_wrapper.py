@@ -42,6 +42,7 @@ class ErrorWrapper:
             with self:
                 return func(*args, **kwargs)
 
+        wrapper: func
         return wrapper
 
     def __str__(self):

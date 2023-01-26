@@ -12,7 +12,6 @@ from assimilator.core.database import (
     SpecificationList,
     LazyCommand,
     SpecificationType,
-    make_lazy,
 )
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
@@ -40,7 +39,6 @@ class AlchemyRepository(Repository):
             error_wrapper=error_wrapper or AlchemyErrorWrapper(),
         )
 
-    @make_lazy
     def get(
         self,
         *specifications: SpecificationType,
@@ -53,7 +51,6 @@ class AlchemyRepository(Repository):
         )
         return self.session.execute(query).one()[0]
 
-    @make_lazy
     def filter(
         self,
         *specifications: SpecificationType,
@@ -115,7 +112,6 @@ class AlchemyRepository(Repository):
     def is_modified(self, obj: AlchemyModelT) -> bool:
         return obj in self.session and self.session.is_modified(obj)
 
-    @make_lazy
     def count(
         self,
         *specifications: SpecificationType,

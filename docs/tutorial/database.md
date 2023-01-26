@@ -278,20 +278,22 @@ Here are more short examples regarding Database functions that you might want to
 ### Data querying
 
 ```Python
+from assimilator.core.database import Repository
 
-repository.get()    # get one entity from the database
-repository.filter()    # get many entities from the database
-
-# When you use those functions, you can add specifications to limit the results:
-
-adult_users = repository.filter(
-    repository.specs.filter(    # we use filter specification
-        age__gte=18,    # get all the users older than 18 years
+def example(repository: Repository):
+    repository.get()    # get one entity from the database
+    repository.filter()    # get many entities from the database
+    
+    # When you use those functions, you can add specifications to limit the results:
+    
+    adult_users = repository.filter(
+        repository.specs.filter(    # we use filter specification
+            age__gte=18,    # get all the users older than 18 years
+        )
     )
-)
-
-for adult_user in adult_users:
-    print(adult_user.username)
+    
+    for adult_user in adult_users:
+        print(adult_user.username)
 
 ```
 There are different filtering options inside of filter() specification:
@@ -308,63 +310,239 @@ There are different filtering options inside of filter() specification:
 
 You can use these options like that:
 ```Python
-# Get all users between ages 18 to 25 with username
-# that has "And" inside and those who are validated.
-repository.filter(
-    repository.specs.filter(
-        age__gt=18,
-        age__lt=25,
-        username__like="%And%",
-        validated__is=True,
+from assimilator.core.database import Repository
+
+
+def filter_example(repository: Repository):
+    # Get all users between ages 18 to 25 with username
+    # that has "And" inside and those who are validated.
+    repository.filter(
+        repository.specs.filter(
+            age__gt=18,
+            age__lt=25,
+            username__like="%And%",
+            validated__is=True,
+        )
     )
-)
 ```
 
 All the users can be queried with `Repository.filter()` without any specifications:
 ```Python
-all_users = repository.filter()     # get all users from the database
+from assimilator.core.database import Repository
+
+def get_all_users(repository: Repository):
+    all_users = repository.filter()     # get all users from the database
 ```
 
 Pagination is added with `paginate()` specification:
 ```Python
-paginated_users = repository.filter(
-    repository.specs.paginate(
-        limit=10,   # limit the results by 10
-        offset=20,  # offset the results by 20
-    ),
-)
+from assimilator.core.database import Repository
+
+
+def paginate(repository: Repository):
+    paginated_users = repository.filter(
+        repository.specs.paginate(
+            limit=10,   # limit the results by 10
+            offset=20,  # offset the results by 20
+        ),
+    )
 ```
 
 Ordering is added with `order()` specification:
 ```Python
-ordered_users = repository.filter(
-    repository.specs.order(
-        'username', # order users by username(Ascending ordering)
-        '-balance', # second order of the users is balance(descending order)
+from assimilator.core.database import Repository
+
+
+def order(repository: Repository):
+    ordered_users = repository.filter(
+        repository.specs.order(
+            'username', # order users by username(Ascending ordering)
+            '-balance', # second order of the users is balance(descending order)
+        )
     )
-)
-# - in front means descending
+    # - in front means descending
 ```
 
 Entity joins are added with `join()` specification:
 ```Python
-users_with_products = repository.filter(
-    repository.specs.join(
-        Order.id,    # another model order that is joined with user     # TODO: check
-        Product.product_id,    # another model product that is joined with user     # TODO: check
+from assimilator.core.database import Repository
+
+
+def join_example(repository: Repository):
+    users_with_products = repository.filter(
+        repository.specs.join(
+            Order.id,    # another model order that is joined with user     # TODO: check
+            Product.product_id,    # another model product that is joined with user     # TODO: check
+        )
     )
-)
 ```
 
 If you want to optimize your queries, you can do so by using `only()`. It will accept fields that will be the only
 ones on your model:
 ```Python
-users_with_products = repository.filter(
-    repository.specs.only('id', 'username')
-    # We only query `id` and `username` from the database. That reduces results size and query execution time
-)
+from assimilator.core.database import Repository
+
+def only_example(repository: Repository):
+    users_with_products = repository.filter(
+        repository.specs.only('id', 'username')
+        # We only query `id` and `username` from the database. 
+        # That reduces results size and query execution time
+    )
 ```
 
+If you want to count something, you can use `count()`:
+```Python
+from assimilator.core.database import Repository
+
+def count_example(repository: Repository):
+    users_count: int = repository.count()    # Count all users
+    other_users_count: int = repository.count(
+        repository.specs.filter(id__gt=10)    # Count all users with id > 10
+    )
+```
+
+Sometimes you want to check if your object was updated or not. You can use `is_modified()`:
+```Python
+is_modified: bool = repository.is_modified(user)
+```
+
+---------------
+### Lazy evaluation😴
+
+Let's say that you want to load all the users from your table. But, the thing is, you don't need to use them straight away.
+Maybe, you want to return the result to another function, or set it as an attribute of an object. If you use the patterns that
+we gave you, then your code is going to be clean, but memory-heavy.
+
+To avoid that, you can prepare your function to be executed
+with another pattern called `LazyCommand`. It saves the function and all the arguments that you want to provide, and executes it
+only when you need it!
+
+You can add lazy=True to enable it in your `Repository`:
+```Python
+from assimilator.core.database import Repository
+
+
+def example(repository: Repository):
+    # Executes on the spot
+    users_list = repository.filter()
+
+    # Creates a lazy command that can be executed later
+    users_filter_lazy_command = repository.filter(lazy=True)
+```
+
+Now, we can optimize our program like this:
+```Python
+from typing import List
+
+from assimilator.core.database import Repository, LazyCommand
+from dependencies import User, user_repository
+
+
+# We use typing for LazyCommand and show that it returns a list of Users
+def caller(repository: Repository) -> LazyCommand[List[User]]:
+    return repository.filter(
+        repository.specs.filter(age__gt=18),
+        lazy=True,      # make it lazy
+    )
+
+
+def second_function():
+    return caller(user_repository)      # Database query not executed yet 
+
+
+def first_function():
+    results = second_function()
+    
+    # Execute more code...
+    
+    for user in results:    # The query is executed here
+        ...
+```
+We can optimize our code drastically. Now, we will only make the queries whenever we need them!
+
+> But, if your query returns an error, that error is returned to the query execution, not creation! That is going
+> to be `first_function()` in our case. Be sure to handle exceptions in the right place.
+
+Here are the places when your command is executed:
+```Python
+from assimilator.core.database import Repository, LazyCommand
+
+def lazy_command_execution(repository: Repository):
+    lazy_command: LazyCommand = repository.filter(lazy=True)
+    
+    if lazy_command: # query is executed in boolean statements
+        print("Executed!")
+
+    for data in lazy_command:   # query is executed in iterators
+        print("Executed!")
+    
+    lazy_user: LazyCommand = repository.get(repository.specs.filter(id=1))
+    print("Executed for User id:", lazy_user.id)    # attribute access execution
+
+    print(lazy_user > 10)   # Boolean execution
+```
+
+Another **important** thing about LazyCommand is its execution policy. The thing is that if you use the same `LazyCommand`
+object many times, the command is only going to be executed once. This code only runs the query once:
+```Python
+lazy_command_obj()  # command executed
+lazy_command_obj()
+lazy_command_obj()
+lazy_command_obj()
+lazy_command_obj()  # the same result in every other call
+```
+
+Another **__FAR MORE IMPORTANT__** thing is the return type of your `LazyCommand`. If you call `Repository.filter()`, it's
+going to be an Iterable. If you use `Repository.get()`, it is just one entity. We suggest you add types with Python typings:
+
+```Python
+from typing import List
+
+from assimilator.core.database import Repository, LazyCommand
+from dependencies import User
+
+def lazy_type_example(repository: Repository):
+    lazy_command_many: LazyCommand[List[User]] = repository.filter(lazy=True)
+    lazy_command_obj: LazyCommand[User] = repository.get(lazy=True)
+
+    # Now we know what is returned when the command is executed:    
+    users: List[User] = lazy_command_many()
+    one_user: User = lazy_command_obj()
+```
+
+The last thing is building your own `LazyCommand` objects:
+```Python
+from assimilator.core.patterns import LazyCommand
+
+
+def func(a, b, c):
+    return a + b + c
+
+
+command: LazyCommand[int] = LazyCommand(
+    command=func,   # NOT func()
+    a=1, b=2, c=3,  # function arguments
+)
+
+assert command == 1 + 2 + 3
+```
+
+Also, you can use the decorator to make your whole function lazy:
+```Python
+from assimilator.core.patterns import LazyCommand
+
+
+@LazyCommand.decorate
+def decorated_lazy(a, b, c):
+    return a + b + c
+
+
+print(decorated_lazy(1, 2, 3))  # 6
+print(decorated_lazy(1, 2, 3, lazy=True))  # LazyCommand
+```
+
+
+---------------
 ### Data changes
 Repository `save()` function can be used with arguments or provided model:
 ```Python

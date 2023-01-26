@@ -51,7 +51,6 @@ class RedisRepository(Repository):
         self.transaction = session
         self.use_double_specifications = use_double_filter
 
-    @make_lazy
     def get(
         self,
         *specifications: SpecificationType,
@@ -87,7 +86,6 @@ class RedisRepository(Repository):
 
         return parsed_objects[0]
 
-    @make_lazy
     def filter(
         self,
         *specifications: SpecificationType,
@@ -167,7 +165,6 @@ class RedisRepository(Repository):
         for key, value in fresh_obj.dict().items():
             setattr(obj, key, value)
 
-    @make_lazy
     def count(
         self,
         *specifications: SpecificationType,

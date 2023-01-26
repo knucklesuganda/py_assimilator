@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import Union, Callable, Iterable, Container, TypeVar, Generic, Iterator
 
 T = TypeVar("T")
@@ -25,6 +26,16 @@ class LazyCommand(Generic[T]):
 
         return iter(results)  # filter() command
 
+    def __eq__(self, other):
+        return self() == other
+
+    def __gt__(self, other):
+        return self() > other
+
+    def __getattr__(self, item):
+        result = self()
+        return getattr(result, item)
+
     def __bool__(self):
         return bool(self())
 
@@ -33,6 +44,24 @@ class LazyCommand(Generic[T]):
 
     def __repr__(self):
         return str(self)
+
+    @staticmethod
+    def decorate(func: Callable) -> Callable:
+
+        @wraps(func)
+        def lazy_wrapper(*args, lazy: bool = False, **kwargs) -> Union[LazyCommand[T], T]:
+            if lazy:
+                return LazyCommand(
+                    func,
+                    *args,
+                    lazy=False,
+                    **kwargs,
+                )
+
+            return func(*args, **kwargs)
+
+        lazy_wrapper: func
+        return lazy_wrapper
 
 
 __all__ = ['LazyCommand']
