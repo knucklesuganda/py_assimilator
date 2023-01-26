@@ -3,7 +3,7 @@ site_description: Assimilator Python framework, Domain-Driven Design, DDD, high 
 theme:
   name: material
   logo: images/logo.png
-  favicon: images/logo.png
+  favicon: images/logo_white.ico
   features:
     - search.suggest
     - search.highlight

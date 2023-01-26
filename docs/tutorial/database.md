@@ -542,39 +542,100 @@ print(decorated_lazy(1, 2, 3, lazy=True))  # LazyCommand
 ```
 
 
----------------
-### Data changes
-Repository `save()` function can be used with arguments or provided model:
+### More on filter specification
+You have probably wondered how to do OR statement in the filter specification. What about AND statement? How are we going to
+implement all these things without using direct coding? You can use special operations like these:
+
 ```Python
 
-user_repository.save(   # indirect method.
+# OR operation. username=="Andrey" or username=="Python":
+repository.specs.filter(username="Andrey") | repository.specs.filter(username="Python")
+
+
+# AND operation. username=="Andrey" and age==22:
+repository.specs.filter(username="Andrey") & repository.specs.filter(age=22)
+
+# AND operation, but shorter:
+repository.specs.fitler(username="Andrey", age=22)
+
+# NOT operation. age != 55
+~repository.specs.filter(age=55)
+
+
+# Combining operations together.
+# (username="Andrey" and age=22) or (username == "Python" and age > 18)
+repository.specs.filter(username="Andrey", age=22) | \
+repository.specs.filter(username="Python") & \
+!repository.specs.filter(age__gt=18) 
+
+```
+Another question that you probably have is how to make all of that shorter. Writing the specification again and again
+can be tiring. Good thing you can save them(not only filter specification. Any specification in general):
+```python
+andrey_username_spec = repository.specs.filter(username="Andrey")
+
+andrey = repository.filter(andrey_username_spec)
+```
+
+---------------
+### Data changes
+Let's finally change some data.
+Repository `save()` function can be used with arguments or provided model:
+
+```Python
+
+repository.save(   # indirect method.
     username="Andrey",
     balance=1000,
 )
 # OR
 user = User(username="Andrey", balance=1000)
-user_repository.save(user)  # direct method.
+repository.save(user)  # direct method.
 ```
 
 Repository `update()` function can be used to update models:
 ```Python
-user = user_repository.get(user_repository.specs.limit(limit=1))
+user = repository.get(repository.specs.limit(limit=1))
 user.balance += 100
-user_repository.update(user)    # update the user
+repository.update(user)    # update the user
 ```
 
 It can also be used to update a lot of entities at once:
 ```Python
-user_repository.update(
+repository.update(
     # you provide specifications to filter the results
-    user_repository.specs.filter(age__gt=18),
-    user_repository.specs.limit(limit=100),
+    repository.specs.filter(age__gt=18),
+    repository.specs.limit(limit=100),
 
     # then, you provide field=new_value pairs to update the fields
     is_validated=False,
     updated_field="New value",
 )
 ```
+
+Use `delete()` to delete one model:
+```Python
+repository.delete(user)
+```
+
+Or many models at once:
+```Python
+repository.delete(  # delete everyone under 18
+    repository.specs.filter(age__lt=18)
+)
+```
+
+> `delete()` is partially safe. That means that you cannot delete your whole database, cause if you provide nothing, you
+> will delete nothing. But, still check your specifications in mass delete statements.
+
+
+Use `refresh()` to update the values in your old object. It goes to the database and changes your old values to new if they
+were updated:
+```Python
+repository.refresh(old_user)
+assert old_user.updated_field == repository.get(repository.specs.filter(id=old_user.id)).updated_field
+```
+
 
 -------------------
 
