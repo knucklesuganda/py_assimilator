@@ -12,7 +12,7 @@
         <meta name="author" content="Andrey Ivanov | Python">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="images/icon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
     
     
@@ -278,6 +278,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#simple-example" class="md-nav__link">
+    Simple example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#source" class="md-nav__link">
     Source
   </a>
@@ -345,14 +352,14 @@
       
       
         <label class="md-nav__link" for="__nav_3">
-          Patterns types
+          Basic tutorials
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Patterns types" data-md-level="1">
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
-          Patterns types
+          Basic tutorials
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -362,8 +369,8 @@
   
   
     <li class="md-nav__item">
-      <a href="patterns/database/" class="md-nav__link">
-        Database
+      <a href="tutorial/important/" class="md-nav__link">
+        Important things
       </a>
     </li>
   
@@ -376,8 +383,36 @@
   
   
     <li class="md-nav__item">
-      <a href="patterns/events/" class="md-nav__link">
-        Events
+      <a href="tutorial/database/" class="md-nav__link">
+        Database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorial/advanced_database/" class="md-nav__link">
+        Advanced database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorial/events/" class="md-nav__link">
+        Events tutorial
       </a>
     </li>
   
@@ -641,12 +676,60 @@
       
       
         <label class="md-nav__link" for="__nav_8">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api_reference/core/" class="md-nav__link">
+        API Reference | Core Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
           Advanced topics
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Advanced topics" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
+        <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
           Advanced topics
         </label>
@@ -706,6 +789,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#simple-example" class="md-nav__link">
+    Simple example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#source" class="md-nav__link">
     Source
   </a>
@@ -759,6 +849,53 @@
 <ul>
 <li><code>pip install py_assimilator</code></li>
 </ul>
+<h2 id="simple-example">Simple example</h2>
+<p>Example usage of the code to create a user using all the DDD patterns:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyUnitOfWork</span><span class="p">,</span> <span class="n">AlchemyRepository</span>
+<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Integer</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">declarative_base</span><span class="p">,</span> <span class="n">sessionmaker</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;sqlite:///:memory:&quot;</span><span class="p">)</span>
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+<span class="n">DatabaseSession</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>    <span class="c1"># Create user model</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">())</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">())</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Float</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>
+        <span class="n">repository</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span>     <span class="c1"># get Repository pattern from unit of work</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># create the user</span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># Commit session with Unit of work pattern</span>
+
+    <span class="k">return</span> <span class="n">new_user</span>
+
+
+<span class="n">user_repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">DatabaseSession</span><span class="p">(),</span> <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="n">user_uow</span> <span class="o">=</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">user_repository</span><span class="p">)</span>
+
+<span class="n">create_user</span><span class="p">(</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> 
+    <span class="n">email</span><span class="o">=</span><span class="s2">&quot;python.on.papyrus@gmail.com&quot;</span><span class="p">,</span>
+    <span class="n">uow</span><span class="o">=</span><span class="n">user_uow</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+Hard? Don't worry, you will only have to memorize it once. After that, you just repeat the code!</p>
 <h2 id="source">Source</h2>
 <ul>
 <li><a href="https://github.com/knucklesuganda/py_assimilator">Github</a></li>
@@ -781,13 +918,13 @@ a library for the patterns that he uses in his projects daily.</p>
 <li>Events - projects with events or event-driven architecture</li>
 </ul>
 <h2 id="available-providers">Available providers</h2>
-<p>Providers are different patterns for external modules like SQLAlchemy or 
-FastAPI.</p>
+<p>Providers are different patterns for external modules like SQLAlchemy or FastAPI.</p>
 <ul>
-<li>Alchemy(Database, Events) - patterns for <a href="https://docs.sqlalchemy.org/en/20/">SQLAlchemy</a> for both database and events</li>
-<li>Kafka(Events) - patterns in <a href="https://kafka.apache.org/">Kafka</a> related to events</li>
-<li>Internal(Database, Events) - internal is the type of provider that saves everything in memory(dict, list and all the tools within your app)</li>
-<li>Redis(Database, Events) - redis allows us to work with <a href="https://redis.io/">Redis</a> memory database</li>
+<li>Alchemy(Database, Events) - patterns for <a href="https://docs.sqlalchemy.org/en/20/">SQLAlchemy</a> for both database and events.</li>
+<li>Kafka(Events) - patterns in <a href="https://kafka.apache.org/">Kafka</a> related to events.</li>
+<li>Internal(Database, Events) - internal is the type of provider that saves everything in memory(dict, list and all the tools within your app).</li>
+<li>Redis(Database, Events) - redis_ allows us to work with <a href="https://redis.io/">Redis</a> memory database.</li>
+<li>MongoDB(Database) - mongo allows us to work with <a href="https://www.mongodb.com/">MongoDB</a> database.</li>
 </ul>
 
 

@@ -1,0 +1,1657 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Assimilator Python framework, Domain-Driven Design, DDD, high performance, easy to learn, fast to code">
+      
+      
+        <meta name="author" content="Andrey Ivanov | Python">
+      
+      
+      <link rel="icon" href="../../images/icon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>API Reference | Core Database - Assimilator - the best Python patterns</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#repository" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Assimilator - the best Python patterns" class="md-header__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Assimilator - the best Python patterns
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference | Core Database
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/knucklesuganda/py_assimilator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    knucklesuganda/py_assimilator
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Assimilator - the best Python patterns" class="md-nav__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    Assimilator - the best Python patterns
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/knucklesuganda/py_assimilator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    knucklesuganda/py_assimilator
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Basic tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Basic tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/important/" class="md-nav__link">
+        Important things
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/database/" class="md-nav__link">
+        Database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/advanced_database/" class="md-nav__link">
+        Advanced database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/events/" class="md-nav__link">
+        Events tutorial
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Internal
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Internal" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Internal
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../internal/database.md" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../internal/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Alchemy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Alchemy" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Alchemy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../alchemy/database/" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../alchemy/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Kafka
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kafka" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kafka
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kafka/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../redis/database.md" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../redis/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          API Reference | Core Database
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        API Reference | Core Database
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#repository" class="md-nav__link">
+    Repository
+  </a>
+  
+    <nav class="md-nav" aria-label="Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_check_obj_is_specification-tupleoptionalmodelt-iterablespecificationtype" class="md-nav__link">
+    _check_obj_is_specification() -&gt; Tuple[Optional[ModelT], Iterable[SpecificationType]]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specs-typespecificationlist" class="md-nav__link">
+    specs -&gt; Type[SpecificationList]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_get_initial_query-queryt" class="md-nav__link">
+    _get_initial_query() -&gt; QueryT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_apply_specifications-queryt" class="md-nav__link">
+    _apply_specifications() -&gt; QueryT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    get()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save" class="md-nav__link">
+    save()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    delete()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    update()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_modified" class="md-nav__link">
+    is_modified()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refresh" class="md-nav__link">
+    refresh()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    count()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-your-own-repository" class="md-nav__link">
+    Creating your own repository:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-create-my-repositories" class="md-nav__link">
+    How to create  my repositories?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specification" class="md-nav__link">
+    Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-based-specifications" class="md-nav__link">
+    Class-based specifications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functional-specifications" class="md-nav__link">
+    Functional specifications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specificationlist" class="md-nav__link">
+    SpecificationList
+  </a>
+  
+    <nav class="md-nav" aria-label="SpecificationList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter_1" class="md-nav__link">
+    filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order" class="md-nav__link">
+    order()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paginate" class="md-nav__link">
+    paginate()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join" class="md-nav__link">
+    join()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazycommand" class="md-nav__link">
+    LazyCommand
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-of-work" class="md-nav__link">
+    Unit of Work
+  </a>
+  
+    <nav class="md-nav" aria-label="Unit of Work">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#__init___1" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#begin" class="md-nav__link">
+    begin()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback" class="md-nav__link">
+    rollback()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commit" class="md-nav__link">
+    commit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#close" class="md-nav__link">
+    close()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#here-is-how-you-can-use-unitofwork-in-your-code" class="md-nav__link">
+    Here is how you can use UnitOfWork in your code:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          Advanced topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Advanced topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core/core.md" class="md-nav__link">
+        Core
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#repository" class="md-nav__link">
+    Repository
+  </a>
+  
+    <nav class="md-nav" aria-label="Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_check_obj_is_specification-tupleoptionalmodelt-iterablespecificationtype" class="md-nav__link">
+    _check_obj_is_specification() -&gt; Tuple[Optional[ModelT], Iterable[SpecificationType]]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specs-typespecificationlist" class="md-nav__link">
+    specs -&gt; Type[SpecificationList]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_get_initial_query-queryt" class="md-nav__link">
+    _get_initial_query() -&gt; QueryT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_apply_specifications-queryt" class="md-nav__link">
+    _apply_specifications() -&gt; QueryT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    get()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save" class="md-nav__link">
+    save()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    delete()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    update()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_modified" class="md-nav__link">
+    is_modified()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refresh" class="md-nav__link">
+    refresh()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    count()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-your-own-repository" class="md-nav__link">
+    Creating your own repository:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-create-my-repositories" class="md-nav__link">
+    How to create  my repositories?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specification" class="md-nav__link">
+    Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-based-specifications" class="md-nav__link">
+    Class-based specifications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functional-specifications" class="md-nav__link">
+    Functional specifications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specificationlist" class="md-nav__link">
+    SpecificationList
+  </a>
+  
+    <nav class="md-nav" aria-label="SpecificationList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter_1" class="md-nav__link">
+    filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order" class="md-nav__link">
+    order()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paginate" class="md-nav__link">
+    paginate()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join" class="md-nav__link">
+    join()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazycommand" class="md-nav__link">
+    LazyCommand
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-of-work" class="md-nav__link">
+    Unit of Work
+  </a>
+  
+    <nav class="md-nav" aria-label="Unit of Work">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#__init___1" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#begin" class="md-nav__link">
+    begin()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback" class="md-nav__link">
+    rollback()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commit" class="md-nav__link">
+    commit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#close" class="md-nav__link">
+    close()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#here-is-how-you-can-use-unitofwork-in-your-code" class="md-nav__link">
+    Here is how you can use UnitOfWork in your code:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/api_reference/core.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+  <h1>API Reference | Core Database</h1>
+
+<h3 id="repository">Repository</h3>
+<h6 id="__init__"><code>__init__()</code></h6>
+<ul>
+<li><code>session: SessionT</code> - each repository has a session that works as the primary data source. It can be your database connection, a text file or a data structure.</li>
+<li><code>initial_query: Optional[SessionT] = None</code> - the initial query that you use in the data storage. We will show how it works later. It can be an SQL query, a key in the dictionary or anything else.</li>
+<li><code>specifications: SpecificationList</code> - an object that contains links to the specifications that are used to create your queries</li>
+<li><code>model: Type[ModelT]</code> - class of the model that we want to work with. It can be an SQLAlchemy model, Pydantic model, or your custom class. </li>
+<li><code>specifications: Type[SpecificationList]</code> - <code>SpecificationList</code> class with all the specifications that you need</li>
+<li><code>error_wrapper: Optional[ErrorWrapper] = ErrorWrapper()</code> - <code>ErrorWrapper</code> class that allows you to convert external providers errors to your custom errors. </li>
+</ul>
+<h6 id="_check_obj_is_specification-tupleoptionalmodelt-iterablespecificationtype"><code>_check_obj_is_specification() -&gt; Tuple[Optional[ModelT], Iterable[SpecificationType]]</code></h6>
+<p>This function is called for parts of the code that use both obj and *specifications.
+We check that if the obj is a model. If that is the case, we swap it around.</p>
+<ul>
+<li><code>obj: ModelT</code></li>
+<li><code>specifications: Iterable[SpecificationType]</code></li>
+</ul>
+<h6 id="specs-typespecificationlist"><code>specs -&gt; Type[SpecificationList]</code></h6>
+<p>Property for a shorter name version of <code>specifications</code> attribute.</p>
+<h6 id="_get_initial_query-queryt"><code>_get_initial_query() -&gt; QueryT</code></h6>
+<p>Returns initial query for the data querying. Can return <code>override_query</code> as the initial query if it is present.</p>
+<ul>
+<li><code>override_query: Optional[QueryT] = None</code> - overrides the initial query. Used for more flexibility in querying.</li>
+</ul>
+<h6 id="_apply_specifications-queryt"><code>_apply_specifications() -&gt; QueryT</code></h6>
+<p>Applies Specifications to the query. <strong>Must not be used directly.</strong> apply
+specifications gets a list of specifications and applies them to the query returned
+in _get_initial_query(). The idea is the following: each specification gets a query and
+adds some filters to it. At the end we get a fully working query modified with the
+specifications provided by the user.</p>
+<ul>
+<li><code>specifications: Iterable[Specifications]</code> - an iterable of specifications that can be used to specify some conditions in the query</li>
+</ul>
+<blockquote>
+<p>Specification is a pattern that adds filters or anything
+else that specifies what kind of data we want.</p>
+</blockquote>
+<h6 id="get"><code>get()</code></h6>
+<p>get is the function used to query the data storage and return one entity. You supply a list
+of specifications that get you the entity from the storage.</p>
+<ul>
+<li><code>specifications: Specifications</code> - specifications that can be used to specify some conditions in the query</li>
+<li><code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future</li>
+<li><code>initial_query = None</code> - if you want to change the initial query for this query only, then you can provide it as an argument</li>
+</ul>
+<h6 id="filter"><code>filter()</code></h6>
+<p>filters is the function used to query the data storage and return many entities. You supply a list
+of specifications that filter entities in the storage.</p>
+<ul>
+<li><code>specifications: Specifications</code> - specifications that can be used to specify some conditions in the query</li>
+<li><code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future</li>
+<li><code>initial_query = None</code> - if you want to change the initial query for this query only, then you can provide it as an argument</li>
+</ul>
+<h6 id="save"><code>save()</code></h6>
+<p>Adds the objects to the session, so you can commit it latter. This method
+should not change the final state of the storage, we have UnitOfWork for this(<em>do not commit your changes, just add them</em>).</p>
+<h6 id="delete"><code>delete()</code></h6>
+<p>Deletes the objects from the session, so you can commit it latter. This method
+should not change the final state of the storage, we have UnitOfWork for this(<em>do not commit your changes, just delete them from your session</em>).</p>
+<h6 id="update"><code>update()</code></h6>
+<p>Updates the objects in the session, so you can commit it latter. This method
+should not change the final state of the storage, we have UnitOfWork for this(<em>do not commit your changes, just update them in your session</em>).</p>
+<h6 id="is_modified"><code>is_modified()</code></h6>
+<p>Checks whether an obj was modified or not. If any value changes within the object,
+then it must return True</p>
+<h6 id="refresh"><code>refresh()</code></h6>
+<p>Updates the object values with the values in the data storage. That can be useful if
+you want to create an object and get its id that was generated in the storage, or if you
+just want to have the latest saved version of the object.</p>
+<h6 id="count"><code>count()</code></h6>
+<p>Counts the objects while applying specifications to the query. Give no specifications to 
+count the whole data storage.</p>
+<ul>
+<li><code>specifications: Specifications</code> - specifications that can be used to specify some conditions in the query</li>
+<li><code>lazy: bool</code> - whether you want to execute your query straight away or just build it  for the future</li>
+</ul>
+<h3 id="creating-your-own-repository">Creating your own repository:</h3>
+<p>If you want to create your own repository, then you are going to have to override all the functions above.
+But, please, do not make new functions available to the outer world.</p>
+<p>You can do this:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">class</span> <span class="nc">UserRepository</span><span class="p">(</span><span class="n">Repository</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_users_private_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Cannot be called outside</span>
+        <span class="k">return</span> <span class="s1">&#39;Do something&#39;</span>
+</code></pre></div>
+And call that function inside of your repository. But, never do this:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">class</span> <span class="nc">UserRepository</span><span class="p">(</span><span class="n">Repository</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_ser_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Cannot be called outside</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filter_specification</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</code></pre></div>
+Since it is going to be really hard for you to replace one repository to another. Example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+<span class="kn">from</span> <span class="nn">users.repository</span> <span class="kn">import</span> <span class="n">UserRepository</span>
+<span class="kn">from</span> <span class="nn">products.repository</span> <span class="kn">import</span> <span class="n">ProductRepository</span>
+
+
+<span class="k">def</span> <span class="nf">get_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filter_specification</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="n">get_by_id</span><span class="p">(</span><span class="n">UserRepository</span><span class="p">())</span>
+<span class="n">get_by_id</span><span class="p">(</span><span class="n">ProductRepository</span><span class="p">())</span>
+<span class="c1"># You can call the function with both repositories, and it will probably work fine</span>
+</code></pre></div>
+<h3 id="how-to-create-my-repositories">How to create  my repositories?</h3>
+<p>You want to create a repository for entities in your projects. That means, that if you
+have some auxiliary table in your app, then it probably should not have a repository. But, things
+like Users, Products, Orders and others might have their own repository. That does not mean
+that you will create a lot of classes, <em>but please do not add repositories for every class
+in your system</em>. If you want to read more, please, look into the Domain-Driven Development books. </p>
+<h2 id="specification">Specification</h2>
+<p>Specification is the pattern that adds values, filters, joins or anything else
+to the query in your repository. It can also work as a filter for your objects.</p>
+<h4 id="class-based-specifications">Class-based specifications</h4>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Specification</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Specification must specify apply()&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</code></pre></div>
+<p><code>apply(query) -&gt; query</code>
+apply is the main functions that you are going to override. It is used
+in order to specify new things in your query. You get the query in the
+specification and return an updated version of query.</p>
+<p>For example, if your query has a filter function, and you want to filter by username, then you can create this:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Specification</span>
+
+<span class="k">class</span> <span class="nc">UsernameSpecification</span><span class="p">(</span><span class="n">Specification</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UsernameSpecification</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Here we do the following:
+1) save the username in the constructor
+2) override apply() and return an updated version of the query provided</p>
+<p>The usage of this specification will look like this:</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">repository</span> <span class="o">=</span> <span class="n">UserRepository</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">UsernameSpecification</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;python.on.papyrus&quot;</span><span class="p">))</span>
+</code></pre></div>
+The repository will apply the specification and return the results.</p>
+<h4 id="functional-specifications">Functional specifications</h4>
+<p><code>__call__()</code> functions receives the query and call <code>apply()</code> in the specification.
+This is used in order to make functional specifications possible.
+<code>__call__()</code> allows you to call an object as a function: <code>obj()</code>.
+This way, we can use functional specifications and class-based specifications
+together.</p>
+<p>If you want to create a functional specification, then you need to use the <code>@specification</code>
+decorator:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
+
+<span class="nd">@specification</span>
+<span class="k">def</span> <span class="nf">username_filter</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+</code></pre></div>
+<p>The function above is the equivalent of the <code>UsernameSpecification</code> class. Then,
+you are going to use it like this:</p>
+<div class="highlight"><pre><span></span><code><span class="n">repository</span> <span class="o">=</span> <span class="n">UserRepository</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username_filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;python.on.papyrus&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>Both types work the same, so you can choose the type of specifications that you like.
+But, you can also use them together:</p>
+<div class="highlight"><pre><span></span><code><span class="n">repository</span> <span class="o">=</span> <span class="n">UserRepository</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="n">username_filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;python.on.papyrus&quot;</span><span class="p">),</span>
+    <span class="n">AgeGreaterSpecification</span><span class="p">(</span><span class="n">age_gt</span><span class="o">=</span><span class="mi">18</span><span class="p">),</span>
+    <span class="n">JoinSpecification</span><span class="p">(</span><span class="n">Friends</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="specificationlist">SpecificationList</h2>
+<p>SpecificationList is a static class that contains basic specifications
+for our repository.</p>
+<p>Specifications:</p>
+<h6 id="filter_1"><code>filter()</code></h6>
+<p>filters the data</p>
+<h6 id="order"><code>order()</code></h6>
+<p>orders the data</p>
+<h6 id="paginate"><code>paginate()</code></h6>
+<p>paginates the data(limits the results, offsets them).</p>
+<h6 id="join"><code>join()</code></h6>
+<p>joins entities together(join a table, get related data).</p>
+<p>The reason we use <code>SpecificationList</code> is because we want to have an abstraction for our specifications.
+Take two examples:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">UserRepository</span>
+<span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">alchemy_filter</span>
+
+
+<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">UserRepository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alchemy_filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">))</span> <span class="c1"># we use alchemy_filter() directly </span>
+</code></pre></div>
+In that example, we use <code>alchemy_filter()</code> directly, which may not seem as an issue, however,
+if we would want to change our <code>UserRepository</code> to work with <code>RedisRepository</code>, then we would
+have to change all of our specifications ourselves.</p>
+<p>In order to fix this, we can use SpecificationList:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">UserRepository</span>
+
+
+<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">UserRepository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">repository</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">))</span>
+    <span class="c1"># we call the filter from repository specifications. </span>
+</code></pre></div>
+Now, we only have to change the repository without worrying about other parts of the code.</p>
+<p>Here is how you can create your own SpecificationList:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">SpecificationList</span><span class="p">,</span> <span class="n">specification</span><span class="p">,</span> <span class="n">Specification</span>
+<span class="kn">from</span> <span class="nn">pagination_func</span> <span class="kn">import</span> <span class="n">paginate_data</span>
+
+
+<span class="nd">@specification</span>
+<span class="k">def</span> <span class="nf">filter_specification</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">do_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
+
+
+<span class="nd">@specification</span>
+<span class="k">def</span> <span class="nf">join_specification</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">query</span>    <span class="c1"># we do not need joins in our data structure, so we leave it</span>
+
+
+<span class="k">class</span> <span class="nc">OrderSpecification</span><span class="p">(</span><span class="n">Specification</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orders</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orders</span> <span class="o">=</span> <span class="n">orders</span>
+
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">make_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orders</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MySpecificationList</span><span class="p">(</span><span class="n">SpecificationList</span><span class="p">):</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="n">filter_specification</span>  <span class="c1"># we use function name as the specification</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">OrderSpecification</span>  <span class="c1"># lambda specification</span>
+    <span class="n">paginate</span> <span class="o">=</span> <span class="n">paginate_data</span>  <span class="c1"># imported specification</span>
+    <span class="n">join</span> <span class="o">=</span> <span class="n">join_specification</span>
+</code></pre></div>
+Notice that we never call the functions, cause the only thing we need are links to the 
+specifications.</p>
+<p>Then, when you build your Repository:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">specifications</span> <span class="kn">import</span> <span class="n">MySpecificationList</span>
+
+<span class="n">repository</span> <span class="o">=</span> <span class="n">MyRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">specifications</span><span class="o">=</span><span class="n">MySpecificationList</span><span class="p">)</span>
+</code></pre></div>
+Once you have done that, the repository will use your specifications.</p>
+<blockquote>
+<p>Of course, you can still use specifications directly, but if you ever need to change
+the repository, then it may be a problem.</p>
+</blockquote>
+<h2 id="lazycommand">LazyCommand</h2>
+<p>Sometimes we don't want to execute the query right away. For example, for optimization purposes or 
+some other purpose that requires us to delay the execution. In that case, you want to find <code>lazy</code> argument
+in the function that you are calling and set it to <code>True</code>. After that, a <code>LazyCommand</code> is going to be returned. That
+object allows you to call it as a function or iterate over it to get the results:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span> <span class="nf">print_all_usernames</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+        <span class="c1"># we don&#39;t want to receive a list of all the users, but want to iterate</span>
+        <span class="c1"># through it and only get 1 user at a time</span>
+
+
+<span class="k">def</span> <span class="nf">count_users_if_argument_true</span><span class="p">(</span><span class="n">do_count</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">count_command</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># turn on lazy and get LazyCommand</span>
+
+    <span class="k">if</span> <span class="n">do_count</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">count_command</span><span class="p">()</span>  <span class="c1"># call for the result</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div>
+<h2 id="unit-of-work">Unit of Work</h2>
+<p>Unit of work allows us to work with transactions and repositories that change the data.
+The problem with repository is the transaction management. We want to make our transaction management
+as easy as possible, but repositories are not responsible for that. That is why we
+have units of work.</p>
+<p>They allow us to do the following:
+1. Start the transaction
+2. Provide the repository to the client code
+3. If there are exceptions, errors, issues with the client code, rollback the transaction and remove all the changes
+4. If everything is good, the client code calls the <code>commit()</code> function and finishes the data change
+5. Unit of work closes the transaction</p>
+<h6 id="__init___1"><code>__init__()</code></h6>
+<ul>
+<li><code>repository: BaseRepository</code> - The repository is provided in the UnitOfWork when we create it. The session
+to the data storage is going to be taken from the repository.</li>
+</ul>
+<h6 id="begin"><code>begin()</code></h6>
+<p>Starts the transaction. The function is called automatically.</p>
+<h6 id="rollback"><code>rollback()</code></h6>
+<p>Removes all the changes from the transaction. You do not need to call that function,
+as it is called automatically if there is an error in your code.</p>
+<h6 id="commit"><code>commit()</code></h6>
+<p>Saves the changes to the data storage. While the repository only adds the temporary, this
+function is responsible for the final save. <em>You need to call it yourself, it will not be called automatically like rollback()</em> </p>
+<h6 id="close"><code>close()</code></h6>
+<p>Closes the transaction. The function is called automatically.</p>
+<h4 id="here-is-how-you-can-use-unitofwork-in-your-code">Here is how you can use UnitOfWork in your code:</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+
+<span class="kn">from</span> <span class="nn">users.unit_of_work</span> <span class="kn">import</span> <span class="n">UserUnitOfWork</span>
+<span class="kn">from</span> <span class="nn">users.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># start the transaction</span>
+        <span class="c1"># everything in here is within the transaction</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>   <span class="c1"># we get the repository from UnitOfWork</span>
+
+        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit the changes making them final. If the function is not called, nothing is saved.</span>
+</code></pre></div>
+<p>As you can see, you do not need to call any function except for <code>commit()</code>. You should
+also use context managers(<code>with uow:</code>) to start the transaction and rollback if there is an exception:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+
+<span class="kn">from</span> <span class="nn">users.unit_of_work</span> <span class="kn">import</span> <span class="n">UserUnitOfWork</span>
+<span class="kn">from</span> <span class="nn">users.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># start the transaction</span>
+        <span class="c1"># everything in here is within the transaction</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>   <span class="c1"># we get the repository from UnitOfWork</span>
+
+        <span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span>   <span class="c1"># ZeroDivisionError. UnitOfWork calls rollback automatically.</span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># nothing is saved, since the rollback was called.</span>
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../../alchemy/database/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Database" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Database
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

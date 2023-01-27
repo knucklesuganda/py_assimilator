@@ -1,0 +1,1682 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Assimilator Python framework, Domain-Driven Design, DDD, high performance, easy to learn, fast to code">
+      
+      
+        <meta name="author" content="Andrey Ivanov | Python">
+      
+      
+      <link rel="icon" href="../../images/icon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Database tutorial - Assimilator - the best Python patterns</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#database-patterns" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Assimilator - the best Python patterns" class="md-header__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Assimilator - the best Python patterns
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Database tutorial
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/knucklesuganda/py_assimilator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    knucklesuganda/py_assimilator
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Assimilator - the best Python patterns" class="md-nav__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
+      
+  <img src="../../images/logo.png" alt="logo">
+
+    </a>
+    Assimilator - the best Python patterns
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/knucklesuganda/py_assimilator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    knucklesuganda/py_assimilator
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Basic tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Basic tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../important/" class="md-nav__link">
+        Important things
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Database tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Database tutorial
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-patterns-do-we-use" class="md-nav__link">
+    What patterns do we use?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#createread-example" class="md-nav__link">
+    Create/Read example😀
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pattern-substitution-example" class="md-nav__link">
+    Pattern substitution example🙂
+  </a>
+  
+    <nav class="md-nav" aria-label="Pattern substitution example🙂">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#about-direct-coding" class="md-nav__link">
+    About direct coding
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors-example" class="md-nav__link">
+    Errors example😰
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-functions-you-must-know" class="md-nav__link">
+    Other functions you must know
+  </a>
+  
+    <nav class="md-nav" aria-label="Other functions you must know">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-querying" class="md-nav__link">
+    Data querying
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lazy-evaluation" class="md-nav__link">
+    Lazy evaluation😴
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-on-filter-specification" class="md-nav__link">
+    More on filter specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-changes" class="md-nav__link">
+    Data changes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-flows" class="md-nav__link">
+    Typical flows
+  </a>
+  
+    <nav class="md-nav" aria-label="Typical flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-creation" class="md-nav__link">
+    Data Creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-filtering" class="md-nav__link">
+    Data Filtering
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced_database/" class="md-nav__link">
+        Advanced database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        Events tutorial
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Internal
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Internal" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Internal
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../internal/database.md" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../internal/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Alchemy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Alchemy" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Alchemy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../alchemy/database/" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../alchemy/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Kafka
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kafka" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kafka
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kafka/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../redis/database.md" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../redis/events.md" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/core/" class="md-nav__link">
+        API Reference | Core Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          Advanced topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Advanced topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core/core.md" class="md-nav__link">
+        Core
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-patterns-do-we-use" class="md-nav__link">
+    What patterns do we use?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#createread-example" class="md-nav__link">
+    Create/Read example😀
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pattern-substitution-example" class="md-nav__link">
+    Pattern substitution example🙂
+  </a>
+  
+    <nav class="md-nav" aria-label="Pattern substitution example🙂">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#about-direct-coding" class="md-nav__link">
+    About direct coding
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors-example" class="md-nav__link">
+    Errors example😰
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-functions-you-must-know" class="md-nav__link">
+    Other functions you must know
+  </a>
+  
+    <nav class="md-nav" aria-label="Other functions you must know">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-querying" class="md-nav__link">
+    Data querying
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lazy-evaluation" class="md-nav__link">
+    Lazy evaluation😴
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-on-filter-specification" class="md-nav__link">
+    More on filter specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-changes" class="md-nav__link">
+    Data changes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-flows" class="md-nav__link">
+    Typical flows
+  </a>
+  
+    <nav class="md-nav" aria-label="Typical flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-creation" class="md-nav__link">
+    Data Creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-filtering" class="md-nav__link">
+    Data Filtering
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/tutorial/database.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="database-patterns">Database patterns</h1>
+<h2 id="what-patterns-do-we-use">What patterns do we use?</h2>
+<p>Database, in our case, is any data storage. It can be PostgreSQL, MySQL, Redis, File, external API or others. We use
+5 main patterns with databases:</p>
+<ul>
+<li><code>Repository</code> - works with the data. Saves, reads, updates, deletes, modifies, checks, filters our data.</li>
+<li><code>UnitOfWork</code> - works with transactions. Ensures data integrity. Only used when the data is changed.</li>
+<li><code>Specification</code> - some sort of filter for the repository. Filters, paginates, joins, limits the results in <code>Repository</code>.</li>
+<li><code>SpecificationList</code> - contains links to <code>Specification</code> patterns to completely remove imports inside of <code>Repository</code>.</li>
+<li><code>LazyCommand</code> - database query that has been created, but not ran yet. Only runs the function when we need the results.</li>
+</ul>
+<hr />
+<h2 id="createread-example">Create/Read example😀</h2>
+<p>Let's say that we use <code>SQLAlchemy</code> library in Python. We want to make a program that can save and read our users.
+Each user has a username and balance. The first thing that we do is we need to create SQLAlchemy tables. <em>There is no
+Assimilator in that step</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># models.py</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Integer</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">declarative_base</span><span class="p">,</span> <span class="n">sessionmaker</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;sqlite:///:memory:&quot;</span><span class="p">)</span>    <span class="c1"># create engine to the SQLite Database</span>
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>   <span class="c1"># Create a base class for our tables</span>
+<span class="n">DatabaseSession</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>     <span class="c1"># create a database connection(session)</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>    <span class="c1"># Create user model</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">())</span>     <span class="c1"># username column</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Float</span><span class="p">())</span>       <span class="c1"># balance column</span>
+
+
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>    <span class="c1"># Create User table in the database!</span>
+</code></pre></div>
+<p>Most of you have probably seen that. We just create a new SQLAlchemy model in our project.
+Now, let's add our Assimilator patterns. Two patterns that we are going to use are <code>Repository</code> and <code>UnitOfWork</code>.</p>
+<p><code>Repository</code> is responsible for data management. We use it to save, read, update, delete, modify, check and basically work with our database.</p>
+<p><code>UnitOfWork</code> is responsible for transactions. We use it to apply the changes made by <code>Repository</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># dependencies.py</span>
+
+<span class="c1"># We import our patterns from alchemy submodule</span>
+<span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyUnitOfWork</span><span class="p">,</span> <span class="n">AlchemyRepository</span>
+
+<span class="c1"># We also import User and DatabaseSession we created before </span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">DatabaseSession</span><span class="p">,</span> <span class="n">User</span>
+
+<span class="n">user_repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">DatabaseSession</span><span class="p">(),</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>
+<span class="p">)</span> <span class="c1"># We create our repository and pass session and model to it</span>
+
+<span class="c1"># UnitOfWork just gets the repository pattern inside it.</span>
+<span class="n">user_uow</span> <span class="o">=</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">user_repository</span><span class="p">)</span>
+</code></pre></div>
+<p>Now, we will use those patterns to create a user. We need to do the following things:</p>
+<ul>
+<li>Start a new transaction using <code>UnitOfWork</code>.</li>
+<li>Create new user using <code>Repository</code>.</li>
+<li>Apply the changes using <code>UnitOfWork</code>.</li>
+</ul>
+<p>The main idea here is that even if we create millions of users, the changes will not be applied to the database until
+<code>UnitOfWork.commit()</code> function is called. We do that so that if there is an error during our operations, new changes
+are not applied.</p>
+<p>If you still don't get the idea of database transactions - <a href="https://www.youtube.com/watch?v=E8RoCAp1JSA">watch this video on my channel</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">user_repository</span><span class="p">,</span> <span class="n">user_uow</span>
+
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># We use that to start the transaction</span>
+        <span class="n">repository</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span>   <span class="c1"># access the repository from the UnitOfWork</span>
+
+        <span class="c1"># Save the user using Repository.save() function and by passing all the arguments inside</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+        <span class="c1"># WARNING!!! We have not applied any changes up to that point.</span>
+        <span class="c1"># We must call UnitOfWork.commit() to change that: </span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span> 
+        <span class="c1"># Changes are applied and used is in the database!</span>
+
+    <span class="k">return</span> <span class="n">new_user</span>
+
+<span class="n">created_user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="n">user_uow</span><span class="p">)</span>
+</code></pre></div>
+<p>We saved the user in the database. Now, let's read it. We use <code>Specification</code> pattern to limit the results using different
+criteria. If we want to filter the results(SQL WHERE), then we must use <code>filter()</code> specification. We can either import
+the specifications from the alchemy submodule, or we can access them from the <code>Repository.specs</code> property.</p>
+<blockquote>
+<p>When you are sure that your function is only going to read your database, then you should only use Repository pattern
+without UnitOfWork. This way, we will not commit any data to our database, and can be sure that the function only
+reads the data, without changing it.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">user_repository</span>
+
+
+<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>    <span class="c1"># only pass the Repository because we want to read the data</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>  <span class="c1"># use get() to query one user from the database</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>    <span class="c1"># use filter specification to give your filtering criteria</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">get_user</span><span class="p">(</span><span class="n">user_repository</span><span class="p">)</span>
+</code></pre></div>
+<p>If you want to import the specification:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+<span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyFilter</span>  <span class="c1"># import AlchemyFilter specification</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">user_repository</span>
+
+
+<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="n">AlchemyFilter</span><span class="p">(</span>  <span class="c1"># everything else is the same except for the specification</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">get_user</span><span class="p">(</span><span class="n">user_repository</span><span class="p">)</span>
+</code></pre></div></p>
+<p>As you probably know, those were direct and indirect coding styles. You can read about them <a href="/tutorial/important/#indirect-vs-direct-code">here</a>.
+We would suggest you to use indirect(the first) coding style. You remove a lot of imports and can do pattern substitutions which are going to be
+discussed in the next example.</p>
+<hr />
+<h2 id="pattern-substitution-example">Pattern substitution example🙂</h2>
+<p>What is pattern substitution? It is a technique where you can change the external providers in one step. Let's see what that means...</p>
+<ol>
+<li>When we write code, it is a good idea to not have dependencies. They are really hard to get rid of, hard to update or change. So,
+if we have as little dependencies as possible, this is only going to be better.</li>
+<li>Sometimes we want to change our database to another one, or we want to change the ORM(database library) that we are using.</li>
+<li>There is a possibility that we need caching in our program, our we want to run tests of our code without using a real database.</li>
+</ol>
+<p>All these examples are perfect for pattern substitution. For that case, we will change SQLAlchemy patterns that we wrote in the
+first example to Internal patterns with one line of code.</p>
+<blockquote>
+<p>Internal patterns work with Python data structures. Your database is a dictionary, list, class or anything else
+within your program. Internal patterns are really useful for testing!</p>
+</blockquote>
+<p>The first thing that we need to do is change the models in our <code>models.py</code> file:
+<div class="highlight"><pre><span></span><code><span class="c1"># models.py</span>
+
+<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">BaseModel</span>     <span class="c1"># BaseModel is just a Pydantic model with id</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># id is supplied by default</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">balance</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div></p>
+<p>So, we changed our SQLAlchemy models to a <code>BaseModel</code>. Then, we need to change the patterns:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># dependencies.py</span>
+
+<span class="c1"># We import the same patterns from internal submodule</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database</span> <span class="kn">import</span> <span class="n">InternalRepository</span><span class="p">,</span> <span class="n">InternalUnitOfWork</span>
+
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">User</span>     <span class="c1"># import our BaseModel User</span>
+
+<span class="c1"># Session is a dictionary in InternalRepository.</span>
+<span class="c1"># That means, that we will store all our data in there.</span>
+<span class="n">session</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># We create our repository and pass session and model to it</span>
+<span class="n">user_repository</span> <span class="o">=</span> <span class="n">InternalRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+
+<span class="c1"># UnitOfWork just gets the repository pattern inside it.</span>
+<span class="n">user_uow</span> <span class="o">=</span> <span class="n">InternalUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">user_repository</span><span class="p">)</span>
+</code></pre></div>
+<p>That's it. After you changed that, your other code like <code>create_user()</code> and <code>get_user()</code> will work with dictionary and
+your new <code>User</code> as a data storage! Now, imagine that you have 200 functions, and in order to change one data storage to
+another you just need 1 line of code!</p>
+<h3 id="about-direct-coding">About direct coding</h3>
+<p>All of that magic with pattern substitution was possible because we used indirect coding. But, if we use direct coding,
+the situation may not be that sweet:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+<span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyFilter</span>  <span class="c1"># import AlchemyFilter specification</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">user_repository</span>
+
+
+<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="n">AlchemyFilter</span><span class="p">(</span>
+            <span class="c1"># We use AlchemyFilter with InternalRepository.</span>
+            <span class="c1"># Those do not work together😭</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">get_user</span><span class="p">(</span><span class="n">user_repository</span><span class="p">)</span>
+</code></pre></div>
+<p><code>AlchemyFilter</code> will not work with <code>InternalRepository</code>. We must go into our code and change it to <code>InternalFilter</code>.
+That is why we advise you to use indirect coding whenever possible.</p>
+<hr />
+<h2 id="errors-example">Errors example😰</h2>
+<p>We have already seen perfect examples of working code. But, errors and exceptions happen! That is why we need to ensure
+that the code that we write is error-proof.</p>
+<p><strong>However, we have already done everything to do that😳.</strong></p>
+<p>As I said earlier, <code>UnitOfWork</code> pattern is used for transaction management. That means, that we use it to commit the data
+if everything is OK, or rollback the changes if there are errors. When we use context managers(<code>with uow</code>) with <code>UnitOfWork</code> pattern
+we make it so that if there are errors, all the pending changes are dropped.</p>
+<p>So, if you want to add try and except to your code, then just do it like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span><span class="p">,</span> <span class="n">InvalidQueryError</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">user_repository</span><span class="p">,</span> <span class="n">user_uow</span>
+
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># We use that to start the transaction</span>
+            <span class="n">repository</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span>
+            <span class="n">new_user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> 
+            <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span> 
+
+        <span class="k">return</span> <span class="n">new_user</span>
+
+    <span class="k">except</span> <span class="n">InvalidQueryError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error in user creation&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>     <span class="c1"># no user created</span>
+
+<span class="n">created_user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="n">user_uow</span><span class="p">)</span>
+</code></pre></div>
+<p>But, even if you do not use try and except, you are sure that your database does not have any weird changes in it!
+That's the power of <code>UnitOfWork</code>.</p>
+<blockquote>
+<p>If you ever want to rollback yourself, then use UnitOfWork.rollback() function. It will remove all the pending changes.
+That is the function that is called if there is an exception in the <code>with uow</code> block.</p>
+</blockquote>
+<hr />
+<h2 id="other-functions-you-must-know">Other functions you must know</h2>
+<p>Here are more short examples regarding Database functions that you might want to use:</p>
+<h3 id="data-querying">Data querying</h3>
+<p><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+<span class="k">def</span> <span class="nf">example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>    <span class="c1"># get one entity from the database</span>
+    <span class="c1"># get() function can raise NotFoundError() or MultipleResultsError()</span>
+
+    <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>    <span class="c1"># get many entities from the database</span>
+
+    <span class="c1"># When you use those functions, you can add specifications to limit the results:</span>
+
+    <span class="n">adult_users</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>    <span class="c1"># we use filter specification</span>
+            <span class="n">age__gte</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>    <span class="c1"># get all the users older than 18 years</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">adult_user</span> <span class="ow">in</span> <span class="n">adult_users</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">adult_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+</code></pre></div>
+There are different filtering options inside of filter() specification:</p>
+<ul>
+<li><code>__eq</code> = equal to. You can omit it and just use <code>field=value</code> as we did before</li>
+<li><code>__gt</code> = greater than. Example: <code>age__gt=18 == (age &gt; 18)</code></li>
+<li><code>__gte</code> = greater than equals. Example: <code>age__gte=18 == (age &gt;= 18)</code></li>
+<li><code>__lt</code> = lower than. Example: <code>age__lt=18 == (age &lt; 18)</code></li>
+<li><code>__lte</code> = lower than equals. Example: <code>age__lte=18 == (age &lt;= 18)</code></li>
+<li><code>__not</code> = not equal. Example: <code>age__not=18 == (age != 18)</code></li>
+<li><code>__is</code> = is True or False. Example: <code>validated__is=True == (validated is True)</code></li>
+<li><code>__like</code> = like SQL expression. Converted to regex if not supported. Example: <code>username__like="Andrey%" == all usernames that start with Andrey</code></li>
+<li><code>__regex</code> = regular expression. Example: <code>username__regex="[1-3]+And.rey\w+" == regular expression, what is there to explain?</code></li>
+</ul>
+<p>You can use these options like that:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span> <span class="nf">filter_example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="c1"># Get all users between ages 18 to 25 with username</span>
+    <span class="c1"># that has &quot;And&quot; inside and those who are validated.</span>
+    <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+            <span class="n">age__lt</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+            <span class="n">username__like</span><span class="o">=</span><span class="s2">&quot;%And%&quot;</span><span class="p">,</span>
+            <span class="n">validated__is</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<p>All the users can be queried with <code>Repository.filter()</code> without any specifications:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+<span class="k">def</span> <span class="nf">get_all_users</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">all_users</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>     <span class="c1"># get all users from the database</span>
+</code></pre></div></p>
+<p>Pagination is added with <code>paginate()</code> specification:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span> <span class="nf">paginate</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">paginated_users</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span>
+            <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>   <span class="c1"># limit the results by 10</span>
+            <span class="n">offset</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>  <span class="c1"># offset the results by 20</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<p>Ordering is added with <code>order()</code> specification:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">ordered_users</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">order</span><span class="p">(</span>
+            <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="c1"># order users by username(Ascending ordering)</span>
+            <span class="s1">&#39;-balance&#39;</span><span class="p">,</span> <span class="c1"># second order of the users is balance(descending order)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># - in front means descending</span>
+</code></pre></div></p>
+<p>Entity joins are added with <code>join()</code> specification:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span> <span class="nf">join_example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">users_with_products</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">Order</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>    <span class="c1"># another model order that is joined with user     # TODO: check</span>
+            <span class="n">Product</span><span class="o">.</span><span class="n">product_id</span><span class="p">,</span>    <span class="c1"># another model product that is joined with user     # TODO: check</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<p>If you want to optimize your queries, you can do so by using <code>only()</code>. It will accept fields that will be the only
+ones on your model:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+<span class="k">def</span> <span class="nf">only_example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">users_with_products</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">)</span>
+        <span class="c1"># We only query `id` and `username` from the database. </span>
+        <span class="c1"># That reduces results size and query execution time</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<p>If you want to count something, you can use <code>count()</code>:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+<span class="k">def</span> <span class="nf">count_example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">users_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>    <span class="c1"># Count all users</span>
+    <span class="n">other_users_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">count</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>    <span class="c1"># Count all users with id &gt; 10</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<p>Sometimes you want to check if your object was updated or not. You can use <code>is_modified()</code>:
+<div class="highlight"><pre><span></span><code><span class="n">is_modified</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">is_modified</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="lazy-evaluation">Lazy evaluation😴</h3>
+<p>Let's say that you want to load all the users from your table. But, the thing is, you don't need to use them straight away.
+Maybe, you want to return the result to another function, or set it as an attribute of an object. If you use the patterns that
+we gave you, then your code is going to be clean, but memory-heavy.</p>
+<p>To avoid that, you can prepare your function to be executed
+with another pattern called <code>LazyCommand</code>. It saves the function and all the arguments that you want to provide, and executes it
+only when you need it!</p>
+<p>You can add lazy=True to enable it in your <code>Repository</code>:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span> <span class="nf">example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="c1"># Executes on the spot</span>
+    <span class="n">users_list</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
+
+    <span class="c1"># Creates a lazy command that can be executed later</span>
+    <span class="n">users_filter_lazy_command</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Now, we can optimize our program like this:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span><span class="p">,</span> <span class="n">LazyCommand</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">user_repository</span>
+
+
+<span class="c1"># We use typing for LazyCommand and show that it returns a list of Users</span>
+<span class="k">def</span> <span class="nf">caller</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LazyCommand</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]]:</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">),</span>
+        <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>      <span class="c1"># make it lazy</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">second_function</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">caller</span><span class="p">(</span><span class="n">user_repository</span><span class="p">)</span>      <span class="c1"># Database query not executed yet </span>
+
+
+<span class="k">def</span> <span class="nf">first_function</span><span class="p">():</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">second_function</span><span class="p">()</span>
+
+    <span class="c1"># Execute more code...</span>
+
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>    <span class="c1"># The query is executed here</span>
+        <span class="o">...</span>
+</code></pre></div>
+We can optimize our code drastically. Now, we will only make the queries whenever we need them!</p>
+<blockquote>
+<p>But, if your query returns an error, that error is returned to the query execution, not creation! That is going
+to be <code>first_function()</code> in our case. Be sure to handle exceptions in the right place.</p>
+</blockquote>
+<p>Here are the places when your command is executed:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span><span class="p">,</span> <span class="n">LazyCommand</span>
+
+<span class="k">def</span> <span class="nf">lazy_command_execution</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">lazy_command</span><span class="p">:</span> <span class="n">LazyCommand</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lazy_command</span><span class="p">:</span> <span class="c1"># query is executed in boolean statements</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executed!&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">lazy_command</span><span class="p">:</span>   <span class="c1"># query is executed in iterators</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executed!&quot;</span><span class="p">)</span>
+
+    <span class="n">lazy_user</span><span class="p">:</span> <span class="n">LazyCommand</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executed for User id:&quot;</span><span class="p">,</span> <span class="n">lazy_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>    <span class="c1"># attribute access execution</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">lazy_user</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span>   <span class="c1"># Boolean execution</span>
+</code></pre></div></p>
+<p>Another <strong>important</strong> thing about LazyCommand is its execution policy. The thing is that if you use the same <code>LazyCommand</code>
+object many times, the command is only going to be executed once. This code only runs the query once:
+<div class="highlight"><pre><span></span><code><span class="n">lazy_command_obj</span><span class="p">()</span>  <span class="c1"># command executed</span>
+<span class="n">lazy_command_obj</span><span class="p">()</span>
+<span class="n">lazy_command_obj</span><span class="p">()</span>
+<span class="n">lazy_command_obj</span><span class="p">()</span>
+<span class="n">lazy_command_obj</span><span class="p">()</span>  <span class="c1"># the same result in every other call</span>
+</code></pre></div></p>
+<p>Another <strong><strong>FAR MORE IMPORTANT</strong></strong> thing is the return type of your <code>LazyCommand</code>. If you call <code>Repository.filter()</code>, it's
+going to be an Iterable. If you use <code>Repository.get()</code>, it is just one entity. We suggest you add types with Python typings:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span><span class="p">,</span> <span class="n">LazyCommand</span>
+<span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">def</span> <span class="nf">lazy_type_example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="n">lazy_command_many</span><span class="p">:</span> <span class="n">LazyCommand</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]]</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">lazy_command_obj</span><span class="p">:</span> <span class="n">LazyCommand</span><span class="p">[</span><span class="n">User</span><span class="p">]</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Now we know what is returned when the command is executed:    </span>
+    <span class="n">users</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]</span> <span class="o">=</span> <span class="n">lazy_command_many</span><span class="p">()</span>
+    <span class="n">one_user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">lazy_command_obj</span><span class="p">()</span>
+</code></pre></div>
+<p>The last thing is building your own <code>LazyCommand</code> objects:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.patterns</span> <span class="kn">import</span> <span class="n">LazyCommand</span>
+
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
+
+
+<span class="n">command</span><span class="p">:</span> <span class="n">LazyCommand</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">LazyCommand</span><span class="p">(</span>
+    <span class="n">command</span><span class="o">=</span><span class="n">func</span><span class="p">,</span>   <span class="c1"># NOT func()</span>
+    <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="c1"># function arguments</span>
+<span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">command</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span>
+</code></pre></div></p>
+<p>Also, you can use the decorator to make your whole function lazy:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.patterns</span> <span class="kn">import</span> <span class="n">LazyCommand</span>
+
+
+<span class="nd">@LazyCommand</span><span class="o">.</span><span class="n">decorate</span>
+<span class="k">def</span> <span class="nf">decorated_lazy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">decorated_lazy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># 6</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">decorated_lazy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>  <span class="c1"># LazyCommand</span>
+</code></pre></div></p>
+<h3 id="more-on-filter-specification">More on filter specification</h3>
+<p>You have probably wondered how to do OR statement in the filter specification. What about AND statement? How are we going to
+implement all these things without using direct coding? You can use special operations like these:</p>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># OR operation. username==&quot;Andrey&quot; or username==&quot;Python&quot;:</span>
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Python&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># AND operation. username==&quot;Andrey&quot; and age==22:</span>
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+
+<span class="c1"># AND operation, but shorter:</span>
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">fitler</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+
+<span class="c1"># NOT operation. age != 55</span>
+<span class="o">~</span><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age</span><span class="o">=</span><span class="mi">55</span><span class="p">)</span>
+
+
+<span class="c1"># Combining operations together.</span>
+<span class="c1"># (username=&quot;Andrey&quot; and age=22) or (username == &quot;Python&quot; and age &gt; 18)</span>
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span> <span class="o">|</span> \
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Python&quot;</span><span class="p">)</span> <span class="o">&amp;</span> \
+<span class="err">!</span><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> 
+</code></pre></div>
+Another question that you probably have is how to make all of that shorter. Writing the specification again and again
+can be tiring. Good thing you can save them(not only filter specification. Any specification in general):
+<div class="highlight"><pre><span></span><code><span class="n">andrey_username_spec</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">)</span>
+
+<span class="n">andrey</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">andrey_username_spec</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="data-changes">Data changes</h3>
+<p>Let's finally change some data.
+Repository <code>save()</code> function can be used with arguments or provided model:</p>
+<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>   <span class="c1"># indirect method.</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>
+    <span class="n">balance</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># OR</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>  <span class="c1"># direct method.</span>
+</code></pre></div>
+<p>Repository <code>update()</code> function can be used to update models:
+<div class="highlight"><pre><span></span><code><span class="n">user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">user</span><span class="o">.</span><span class="n">balance</span> <span class="o">+=</span> <span class="mi">100</span>
+<span class="n">repository</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>    <span class="c1"># update the user</span>
+</code></pre></div></p>
+<p>It can also be used to update a lot of entities at once:
+<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="c1"># you provide specifications to filter the results</span>
+    <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">),</span>
+    <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+
+    <span class="c1"># then, you provide field=new_value pairs to update the fields</span>
+    <span class="n">is_validated</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">updated_field</span><span class="o">=</span><span class="s2">&quot;New value&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<p>Use <code>delete()</code> to delete one model:
+<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Or many models at once:
+<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>  <span class="c1"># delete everyone under 18</span>
+    <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__lt</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<blockquote>
+<p><code>delete()</code> is partially safe. That means that you cannot delete your whole database, cause if you provide nothing, you
+will delete nothing. But, still check your specifications in mass delete statements.</p>
+</blockquote>
+<p>Use <code>refresh()</code> to update the values in your old object. It goes to the database and changes your old values to new if they
+were updated:
+<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">old_user</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">old_user</span><span class="o">.</span><span class="n">updated_field</span> <span class="o">==</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">old_user</span><span class="o">.</span><span class="n">id</span><span class="p">))</span><span class="o">.</span><span class="n">updated_field</span>
+</code></pre></div></p>
+<hr />
+<h2 id="typical-flows">Typical flows</h2>
+<h3 id="data-creation">Data Creation</h3>
+<p>1) You create Repository and UnitOfWork.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyRepository</span><span class="p">,</span> <span class="n">AlchemyUnitOfWork</span>
+
+<span class="n">user_repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">DatabaseSession</span><span class="p">(),</span>  <span class="c1"># your SQLAlchemy session</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>         <span class="c1"># User is your SQLAlchemy model</span>
+<span class="p">)</span>
+<span class="n">user_uow</span> <span class="o">=</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">user_repository</span><span class="p">)</span>
+</code></pre></div>
+<p>2) You provide them in the function as parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">new_username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span> <span class="o">...</span>    <span class="c1"># UnitOfWork is a parameter</span>
+</code></pre></div>
+<p>3) You use context manager(with statement in Python) with UnitOfWork.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">new_username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>      <span class="c1"># Start the transaction in the database</span>
+        <span class="o">...</span>
+</code></pre></div>
+<p>4) You get the repository from UnitOfWork and use <code>save()</code> to save the result.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">new_username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">new_username</span><span class="p">,</span>
+            <span class="n">user_balance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># create new user</span>
+</code></pre></div>
+<p>5) You use UnitOfWork <code>commit()</code> to apply the changes to the database.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">new_username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">new_username</span><span class="p">,</span> 
+            <span class="n">user_balance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># create new user</span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># Save changes do the database</span>
+
+    <span class="k">return</span> <span class="n">new_user</span>     <span class="c1"># return new user</span>
+</code></pre></div>
+<hr />
+<h3 id="data-filtering">Data Filtering</h3>
+<p>1) You create Repository.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyRepository</span>
+
+<span class="n">user_repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">DatabaseSession</span><span class="p">(),</span>  <span class="c1"># your SQLAlchemy session</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>         <span class="c1"># User is your SQLAlchemy model</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>2) You provide it in the function as a parameter.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+<span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span> <span class="o">...</span>    <span class="c1"># Repository is a parameter</span>
+</code></pre></div>
+<p>3) You use Repository <code>filter()</code> function to filter the results.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+<p>4) You use <code>repository.specs</code> to access the specifications. Then, you choose filter to filter the users who are
+18 or older:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__gte</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>     <span class="c1"># age &gt;= 18</span>
+    <span class="p">)</span>
+</code></pre></div>
+<p>5) <em>Optional step</em> You can use direct coding style to use the specification like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyFilter</span>
+
+<span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">AlchemyFilter</span><span class="p">(</span><span class="n">age__gte</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>     <span class="c1"># age &gt;= 18</span>
+    <span class="p">)</span>
+</code></pre></div>
+<p>6) <em>Optional step</em> You use direct coding style with SQLAlchemy filter</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyFilter</span>
+
+<span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">User</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span>     <span class="c1"># Your SQLAlchemy User model. age &gt;= 18</span>
+    <span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../important/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Important things" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Important things
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../advanced_database/" class="md-footer__link md-footer__link--next" aria-label="Next: Advanced database tutorial" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Advanced database tutorial
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>
