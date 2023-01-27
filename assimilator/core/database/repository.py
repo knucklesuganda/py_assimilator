@@ -37,6 +37,7 @@ def make_lazy(func: Callable):
 QueryT = TypeVar("QueryT")
 ModelT = TypeVar("ModelT")
 SessionT = TypeVar("SessionT")
+SpecsT = TypeVar("SpecsT", bound=Type[SpecificationList])
 
 
 class Repository(Generic[SessionT, ModelT, QueryT], ABC):
@@ -44,14 +45,14 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self,
         session: SessionT,
         model: Type[ModelT],
-        specifications: Type[SpecificationList],
+        specifications: SpecsT,
         initial_query: Optional[SessionT] = None,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
         self.session = session
         self.model = model
         self.__initial_query: QueryT = initial_query
-        self.specifications: Type[SpecificationList] = specifications
+        self.specifications: SpecsT = specifications
 
         self.error_wrapper = error_wrapper or ErrorWrapper()
         self.get = LazyCommand.decorate(
@@ -82,7 +83,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         return obj, specifications
 
     @property
-    def specs(self) -> Type[SpecificationList]:
+    def specs(self) -> SpecsT:
         """ That property is used to shorten the full name of the self.specifications. """
         return self.specifications
 

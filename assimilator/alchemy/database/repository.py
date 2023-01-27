@@ -4,16 +4,11 @@ from sqlalchemy import func, select, update, delete
 from sqlalchemy.orm import Session, Query
 from sqlalchemy.inspection import inspect
 
+from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
 from assimilator.alchemy.database.specifications import AlchemySpecificationList
-from assimilator.core.database import (
-    Repository,
-    SpecificationList,
-    LazyCommand,
-    SpecificationType,
-)
-from assimilator.core.patterns.error_wrapper import ErrorWrapper
+from assimilator.core.database import Repository, LazyCommand, SpecificationType
 
 
 AlchemyModelT = TypeVar("AlchemyModelT")
@@ -28,7 +23,7 @@ class AlchemyRepository(Repository):
         session: Session,
         model: Type[AlchemyModelT],
         initial_query: Query = None,
-        specifications: Type[SpecificationList] = AlchemySpecificationList,
+        specifications: Type[AlchemySpecificationList] = AlchemySpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
         super(AlchemyRepository, self).__init__(
@@ -77,7 +72,9 @@ class AlchemyRepository(Repository):
                 query=self.get_initial_query(update(self.model)),
                 specifications=specifications,
             )
+
             self.session.execute(query.values(update_values).execution_options(synchronize_session=False))
+
         elif obj is not None:
             if obj not in self.session:
                 obj = self.session.merge(obj)

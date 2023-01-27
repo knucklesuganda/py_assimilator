@@ -174,3 +174,80 @@ def filter_all_validated(repository: Repository):
 What is the problem with our custom specifications? They are direct. We cannot use them if the query type changes,
 so that means that we cannot use them with different repositories.
 
+We can solve that issue with another pattern called `SpecificationList`. It allows you to map your specifications to
+classes that can call different specifications for different repositories. When you use `repository.specifications` or
+`repository.specs`, you are using `SpecificationList` objects from these repositories.
+
+The most basic SpecificationList looks like this:
+```Python
+from typing import Type
+
+from assimilator.core.database import FilterSpecification
+from assimilator.core.database.specifications.typings import (
+    OrderSpecificationProtocol,
+    PaginateSpecificationProtocol,
+    OnlySpecificationProtocol,
+    JoinSpecificationProtocol,
+)
+
+class SpecificationList:
+    filter: Type[FilterSpecification]
+    order: OrderSpecificationProtocol
+    paginate: PaginateSpecificationProtocol
+    join: JoinSpecificationProtocol
+    only: OnlySpecificationProtocol
+```
+
+We have all the specifications that we talked about, and each specification has a [Protocol](https://docs.python.org/3/library/typing.html#typing.Protocol)
+typing that allows us to specify what arguments we need for specific pre-built specifications.
+
+If you want to create your own `SpecificationList`, then be sure to do the following:
+
+1. Create a class that inherits from `SpecificationList`.
+2. Add all the pre-built specifications if your base class doesn't specify them.
+3. Add your custom specifications.
+4. Add your custom specification list to your repository.
+
+```Python
+from sqlalchemy.orm import Query
+
+from assimilator.alchemy.database import AlchemySpecificationList
+from assimilator.core.database import specification
+
+
+@specification
+def alchemy_validate(validate_vip: bool, query: Query):
+    if validate_vip:
+        return query.filter(is_vip=True, is_validated=True)
+
+    return query.filter(is_validated=True)
+
+
+class CustomSpecificationList(AlchemySpecificationList):
+    # We don't need to specify pre-built specifications, 
+    # we already have them in the AlchemySpecificationList
+    validated = alchemy_validate
+```
+
+Then, we can use that specification list with any repository that works with alchemy:
+```Python
+from assimilator.alchemy.database import AlchemyRepository
+
+from specifications import CustomSpecificationList
+
+
+repository = AlchemyRepository(
+    session=DatabaseSession(),
+    model=User,
+    specifications=CustomSpecificationList,     # Change specifications list
+)
+
+
+repository.filter(
+    repository.specs.validated()    # use the specification indirectly
+)
+```
+
+But, how do we make it so that the specification can work with other repositories? We have to write different specifications
+and specification lists. There is just no other way(yet😎). So, if you want to use your specification with other patterns,
+rewrite it to work with their data types and create a new SpecificationList that is going to be supplied in the Repository.
