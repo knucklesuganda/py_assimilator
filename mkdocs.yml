@@ -3,7 +3,7 @@ site_description: Assimilator Python framework, Domain-Driven Design, DDD, high 
 theme:
   name: material
   logo: images/logo.png
-  favicon: images/logo_white.ico
+  favicon: images/icon.png
   features:
     - search.suggest
     - search.highlight
@@ -26,10 +26,11 @@ theme:
 nav:
   - Introduction: index.md
   - Concepts: concepts.md
-  - Basic tutorial:
+  - Basic tutorials:
     - Important things: tutorial/important.md
-    - Database Tutorial: tutorial/database.md
-    - Events: tutorial/events.md
+    - Database tutorial: tutorial/database.md
+    - Advanced database tutorial: tutorial/advanced_database.md
+    - Events tutorial: tutorial/events.md
   - Internal:
     - Database: internal/database.md
     - Events: internal/events.md

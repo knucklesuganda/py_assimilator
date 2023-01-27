@@ -282,6 +282,8 @@ from assimilator.core.database import Repository
 
 def example(repository: Repository):
     repository.get()    # get one entity from the database
+    # get() function can raise NotFoundError() or MultipleResultsError()
+
     repository.filter()    # get many entities from the database
     
     # When you use those functions, you can add specifications to limit the results:
