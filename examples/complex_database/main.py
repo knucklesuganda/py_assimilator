@@ -1,8 +1,8 @@
 import operator
 
+from core.patterns import LazyCommand
 from alchemy.database import AlchemyRepository
 from core.database import UnitOfWork, Repository
-from core.patterns import LazyCommand
 from dependencies import get_uow, User, Balance
 from internal.database import InternalRepository
 from redis_.database import RedisRepository
@@ -34,10 +34,14 @@ def create_user_model(uow: UnitOfWork):
         uow.commit()
 
 
-def read_user(username: str, repository: Repository):
+def read_user(username: str, balance: int, repository: Repository):
     user = repository.get(
-        repository.specs.join(User.balances),
-        repository.specs.filter(username=username),
+        repository.specs.join('balances'),
+        repository.specs.filter(
+            username=username,
+            balances__balance=balance,
+            balances__currency="USD",
+        ),
     )
     print("User:", user.id, user.username, user.email)
 
@@ -49,11 +53,16 @@ def read_user(username: str, repository: Repository):
 
 def read_user_direct(username: str, repository: Repository):
     if isinstance(repository, AlchemyRepository):       # Awful! Try to use filtering options
-        user = repository.get(repository.specs.filter(User.username == username))
+        user = repository.get(
+            repository.specs.join(User.balances),
+            repository.specs.filter(User.username == username),
+        )
     elif isinstance(repository, (InternalRepository, RedisRepository)):
-        user = repository.get(repository.specs.filter(
-            (operator.eq, 'username', username),    # will call eq(model.username, username) for every user
-        ))
+        user = repository.get(
+            repository.specs.filter(
+                (operator.eq, 'username', username),    # will call eq(model.username, username) for every user
+            )
+        )
     else:
         raise ValueError("Direct repository filter not found")
 
@@ -118,7 +127,8 @@ def create_many_users_direct(uow: UnitOfWork):
 
 def filter_users(repository: Repository):
     users = repository.filter(
-        repository.specs.filter(balance__gt=50),
+        repository.specs.join(User.balances),
+        repository.specs.filter(balances__balance__gt=50),
     )
 
     for user in users:
@@ -128,19 +138,23 @@ def filter_users(repository: Repository):
 def count_users(repository: Repository):
     print("Total users:", repository.count())
     print(
-        "Users with balance greater than 5000:",
-        repository.count(repository.specs.filter(balance__gt=5000))
+        "Users with balances greater than 5000:",
+        repository.count(
+            repository.specs.join(User.balances),
+            repository.specs.filter(balances__balance__gt=5000, balances__currency="EUR")
+        )
     )
 
 
 def filter_users_lazy(repository: Repository):
     users: LazyCommand[User] = repository.filter(
-        repository.specs.filter(balance__eq=0),
+        repository.specs.join(User.balances),
+        repository.specs.filter(balances__balance__eq=0),
         lazy=True,
     )
 
     for user in users:  # Queries the database here
-        print("User without any money:", user.username, user.balance)
+        print("User without any money:", user.username, user.balances)
 
 
 def update_many_users(uow: UnitOfWork):
@@ -164,20 +178,21 @@ def delete_many_users(uow: UnitOfWork):
         ))
         uow.commit()
 
-    assert uow.repository.count(uow.repository.specs.filter(balance=10)) == 0
+    specs = uow.repository.specs
+    assert uow.repository.count(specs.join(User.balances), specs.filter(balance=10)) == 0
 
 
 if __name__ == '__main__':
     create_user__kwargs(get_uow())
     create_user_model(get_uow())
 
-    read_user(username="Andrey", repository=get_uow().repository)
+    read_user(username="Andrey", balance=2000, repository=get_uow().repository)
     read_user_direct(username="Andrey-2", repository=get_uow().repository)
 
     update_user(get_uow())
-    read_user(username="Andrey", repository=get_uow().repository)
+    read_user(username="Andrey", balance=3000, repository=get_uow().repository)
 
-    second_user = read_user(username="Andrey-2", repository=get_uow().repository)
+    second_user = read_user(username="Andrey-2", balance=0, repository=get_uow().repository)
     update_user_direct(user=second_user, uow=get_uow())
 
     create_many_users(get_uow())

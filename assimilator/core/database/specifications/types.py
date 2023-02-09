@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar, Optional, Collection, Iterable
+from typing import Protocol, TypeVar, Optional, Iterable, Union, Any
 
 QueryT = TypeVar("QueryT")
 
@@ -14,7 +14,7 @@ class PaginateSpecificationProtocol(Protocol):
 
 
 class JoinSpecificationProtocol(Protocol):
-    def __call__(self, *targets: Collection, **join_args: dict):
+    def __call__(self, *targets: Union[str, Any], **join_args: dict):
         ...
 
 

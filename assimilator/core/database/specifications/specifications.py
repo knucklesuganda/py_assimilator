@@ -2,8 +2,8 @@ from functools import wraps
 from abc import ABC, abstractmethod
 from typing import Callable, Union, TypeVar, Any, Type, final
 
-from assimilator.core.database.specifications.filtering_options import FilteringOptions
-from assimilator.core.database.specifications.typings import (
+from assimilator.core.database.specifications.filtering_options import FilteringOptions, FilterOptionProtocol
+from assimilator.core.database.specifications.types import (
     OrderSpecificationProtocol,
     PaginateSpecificationProtocol,
     OnlySpecificationProtocol,
@@ -31,15 +31,16 @@ class FilterSpecification(Specification, ABC):
         self.filtering_options = self.filtering_options_cls()
 
         for field, value in named_filters.items():
-            option, filter_func = self.filtering_options.parse_filter(raw_filter=field)
+            field, filter_func = self.filtering_options.parse_field(field)
+
             self.filters.append(self.get_parsed_filter(
                 filter_func=filter_func,
-                field=field.replace(option, ""),
+                field=field,
                 value=value,
             ))
 
-    def get_parsed_filter(self, filter_func: Callable, field: str, value: Any):
-        return filter_func(field, value)
+    def get_parsed_filter(self, filter_func: FilterOptionProtocol, field: str, value: Any):
+        return filter_func(field=field, value=value)
 
     def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
         raise NotImplementedError("or() is not implemented for FilterSpecification")
@@ -51,7 +52,7 @@ class FilterSpecification(Specification, ABC):
         raise NotImplementedError("invert() is not implemented for FilterSpecification")
 
     def __str__(self):
-        return f'filter_specification({self.filters})'
+        return f'filter({self.filters})'
 
 
 def specification(func: Callable) -> Callable:

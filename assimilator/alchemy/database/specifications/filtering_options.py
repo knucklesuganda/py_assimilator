@@ -6,7 +6,7 @@ from assimilator.core.database.specifications.filtering_options import Filtering
 
 class AlchemyFilteringOptions(FilteringOptions):
     def _convert_field(self, field: str) -> ColumnClause:
-        return column(field)
+        return column(field, is_literal=True)
 
     def _eq(self, field, value):
         return self._convert_field(field) == value

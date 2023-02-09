@@ -46,7 +46,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         session: SessionT,
         model: Type[ModelT],
         specifications: SpecsT,
-        initial_query: Optional[SessionT] = None,
+        initial_query: Optional[QueryT] = None,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
         self.session = session

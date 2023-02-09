@@ -179,16 +179,18 @@ classes that can call different specifications for different repositories. When 
 `repository.specs`, you are using `SpecificationList` objects from these repositories.
 
 The most basic SpecificationList looks like this:
+
 ```Python
 from typing import Type
 
 from assimilator.core.database import FilterSpecification
-from assimilator.core.database.specifications.typings import (
+from assimilator.core.database.specifications.types import (
     OrderSpecificationProtocol,
     PaginateSpecificationProtocol,
     OnlySpecificationProtocol,
     JoinSpecificationProtocol,
 )
+
 
 class SpecificationList:
     filter: Type[FilterSpecification]

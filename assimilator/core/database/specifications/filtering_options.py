@@ -1,30 +1,44 @@
 from abc import abstractmethod
-from typing import Callable, Dict, Tuple
+from typing import Dict, Tuple, Protocol, Any
+
+
+class FilterOptionProtocol(Protocol):
+    def __call__(self, field: str, value: Any):
+        ...
 
 
 class FilteringOptions:
     def __init__(self):
-        self.filter_options: Dict[str, Callable] = {
-            "__eq": self._eq,
-            "__gt": self._gt,
-            "__gte": self._gte,
-            "__lt": self._lt,
-            "__lte": self._lte,
-            "__not": self._not,
-            "__is": self._is,
-            "__like": self._like,
-            "__regex": self._regex,
+        self.filter_options: Dict[str, FilterOptionProtocol] = {
+            "eq": self._eq,
+            "gt": self._gt,
+            "gte": self._gte,
+            "lt": self._lt,
+            "lte": self._lte,
+            "not": self._not,
+            "is": self._is,
+            "like": self._like,
+            "regex": self._regex,
         }
 
-    def get_default_filter(self) -> Tuple[str, Callable]:
-        return '__eq', self._eq
+    def get_default_filter(self) -> FilterOptionProtocol:
+        return self._eq
 
-    def parse_filter(self, raw_filter: str) -> Tuple[str, Callable]:
-        for filter_ending, filter_func in self.filter_options.items():
-            if raw_filter.endswith(filter_ending):
-                return filter_ending, filter_func
+    def parse_field(self, raw_field: str) -> Tuple[str, FilterOptionProtocol]:
+        options = raw_field.split("__")
 
-        return self.get_default_filter()
+        if len(options) == 1:
+            return options[0], self.filter_options.get(options[-1], self.get_default_filter())
+        else:   # foreign key
+            option = self.filter_options.get(options[-1])
+
+            if option is None:
+                field = ".".join(options)
+                option = self.get_default_filter()
+            else:
+                field = ".".join(options[:-1])
+
+            return field, option
 
     @abstractmethod
     def _eq(self, field: str, value):
@@ -63,4 +77,7 @@ class FilteringOptions:
         raise NotImplementedError("_regex() is not implemented in the filtering options")
 
 
-__all__ = ['FilteringOptions']
+__all__ = [
+    'FilteringOptions',
+    'FilterOptionProtocol',
+]

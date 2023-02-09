@@ -1,5 +1,9 @@
+from typing import List
+
 from sqlalchemy import create_engine, Column, String, Float, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship
+
+from core.database import BaseModel
 
 engine = create_engine(url="sqlite:///:memory:")
 Base = declarative_base()
@@ -32,5 +36,22 @@ class AlchemyUserBalance(Base):
     balance = Column(Float(), server_default='0')
     currency = Column(String(length=20))
 
+    def __str__(self):
+        return f"{self.balance} {self.currency}"
+
+    def __repr__(self):
+        return str(self)
+
 
 Base.metadata.create_all(engine)
+
+
+class InternalBalance(BaseModel):
+    balance: float
+    currency: str
+
+
+class InternalUser(BaseModel):
+    username: str
+    email: str
+    balances: List[InternalBalance] = []

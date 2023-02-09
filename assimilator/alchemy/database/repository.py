@@ -1,7 +1,7 @@
 from typing import Type, Union, Optional, TypeVar, Collection
 
-from sqlalchemy import func, select, update, delete
-from sqlalchemy.orm import Session, Query
+from sqlalchemy import func, select, update, delete, Delete
+from sqlalchemy.orm import Session, Query   # TODO: change query for alchemy 2
 from sqlalchemy.inspection import inspect
 
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
@@ -68,7 +68,7 @@ class AlchemyRepository(Repository):
                     "to the update() yet provided specifications"
                 )
 
-            query: Query = self._apply_specifications(
+            query = self._apply_specifications(
                 query=self.get_initial_query(update(self.model)),
                 specifications=specifications,
             )
@@ -98,7 +98,7 @@ class AlchemyRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query: Query = self._apply_specifications(
+            query: Delete = self._apply_specifications(
                 query=self.get_initial_query(delete(self.model)),
                 specifications=specifications,
             )

@@ -26,7 +26,6 @@ class BaseModel(PydanticBaseModel):
     def __init__(self, **kwargs):
         if getattr(self.AssimilatorConfig, 'autogenerate_id', True) and (kwargs.get('id') is None):
             kwargs['id'] = self.generate_id(**kwargs)
-
         super(BaseModel, self).__init__(**kwargs)
 
     @classmethod
