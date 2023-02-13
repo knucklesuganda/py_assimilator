@@ -1,4 +1,4 @@
-from typing import Callable, Any, Union, List
+from typing import Callable, Any, Union, List, Set, Dict, Tuple
 
 from assimilator.core.database.specifications import FilterSpecification
 from assimilator.internal.database.specifications.filtering_options import InternalFilteringOptions
@@ -6,6 +6,7 @@ from assimilator.core.database.models import BaseModel
 
 
 QueryT = Union[str, List[BaseModel]]
+Containers = (List, Set, Tuple)
 
 
 class InternalFilter(FilterSpecification):
@@ -22,8 +23,32 @@ class InternalFilter(FilterSpecification):
     def get_parsed_filter(self, filter_func: Callable, field: str, value: Any):
         return filter_func, field, value
 
-    def _check_model_passes(self, filter_func: Callable, field, value):
-        return filter_func(field, value)
+    def _get_model_field(self, model, field: str):
+        foreign_fields = field.split(".")
+
+        field_val = model
+        for foreign_field in foreign_fields:
+            if isinstance(field_val, Containers):
+                field_val = list(map(lambda obj: getattr(obj, foreign_field), field_val))
+            elif isinstance(field_val, Dict):   # TODO: what to do with different data types???
+                field_val = list(map(lambda obj: getattr(obj, foreign_field), field_val.values()))
+            else:
+                field_val = getattr(field_val, foreign_field)
+
+        return field_val
+
+    def _check_model_passes(self, model) -> bool:
+
+        for filter_func, field, value in self.filters:
+            field_value = self._get_model_field(model, field)
+
+            if isinstance(field_value, list) and not isinstance(value, list):
+                if not any(filter_func(attr, value) for attr in field_value):
+                    return False
+            elif not filter_func(field_value, value):
+                return False
+
+        return True
 
     def apply(self, query: QueryT) -> Union[str, QueryT]:
         if isinstance(query, str):
@@ -31,16 +56,7 @@ class InternalFilter(FilterSpecification):
         elif not self.filters:
             return query
 
-        return list(filter(
-            lambda model: all(
-                self._check_model_passes(
-                    filter_func=filter_func,
-                    field=getattr(model, field),
-                    value=value,
-                ) for filter_func, field, value in self.filters
-            ),
-            query,
-        ))
+        return list(filter(lambda model: self._check_model_passes(model), query))
 
     def __or__(self, other: 'InternalFilter') -> 'InternalFilter':
         return OrInternalFilter(first_spec=self, second_spec=other)
@@ -53,8 +69,7 @@ class InternalFilter(FilterSpecification):
     @staticmethod
     def __inversion_func(func: Callable):
         def __inversion_func_wrapper(field, value):
-            return func(field, value)
-
+            return not func(field, value)
         return __inversion_func_wrapper
 
     def __invert__(self):

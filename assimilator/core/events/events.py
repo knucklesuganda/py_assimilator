@@ -7,9 +7,11 @@ from core.database.models import BaseModel
 
 
 class Event(BaseModel):
-    id: int
-    event_name: str
+    event_name: str = Field(allow_mutation=False)
     event_date: datetime = Field(default_factory=datetime.now)
+
+    class Config:
+        validate_assignment = True
 
 
 class ExternalEvent(Event):

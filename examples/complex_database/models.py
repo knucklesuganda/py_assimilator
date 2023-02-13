@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, ClassVar
 
 from sqlalchemy import create_engine, Column, String, Float, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship

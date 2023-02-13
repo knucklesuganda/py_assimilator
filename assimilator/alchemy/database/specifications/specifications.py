@@ -2,7 +2,7 @@ from itertools import zip_longest
 from typing import Collection, Optional, Iterable, Union
 
 from sqlalchemy.orm import load_only
-from sqlalchemy import column, desc, and_, or_, not_, alias, table, Select
+from sqlalchemy import column, desc, and_, or_, not_, Select, table
 
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
 from assimilator.core.database.specifications import (
@@ -56,14 +56,12 @@ def alchemy_paginate(*, limit: Optional[int] = None, offset: Optional[int] = Non
 
 
 @specification
-def alchemy_join(*targets: Union[Collection, str], query: Select, **join_args: dict) -> Select:
+def alchemy_join(*targets: Collection, query: Select, **join_args: dict) -> Select:
     for target, join_data in zip_longest(targets, join_args, fillvalue=dict()):
-        if target is None:
+        if not target:
             continue
-        elif isinstance(target, str):
-            query = query.join_from(query, table(target), **join_data)
-        else:
-            query = query.join(target, **join_data)
+
+        query = query.join(target, **join_data)
 
     return query
 

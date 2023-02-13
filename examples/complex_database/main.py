@@ -54,7 +54,7 @@ def read_user(username: str, balance: int, repository: Repository):
 def read_user_direct(username: str, repository: Repository):
     if isinstance(repository, AlchemyRepository):       # Awful! Try to use filtering options
         user = repository.get(
-            repository.specs.join(User.balances),
+            repository.specs.join('balances'),
             repository.specs.filter(User.username == username),
         )
     elif isinstance(repository, (InternalRepository, RedisRepository)):
@@ -127,7 +127,7 @@ def create_many_users_direct(uow: UnitOfWork):
 
 def filter_users(repository: Repository):
     users = repository.filter(
-        repository.specs.join(User.balances),
+        repository.specs.join('balances'),
         repository.specs.filter(balances__balance__gt=50),
     )
 
@@ -140,7 +140,7 @@ def count_users(repository: Repository):
     print(
         "Users with balances greater than 5000:",
         repository.count(
-            repository.specs.join(User.balances),
+            repository.specs.join('balances'),
             repository.specs.filter(balances__balance__gt=5000, balances__currency="EUR")
         )
     )
@@ -148,7 +148,7 @@ def count_users(repository: Repository):
 
 def filter_users_lazy(repository: Repository):
     users: LazyCommand[User] = repository.filter(
-        repository.specs.join(User.balances),
+        repository.specs.join('balances'),
         repository.specs.filter(balances__balance__eq=0),
         lazy=True,
     )
@@ -179,7 +179,7 @@ def delete_many_users(uow: UnitOfWork):
         uow.commit()
 
     specs = uow.repository.specs
-    assert uow.repository.count(specs.join(User.balances), specs.filter(balance=10)) == 0
+    assert uow.repository.count(specs.join('balances'), specs.filter(balances__balance=10)) == 0
 
 
 if __name__ == '__main__':
