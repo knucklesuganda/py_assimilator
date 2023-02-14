@@ -46,7 +46,7 @@ class MongoRepository(Repository):
         initial_query: dict = None,
     ):
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
 
@@ -64,7 +64,7 @@ class MongoRepository(Repository):
         initial_query: dict = None
     ) -> Union[Collection[ModelT], LazyCommand[Collection[ModelT]]]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
         return [self.model(**data) for data in self._collection.find(**query)]
@@ -126,7 +126,7 @@ class MongoRepository(Repository):
     ) -> Union[LazyCommand[int], int]:
         return self._collection.count_documents(
             filter=self._apply_specifications(
-                query=self.get_initial_query(initial_query),
+                query=initial_query,
                 specifications=specifications,
             ),
         )

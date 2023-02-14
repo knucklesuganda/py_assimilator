@@ -1,16 +1,9 @@
 from functools import wraps
 from abc import ABC, abstractmethod
 from typing import (
-    TypeVar,
-    Callable,
-    Generic,
-    final,
-    Union,
-    Optional,
-    Iterable,
-    Type,
-    Collection,
-    Tuple,
+    TypeVar, Callable, Generic, final,
+    Union, Optional, Iterable, Type,
+    Collection, Tuple, Any, Dict,
 )
 
 from assimilator.core.patterns import ErrorWrapper
@@ -95,10 +88,18 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         else:
             raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 
+    def _get_specifications_context(self) -> Dict[str, Any]:
+        return {"model": self.model}
+
     @final
-    def _apply_specifications(self, query: QueryT, specifications: Iterable[SpecificationType]) -> QueryT:
+    def _apply_specifications(
+        self, query: Union[QueryT, None],
+        specifications: Iterable[SpecificationType],
+    ) -> QueryT:
+        query = self.get_initial_query(query)
+
         for specification in specifications:
-            query = specification(query)
+            query = specification(query=query, **self._get_specifications_context())
 
         return query
 

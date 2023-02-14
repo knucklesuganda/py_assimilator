@@ -1,23 +1,38 @@
-import re
-import operator
+from typing import Any, Callable
 
+from assimilator.core.database import BaseModel
 from assimilator.core.database.specifications import FilteringOptions
+from internal.database.specifications.internal_operator import (
+    find_attribute, eq, gte, gt, lte, lt, is_, not_, like, regex,
+)
 
 
 class InternalFilteringOptions(FilteringOptions):
-    _eq = operator.eq
-    _gt = operator.gt
-    _gte = operator.ge
-    _lt = operator.lt
-    _lte = operator.le
-    _not = operator.not_
-    _is = operator.is_
+    def __init__(self, attr_finder: Callable[[Callable, str, Any], Callable[[BaseModel], bool]] = find_attribute):
+        super(InternalFilteringOptions, self).__init__()
+        self.attr_finder = attr_finder
 
-    def _like(self, field: str, value):
-        return self._regex(field, f'^{value.replace("%", ".*?")}$')
+    _eq = staticmethod(eq)
+    _gt = staticmethod(gt)
+    _gte = staticmethod(gte)
+    _lt = staticmethod(lt)
+    _lte = staticmethod(lte)
+    _not = staticmethod(not_)
+    _is = staticmethod(is_)
+    _like = staticmethod(like)
+    _regex = staticmethod(regex)
 
-    def _regex(self, field: str, value):
-        return re.compile(value).match(field)
 
-
-__all__ = ['InternalFilteringOptions']
+__all__ = [
+    'InternalFilteringOptions',
+    'find_attribute',
+    "eq",
+    "gte",
+    "gt",
+    "lte",
+    "lt",
+    "is_",
+    "not_",
+    "like",
+    "regex",
+]

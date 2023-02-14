@@ -34,7 +34,7 @@ class MongoFilterSpecification(FilterSpecification):
 
         return MongoFilterSpecification(*inverted_filters)
 
-    def apply(self, query: dict) -> dict:
+    def apply(self, query: dict, **context: Any) -> dict:
         query['filter'] = {**query.get('filter', {}), **self.filters}
         return query
 

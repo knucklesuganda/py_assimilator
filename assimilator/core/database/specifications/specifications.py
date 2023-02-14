@@ -1,8 +1,8 @@
 from functools import wraps
 from abc import ABC, abstractmethod
-from typing import Callable, Union, TypeVar, Any, Type, final
+from typing import Callable, Union, TypeVar, Type, final, Any
 
-from assimilator.core.database.specifications.filtering_options import FilteringOptions, FilterOptionProtocol
+from assimilator.core.database.specifications.filtering_options import FilteringOptions
 from assimilator.core.database.specifications.types import (
     OrderSpecificationProtocol,
     PaginateSpecificationProtocol,
@@ -15,12 +15,12 @@ QueryT = TypeVar("QueryT")
 
 class Specification(ABC):
     @abstractmethod
-    def apply(self, query: QueryT) -> QueryT:
+    def apply(self, query: QueryT, **context: Any) -> QueryT:
         raise NotImplementedError("Specification must specify apply()")
 
     @final
-    def __call__(self, query: QueryT) -> QueryT:
-        return self.apply(query)
+    def __call__(self, query: QueryT, **context: Any) -> QueryT:
+        return self.apply(query, **context)
 
 
 class FilterSpecification(Specification, ABC):
@@ -31,16 +31,9 @@ class FilterSpecification(Specification, ABC):
         self.filtering_options = self.filtering_options_cls()
 
         for field, value in named_filters.items():
-            field, filter_func = self.filtering_options.parse_field(field)
-
-            self.filters.append(self.get_parsed_filter(
-                filter_func=filter_func,
-                field=field,
-                value=value,
-            ))
-
-    def get_parsed_filter(self, filter_func: FilterOptionProtocol, field: str, value: Any):
-        return filter_func(field=field, value=value)
+            self.filters.append(
+                self.filtering_options.parse_field(raw_field=field, value=value)
+            )
 
     def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
         raise NotImplementedError("or() is not implemented for FilterSpecification")
@@ -52,14 +45,14 @@ class FilterSpecification(Specification, ABC):
         raise NotImplementedError("invert() is not implemented for FilterSpecification")
 
     def __str__(self):
-        return f'filter({self.filters})'
+        return f'filter_spec({self.filters})'
 
 
 def specification(func: Callable) -> Callable:
     def create_specification(*args, **kwargs):
         @wraps(func)
-        def created_specification(query: QueryT) -> QueryT:
-            return func(*args, **kwargs, query=query)
+        def created_specification(query: QueryT, **context) -> QueryT:
+            return func(*args, **kwargs, query=query, **context)
 
         created_specification: func
         return created_specification

@@ -1,13 +1,18 @@
-from abc import abstractmethod
-from typing import Dict, Tuple, Protocol, Any
+from abc import abstractmethod, abstractstaticmethod
+from typing import Dict, Protocol, Any, Callable
 
 
 class FilterOptionProtocol(Protocol):
-    def __call__(self, field: str, value: Any):
+    def __call__(self, field: str, value: Any) -> Callable[[], Any]:
         ...
 
 
+FILTERING_OPTIONS_SEPARATOR = "__"
+
+
 class FilteringOptions:
+    """ Looks for the filtering option """
+
     def __init__(self):
         self.filter_options: Dict[str, FilterOptionProtocol] = {
             "eq": self._eq,
@@ -24,60 +29,64 @@ class FilteringOptions:
     def get_default_filter(self) -> FilterOptionProtocol:
         return self._eq
 
-    def parse_field(self, raw_field: str) -> Tuple[str, FilterOptionProtocol]:
-        options = raw_field.split("__")
+    def parse_field(self, raw_field: str, value: Any) -> Callable:
+        fields = raw_field.split(FILTERING_OPTIONS_SEPARATOR)
+        last_field = fields[-1]
 
-        if len(options) == 1:
-            return options[0], self.filter_options.get(options[-1], self.get_default_filter())
-        else:   # foreign key
-            option = self.filter_options.get(options[-1])
+        if len(fields) == 1:
+            filter_func = self.filter_options.get(last_field, self.get_default_filter())
+            return filter_func(last_field, value)
 
-            if option is None:
-                field = ".".join(options)
-                option = self.get_default_filter()
-            else:
-                field = ".".join(options[:-1])
+        # Foreign Key
 
-            return field, option
+        if self.filter_options.get(fields[-1]) is None:
+            foreign_field = raw_field
+            filter_func = self.get_default_filter()
+        else:
+            foreign_field = FILTERING_OPTIONS_SEPARATOR.join(fields[:-1])
+            filter_func = self.filter_options.get(fields[-1])
 
-    @abstractmethod
-    def _eq(self, field: str, value):
+        return filter_func(foreign_field, value)
+
+    @abstractstaticmethod
+    def _eq(field: str, value):
         raise NotImplementedError("_eq() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _gt(self, field: str, value):
+    @abstractstaticmethod
+    def _gt(field: str, value):
         raise NotImplementedError("_gt() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _gte(self, field: str, value):
+    @abstractstaticmethod
+    def _gte(field: str, value):
         raise NotImplementedError("_gte() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _lt(self, field: str, value):
+    @abstractstaticmethod
+    def _lt(field: str, value):
         raise NotImplementedError("_lt() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _lte(self, field: str, value):
+    @abstractstaticmethod
+    def _lte(field: str, value):
         raise NotImplementedError("_lte() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _not(self, field: str, value):
+    @abstractstaticmethod
+    def _not(field: str, value):
         raise NotImplementedError("_not() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _is(self, field: str, value):
+    @abstractstaticmethod
+    def _is(field: str, value):
         raise NotImplementedError("_is() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _like(self, field: str, value):
+    @abstractstaticmethod
+    def _like(field: str, value):
         raise NotImplementedError("_like() is not implemented in the filtering options")
 
-    @abstractmethod
-    def _regex(self, field: str, value):
+    @abstractstaticmethod
+    def _regex(field: str, value):
         raise NotImplementedError("_regex() is not implemented in the filtering options")
 
 
 __all__ = [
     'FilteringOptions',
     'FilterOptionProtocol',
+    'FILTERING_OPTIONS_SEPARATOR',
 ]

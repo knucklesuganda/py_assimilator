@@ -1,11 +1,10 @@
-import operator
+from assimilator.core.patterns import LazyCommand
+from assimilator.alchemy.database import AlchemyRepository
+from assimilator.core.database import UnitOfWork, Repository
+from assimilator.internal.database import InternalRepository, eq
+from assimilator.redis_.database import RedisRepository
 
-from core.patterns import LazyCommand
-from alchemy.database import AlchemyRepository
-from core.database import UnitOfWork, Repository
 from dependencies import get_uow, User, Balance
-from internal.database import InternalRepository
-from redis_.database import RedisRepository
 
 
 def create_user__kwargs(uow: UnitOfWork):
@@ -60,7 +59,8 @@ def read_user_direct(username: str, repository: Repository):
     elif isinstance(repository, (InternalRepository, RedisRepository)):
         user = repository.get(
             repository.specs.filter(
-                (operator.eq, 'username', username),    # will call eq(model.username, username) for every user
+                eq('username', username),
+                # will call eq(model.username, username) for every user
             )
         )
     else:

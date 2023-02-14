@@ -58,7 +58,7 @@ class RedisRepository(Repository):
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[RedisModelT], RedisModelT]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         ) or '*'
 
@@ -67,17 +67,10 @@ class RedisRepository(Repository):
         if not all(found_objects):
             raise NotFoundError()
 
-        parsed_objects = []
-        for obj in found_objects:
-            try:
-                parsed_objects.append(self.model.loads(obj))
-            except ParsingError:
-                pass
-
-        parsed_objects = self._apply_specifications(
-            query=parsed_objects,
+        parsed_objects = list(self._apply_specifications(
+            query=[self.model.loads(found_object) for found_object in found_objects],
             specifications=specifications,
-        )
+        ))
 
         if not parsed_objects:
             raise NotFoundError()
@@ -94,7 +87,7 @@ class RedisRepository(Repository):
     ) -> Union[LazyCommand[Collection[RedisModelT]], Collection[RedisModelT]]:
         if self.use_double_specifications and specifications:
             key_name = self._apply_specifications(
-                query=self.get_initial_query(initial_query),
+                query=initial_query,
                 specifications=specifications,
             ) or "*"
         else:
@@ -175,7 +168,7 @@ class RedisRepository(Repository):
             return self.session.dbsize()
 
         filter_query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
         return len(self.session.keys(filter_query))

@@ -43,17 +43,17 @@ class InternalRepository(Repository):
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[ModelT], ModelT]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
 
         if query:   # Dict key was not provided, we must use other search parameters
             return self.session[query]
 
-        found_models = self._apply_specifications(
-            query=list(self.session.values()),
+        found_models = list(self._apply_specifications(
+            query=self.session.values(),
             specifications=specifications,
-        )
+        ))
 
         if not found_models:
             raise NotFoundError()
@@ -68,10 +68,10 @@ class InternalRepository(Repository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[List[ModelT]], List[ModelT]]:
-        return self._apply_specifications(
-            query=list(self.session.values()),
+        return list(self._apply_specifications(
+            query=self.session.values(),
             specifications=specifications,
-        )
+        ))
 
     def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         if obj is None:
@@ -125,7 +125,10 @@ class InternalRepository(Repository):
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[int], int]:
         if specifications:
-            return len(self.filter(*specifications, lazy=False, initial_query=initial_query))
+            return len(list(self._apply_specifications(  # We do not call filter() for list() optimization
+                query=self.session.values(),
+                specifications=specifications,
+            )))
         return len(self.session)
 
 

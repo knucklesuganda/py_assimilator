@@ -1,8 +1,8 @@
 from itertools import zip_longest
-from typing import Collection, Optional, Iterable, Union
+from typing import Collection, Optional, Iterable, Any
 
 from sqlalchemy.orm import load_only
-from sqlalchemy import column, desc, and_, or_, not_, Select, table
+from sqlalchemy import column, desc, and_, or_, not_, Select
 
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
 from assimilator.core.database.specifications import (
@@ -25,11 +25,11 @@ class AlchemyFilter(FilterSpecification):
     def __invert__(self):
         return AlchemyFilter(not_(*self.filters))
 
-    def apply(self, query: Select) -> Select:
+    def apply(self, query: Select, **context: Any) -> Select:
         return query.filter(*self.filters)
 
 
-alchemy_filter = AlchemyFilter  # TODO: for old versions support, delete later
+alchemy_filter = AlchemyFilter
 
 
 @specification
@@ -56,12 +56,21 @@ def alchemy_paginate(*, limit: Optional[int] = None, offset: Optional[int] = Non
 
 
 @specification
-def alchemy_join(*targets: Collection, query: Select, **join_args: dict) -> Select:
-    for target, join_data in zip_longest(targets, join_args, fillvalue=dict()):
+def alchemy_join(
+    *targets: Collection,
+    join_args: Iterable[dict] = None,
+    query: Select,
+    model,
+    **_,
+) -> Select:
+    for target, join_data in zip_longest(targets, (join_args or {}), fillvalue=dict()):
         if not target:
             continue
 
-        query = query.join(target, **join_data)
+        if isinstance(target, str):
+            query = query.join(getattr(model, target), **join_data)
+        else:
+            query = query.join(target, **join_data)
 
     return query
 
@@ -81,7 +90,7 @@ class AlchemySpecificationList(SpecificationList):
 
 __all__ = [
     'AlchemySpecificationList',
-    'alchemy_filter',   # TODO: remove in future versions
+    'alchemy_filter',
     'AlchemyFilter',
     'alchemy_order',
     'alchemy_paginate',

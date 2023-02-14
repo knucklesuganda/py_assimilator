@@ -1,11 +1,13 @@
 import operator
 
-from alchemy.database import AlchemyRepository
-from core.database import UnitOfWork, Repository
-from core.patterns import LazyCommand
+from assimilator.alchemy.database import AlchemyRepository
+from assimilator.core.patterns import LazyCommand
+from assimilator.redis_.database import RedisRepository
+from assimilator.core.database import UnitOfWork, Repository
+from assimilator.internal.database import InternalRepository
+from assimilator.internal.database.specifications.filtering_options import find_attribute
+
 from dependencies import get_uow, User
-from internal.database import InternalRepository
-from redis_.database import RedisRepository
 
 
 def create_user__kwargs(uow: UnitOfWork):
@@ -40,7 +42,8 @@ def read_user_direct(username: str, repository: Repository):
         user = repository.get(repository.specs.filter(User.username == username))
     elif isinstance(repository, (InternalRepository, RedisRepository)):
         user = repository.get(repository.specs.filter(
-            (operator.eq, 'username', username),    # will call eq(model.username, username) for every user
+            find_attribute(operator.eq, 'username', username),
+            # will call eq(model.username, username) for every user
         ))
     else:
         raise ValueError("Direct repository filter not found")

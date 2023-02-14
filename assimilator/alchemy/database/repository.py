@@ -41,7 +41,7 @@ class AlchemyRepository(Repository):
         initial_query: Query = None,
     ) -> Union[AlchemyModelT, LazyCommand[AlchemyModelT]]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
         return self.session.execute(query).one()[0]
@@ -53,7 +53,7 @@ class AlchemyRepository(Repository):
         initial_query: Query = None,
     ) -> Union[Collection[AlchemyModelT], LazyCommand[Collection[AlchemyModelT]]]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
         return [result[0] for result in self.session.execute(query)]
@@ -69,7 +69,7 @@ class AlchemyRepository(Repository):
                 )
 
             query = self._apply_specifications(
-                query=self.get_initial_query(update(self.model)),
+                query=update(self.model),
                 specifications=specifications,
             )
 
@@ -99,7 +99,7 @@ class AlchemyRepository(Repository):
 
         if specifications:
             query: Delete = self._apply_specifications(
-                query=self.get_initial_query(delete(self.model)),
+                query=delete(self.model),
                 specifications=specifications,
             )
             self.session.execute(query.execution_options(synchronize_session=False))

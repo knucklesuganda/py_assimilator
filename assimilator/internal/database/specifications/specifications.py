@@ -4,25 +4,20 @@ from assimilator.core.database import specification, SpecificationList, BaseMode
 from assimilator.internal.database.specifications.filter_specifications import InternalFilter
 
 QueryT = Union[str, List[BaseModel]]
-
-internal_filter = InternalFilter    # TODO: remove in later versions
+internal_filter = InternalFilter
 
 
 @specification
-def internal_order(*clauses, query: QueryT) -> Iterable[BaseModel]:
+def internal_order(*clauses: str, query: QueryT) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 
     query = list(query)
-
-    if not any(field.startswith("-") for field in clauses):
-        query.sort(key=lambda item: [getattr(item, argument) for argument in clauses])
-    else:
-        for field in clauses:
-            query.sort(
-                key=lambda item: getattr(item, field.strip("-")),
-                reverse=field.startswith("-"),
-            )
+    for field in clauses:
+        query.sort(
+            key=lambda item: getattr(item, field.strip("-")),
+            reverse=field.startswith("-"),
+        )
 
     return query
 
@@ -46,11 +41,11 @@ def internal_join(*targets: Collection, query: QueryT, **join_args: dict) -> Que
 
 
 @specification
-def internal_only(*only_fields: Iterable[str], query: QueryT):
+def internal_only(*only_fields: Iterable[str], query: QueryT) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 
-    return [model.copy(include=set(only_fields)) for model in query]
+    return (model.copy(include=set(only_fields)) for model in query)
 
 
 class InternalSpecificationList(SpecificationList):
