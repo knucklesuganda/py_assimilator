@@ -76,14 +76,25 @@ class MongoRepository(Repository):
         self._collection.insert_one(obj.dict())
         return obj
 
+    def __unpack_query(self, query: dict) -> dict:
+        return {
+            **query.get("filter", {}),
+            **query.get("sort", {}),
+            **query.get("skip", {}),
+            **query.get("limit", {}),
+            **query.get("projection", {}),
+        }
+
     def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            self._collection.delete_many(**self._apply_specifications(
+            query: dict = self._apply_specifications(
                 query=self.get_initial_query(),
                 specifications=specifications,
-            ))
+            )
+
+            self._collection.delete_many(self.__unpack_query(query))
         elif obj is not None:
             self._collection.delete_one(obj.dict())
 
@@ -96,13 +107,14 @@ class MongoRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
+            query = self._apply_specifications(
+                query=self.get_initial_query(),
+                specifications=specifications,
+            )
+
             self._collection.update_many(
-                filter=self._apply_specifications(
-                    query=self.get_initial_query(),
-                    specifications=specifications,
-                ),
-                update=update_values,
-                upsert=self.model.upsert,
+                filter=self.__unpack_query(query),
+                update={'$set': update_values},
             )
         elif obj is not None:
             self._collection.update_one(
