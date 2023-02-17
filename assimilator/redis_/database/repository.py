@@ -141,7 +141,7 @@ class RedisRepository(Repository):
 
             for model in models:
                 model.__dict__.update(update_values)
-                updated_models[str(model.id)] = model.dumps()
+                updated_models[str(model.id)] = model.json()
 
             self.transaction.mset(updated_models)
 

@@ -8,7 +8,7 @@ from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
 from assimilator.internal.database import InternalRepository, InternalUnitOfWork
 from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
 from examples.simple_database.models import engine, AlchemyUser, InternalUser, RedisUser, MongoUser
-from mongo.database import MongoRepository, MongoUnitOfWork
+from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
 
 if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
     User = AlchemyUser

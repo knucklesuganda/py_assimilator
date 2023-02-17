@@ -2,7 +2,6 @@ from typing import Union, Optional, Collection, Type, TypeVar, final
 
 from pymongo import MongoClient
 
-from assimilator.core.database import make_lazy
 from assimilator.mongo.database.models import MongoModel
 from assimilator.core.patterns import LazyCommand, ErrorWrapper
 from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
@@ -37,7 +36,7 @@ class MongoRepository(Repository):
     @final
     @property
     def _collection(self):
-        return self.session[self.database][self.model.get_collection()]
+        return self.session[self.database][self.model.Config.collection]
 
     def get(
         self,

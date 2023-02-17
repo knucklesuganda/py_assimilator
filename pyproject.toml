@@ -2,6 +2,12 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+ignore-vcs = true
+include = [
+    "assimilator"
+]
+
 [project]
 name = "py_assimilator"
 version = "0.3.1"

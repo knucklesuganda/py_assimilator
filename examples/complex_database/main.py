@@ -165,6 +165,8 @@ def update_many_users(uow: UnitOfWork):
             for balance in user.balances:
                 balance.balance = 10
 
+            uow.repository.update(user)
+
         uow.commit()
 
     for user in uow.repository.filter(username_filter, lazy=True):

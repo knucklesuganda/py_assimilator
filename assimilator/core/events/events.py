@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import Field
 
-from core.database.models import BaseModel
+from assimilator.core.database.models import BaseModel
 
 
 class Event(BaseModel):

@@ -8,7 +8,7 @@ from assimilator.internal.database import InternalRepository
 from assimilator.internal.database.specifications.filtering_options import find_attribute
 
 from dependencies import get_uow, User
-from mongo.database import MongoRepository
+from assimilator.mongo.database import MongoRepository
 
 
 def create_user__kwargs(uow: UnitOfWork):

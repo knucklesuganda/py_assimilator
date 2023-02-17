@@ -8,22 +8,19 @@ class MongoModel(BaseModel):
     id: ObjectId
     upsert: bool = False
 
-    class AssimilatorConfig:
-        excluded_dumps = (
+    class Config(BaseModel.Config):
+        exclude = (
             'collection',
             'upsert',
         )
-
-    class Config:
+        collection: str
         extra = Extra.allow
 
-    @staticmethod
-    def get_collection():
-        raise NotImplementedError("collection() is not implemented for the model")
+    def __init__(self, **kwargs):
+        super(MongoModel, self).__init__(**kwargs)
 
-    @property
-    def _id(self):
-        return self.id
+        if getattr(self.Config, 'collection', None) is None:
+            self.Config.collection = self.__class__.__name__.lower()
 
     def generate_id(self, *args, **kwargs) -> ObjectId:
         return ObjectId()

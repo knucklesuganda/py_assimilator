@@ -1,46 +1,59 @@
-from typing import Type
+from typing import Type, TypeVar, Iterable, Union
 
 from assimilator.core.database import UnitOfWork
 from assimilator.core.services.base import Service
+from assimilator.core.patterns import LazyCommand
+
+ModelT = TypeVar("ModelT")
 
 
 class CRUDService(Service):
-    def __init__(self, model: Type):
+    def __init__(self, model: Type[ModelT], uow: UnitOfWork):
         self.model = model
+        self.uow = uow
+        self._specs = self.uow.repository.specs
 
-    def create(self, obj_data: dict, uow: UnitOfWork):
-        with uow:
+    def create(self, obj_data: dict) -> ModelT:
+        with self.uow:
             obj = self.model(**obj_data)
-            uow.repository.save(obj)
-            uow.commit()
+            self.uow.repository.save(obj)
+            self.uow.commit()
 
-        uow.repository.refresh(obj)
+        self.uow.repository.refresh(obj)
         return obj
 
-    def update(self, update_data: dict, uow: UnitOfWork, *filters, **kwargs_filters):
-        with uow:
+    def update(self, update_data: dict, *filters, **kwargs_filters) -> ModelT:
+        with self.uow:
             obj = self.get(*filters, **kwargs_filters)
 
             for key, value in update_data.items():
                 setattr(obj, key, value)
 
-            uow.repository.update(obj)
-            uow.commit()
+            self.uow.repository.update(obj)
+            self.uow.commit()
 
-        uow.repository.refresh(obj)
+        self.uow.repository.refresh(obj)
         return obj
 
-    def list(self, *filters, uow: UnitOfWork, lazy: bool = False, **kwargs_filters):
-        return uow.repository.get(uow.repository.specs.filter(*filters, **kwargs_filters), lazy=lazy)
+    def list(
+        self, *filters, lazy: bool = False, **kwargs_filters
+    ) -> Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]]:
+        return self.uow.repository.get(
+            self._specs.filter(*filters, **kwargs_filters),
+            lazy=lazy,
+        )
 
-    def get(self, *filters, uow: UnitOfWork, lazy: bool = False, **kwargs_filters):
-        return uow.repository.filter(uow.repository.specs.filter(*filters, **kwargs_filters), lazy=lazy)
+    def get(self, *filters, lazy: bool = False, **kwargs_filters):
+        return self.uow.repository.filter(
+            self._specs.filter(*filters, **kwargs_filters),
+            lazy=lazy,
+        )
 
-    def delete(self, uow: UnitOfWork, *filters, **kwargs_filters):
-        with uow:
+    def delete(self, *filters, **kwargs_filters):
+        with self.uow:
             obj = self.get(*filters, **kwargs_filters)
-            uow.repository.delete(obj)
-            uow.commit()
+            self.uow.repository.delete(obj)
+            self.uow.commit()
 
 
 __all__ = [

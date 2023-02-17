@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine, Column, String, Float, Integer
 from sqlalchemy.orm import declarative_base
 
-from core.database import BaseModel
-from mongo.database import MongoModel
-from redis_.database import RedisModel
+from assimilator.core.database import BaseModel
+from assimilator.mongo.database import MongoModel
+from assimilator.redis_.database import RedisModel
 
 engine = create_engine(url="sqlite:///:memory:")
 Base = declarative_base()
@@ -37,7 +37,6 @@ class RedisUser(RedisModel):
 
 
 class MongoUser(MongoModel):
-
-    @staticmethod
-    def get_collection():
-        return "users"
+    username: str
+    email: str
+    balance: float

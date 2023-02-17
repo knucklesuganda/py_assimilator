@@ -3,7 +3,7 @@ import sys
 import redis
 
 from assimilator.internal.events import InternalEventProducer, InternalEventConsumer
-from redis_.events import RedisEventConsumer, RedisEventProducer
+from assimilator.redis_.events import RedisEventConsumer, RedisEventProducer
 
 if len(sys.argv) == 1 or sys.argv[1] == "internal":
     event_storage = []

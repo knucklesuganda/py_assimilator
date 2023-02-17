@@ -1,7 +1,7 @@
 from redis.client import Pipeline
 
 from assimilator.core.database.unit_of_work import UnitOfWork
-from redis_.database.repository import RedisRepository
+from assimilator.redis_.database.repository import RedisRepository
 
 
 class RedisUnitOfWork(UnitOfWork):

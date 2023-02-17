@@ -3,7 +3,9 @@ from typing import List, ClassVar
 from sqlalchemy import create_engine, Column, String, Float, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship
 
-from core.database import BaseModel
+from assimilator.core.database import BaseModel
+from assimilator.mongo.database import MongoModel
+from assimilator.redis_.database import RedisModel
 
 engine = create_engine(url="sqlite:///:memory:")
 Base = declarative_base()
@@ -55,3 +57,23 @@ class InternalUser(BaseModel):
     username: str
     email: str
     balances: List[InternalBalance] = []
+
+
+class RedisBalance(InternalBalance, RedisModel):
+    pass
+
+
+class RedisUser(InternalUser, RedisModel):
+    balances: List[RedisBalance] = []
+
+
+class MongoBalance(InternalBalance, MongoModel):
+    class Config:
+        collection: str = "balances"
+
+
+class MongoUser(MongoModel):
+    class Config:
+        collection: str = "users"
+
+    balances: List[MongoBalance] = []

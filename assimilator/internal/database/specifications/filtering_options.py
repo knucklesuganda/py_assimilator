@@ -2,7 +2,7 @@ from typing import Any, Callable
 
 from assimilator.core.database import BaseModel
 from assimilator.core.database.specifications import FilteringOptions
-from internal.database.specifications.internal_operator import (
+from assimilator.internal.database.specifications.internal_operator import (
     find_attribute, eq, gte, gt, lte, lt, is_, not_, like, regex,
 )
 

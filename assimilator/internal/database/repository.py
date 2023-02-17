@@ -11,7 +11,7 @@ from assimilator.core.database import (
     NotFoundError,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
-from core.database import MultipleResultsError
+from assimilator.core.database import MultipleResultsError
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
