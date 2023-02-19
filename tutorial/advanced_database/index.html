@@ -44,6 +44,18 @@
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-7PEMV9YSS5"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-7PEMV9YSS5",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-7PEMV9YSS5",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
     
     
@@ -1006,16 +1018,17 @@ so that means that we cannot use them with different repositories.</p>
 <p>We can solve that issue with another pattern called <code>SpecificationList</code>. It allows you to map your specifications to
 classes that can call different specifications for different repositories. When you use <code>repository.specifications</code> or
 <code>repository.specs</code>, you are using <code>SpecificationList</code> objects from these repositories.</p>
-<p>The most basic SpecificationList looks like this:
+<p>The most basic SpecificationList looks like this:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
 
 <span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">FilterSpecification</span>
-<span class="kn">from</span> <span class="nn">assimilator.core.database.specifications.typings</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">assimilator.core.database.specifications.types</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">OrderSpecificationProtocol</span><span class="p">,</span>
     <span class="n">PaginateSpecificationProtocol</span><span class="p">,</span>
     <span class="n">OnlySpecificationProtocol</span><span class="p">,</span>
     <span class="n">JoinSpecificationProtocol</span><span class="p">,</span>
 <span class="p">)</span>
+
 
 <span class="k">class</span> <span class="nc">SpecificationList</span><span class="p">:</span>
     <span class="nb">filter</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">FilterSpecification</span><span class="p">]</span>
@@ -1023,7 +1036,7 @@ classes that can call different specifications for different repositories. When 
     <span class="n">paginate</span><span class="p">:</span> <span class="n">PaginateSpecificationProtocol</span>
     <span class="n">join</span><span class="p">:</span> <span class="n">JoinSpecificationProtocol</span>
     <span class="n">only</span><span class="p">:</span> <span class="n">OnlySpecificationProtocol</span>
-</code></pre></div></p>
+</code></pre></div>
 <p>We have all the specifications that we talked about, and each specification has a <a href="https://docs.python.org/3/library/typing.html#typing.Protocol">Protocol</a>
 typing that allows us to specify what arguments we need for specific pre-built specifications.</p>
 <p>If you want to create your own <code>SpecificationList</code>, then be sure to do the following:</p>
@@ -1073,6 +1086,8 @@ typing that allows us to specify what arguments we need for specific pre-built s
 and specification lists. There is just no other way(yet😎). So, if you want to use your specification with other patterns,
 rewrite it to work with their data types and create a new SpecificationList that is going to be supplied in the Repository.</p>
 
+
+  
 
 
 
