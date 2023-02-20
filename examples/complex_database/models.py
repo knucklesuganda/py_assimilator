@@ -1,4 +1,4 @@
-from typing import List, ClassVar
+from typing import List
 
 from sqlalchemy import create_engine, Column, String, Float, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship
@@ -68,12 +68,12 @@ class RedisUser(InternalUser, RedisModel):
 
 
 class MongoBalance(InternalBalance, MongoModel):
-    class Config:
+    class AssimilatorConfig:
         collection: str = "balances"
 
 
 class MongoUser(MongoModel):
-    class Config:
+    class AssimilatorConfig:
         collection: str = "users"
 
     balances: List[MongoBalance] = []

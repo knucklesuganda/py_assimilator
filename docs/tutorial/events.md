@@ -1,4 +1,5 @@
-# Events patterns
+# Events patterns - STILL IN DEVELOPMENT
+
 
 ## Events and how they work
 Event shows changes in your system and listeners(consumers) respond to them. Events contain all the possible things that

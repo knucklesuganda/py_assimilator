@@ -56,7 +56,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-database = [
+alchemy = [
     'SQLAlchemy>=1.4.44'
 ]
 kafka = [

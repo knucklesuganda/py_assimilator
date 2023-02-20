@@ -83,6 +83,25 @@ class AlchemyRepository(Repository):
 
     def save(self, obj: Optional[AlchemyModelT] = None, **data) -> AlchemyModelT:
         if obj is None:
+            for key in inspect(self.model).relationships.keys():
+                foreign_data = data.get(key)
+                if foreign_data is None:
+                    continue
+
+                foreign_prop = getattr(self.model, key).property
+                foreign_model = foreign_prop.mapper.class_
+
+                if not foreign_prop.uselist and isinstance(foreign_data, dict):
+                    foreign_data = foreign_model(**foreign_data)
+
+                elif foreign_prop.uselist:
+                    foreign_models = (f_obj for f_obj in foreign_data if isinstance(f_obj, dict))
+
+                    for i, f_data in enumerate(foreign_models):
+                        foreign_data[i] = foreign_model(**f_data)
+
+                data[key] = foreign_data
+
             obj = self.model(**data)
 
         self.session.add(obj)

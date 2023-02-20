@@ -31,12 +31,12 @@ nav:
     - Database tutorial: tutorial/database.md
     - Advanced database tutorial: tutorial/advanced_database.md
     - Events tutorial: tutorial/events.md
+  - SQLAlchemy:
+    - Database: alchemy/database.md
+    - Events: alchemy/events.md
   - Internal:
     - Database: internal/database.md
     - Events: internal/events.md
-  - Alchemy:
-    - Database: alchemy/database.md
-    - Events: alchemy/events.md
   - Kafka:
     - Events: kafka/events.md
   - Redis:
@@ -44,8 +44,6 @@ nav:
     - Events: redis/events.md
   - API Reference:
     - API Reference | Core Database: api_reference/core.md
-  - Advanced topics:
-    - Core: core/core.md
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator
 site_author: Andrey Ivanov | Python
@@ -56,3 +54,7 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+extra:
+  analytics:
+    provider: google
+    property: G-7PEMV9YSS5

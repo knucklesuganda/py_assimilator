@@ -36,7 +36,13 @@ class MongoRepository(Repository):
     @final
     @property
     def _collection(self):
-        return self.session[self.database][self.model.Config.collection]
+        config = getattr(self.model, 'AssimilatorConfig', None)
+        if config is not None:
+            collection = self.model.AssimilatorConfig.collection
+        else:
+            collection = getattr(self.model, 'collection', self.model.__class__.__name__.lower())
+
+        return self.session[self.database][collection]
 
     def get(
         self,

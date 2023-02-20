@@ -77,7 +77,7 @@ def alchemy_join(
 
 @specification
 def alchemy_only(*only_fields: Iterable[str], query: Select):
-    return query.options(load_only(*(only_field for only_field in only_fields)))
+    return query.options(load_only(*only_fields))
 
 
 class AlchemySpecificationList(SpecificationList):

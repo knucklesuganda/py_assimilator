@@ -1,8 +1,8 @@
 import json
 from uuid import uuid4
-from typing import Type, Set, TypeVar
+from typing import Type, TypeVar, ClassVar
 
-from pydantic import ValidationError, BaseModel as PydanticBaseModel
+from pydantic import ValidationError, BaseModel as PydanticBaseModel, Extra
 
 from assimilator.core.exceptions import ParsingError
 
@@ -13,15 +13,26 @@ T = TypeVar("T", bound='BaseModel')
 class BaseModel(PydanticBaseModel):
     id: str
 
+    class AssimilatorConfig(PydanticBaseModel, extra=Extra.allow):
+        autogenerate_id: ClassVar[bool] = True
+
     class Config:
         arbitrary_types_allowed = True
-        autogenerate_id = True
 
     def generate_id(self, **kwargs) -> str:
         return str(uuid4())
 
+    def __new__(cls, *args, **kwargs):
+        if not issubclass(cls.AssimilatorConfig, BaseModel.AssimilatorConfig):
+            class InheritedConfig(cls.AssimilatorConfig, BaseModel.AssimilatorConfig):
+                ...
+
+            cls.AssimilatorConfig = InheritedConfig
+
+        return super().__new__(cls)
+
     def __init__(self, **kwargs):
-        if self.Config.autogenerate_id and kwargs.get('id') is None:
+        if self.AssimilatorConfig.autogenerate_id and kwargs.get('id') is None:
             kwargs['id'] = self.generate_id(**kwargs)
 
         super(BaseModel, self).__init__(**kwargs)

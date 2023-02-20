@@ -1,42 +1,26 @@
-# SQLAlchemy Database patterns
+# Internal Database patterns
 
-SQLAlchemy is a Python ORM that is used with Relational databases. This page tells you about pyAssimilator patterns
-for SQLAlchemy.
-
-> **IMPORTANT**! SQLAlchemy team have just released SQLAlchemy 2.0.
-> Fortunately, all of our patterns work with both versions 1 and 2 of SQLAlchemy. But, that is going
-> to change in the future, so we recommend switching to SQLAlchemy 2.0.
-> [Here is a guide on how to do that](https://docs.sqlalchemy.org/en/20/changelog/migration_20.html).
+Internal patterns work with Python data structures like dictionary, list, set, and others. You can use that if you don't
+have a database yet, or just want to test how things will work in memory.
 
 ## What patterns do we use?
-Database, in our case, is any data storage that can be connected to SQLAlchemy.
-It can be PostgreSQL, MySQL, Oracle and others. Please, check [SQLAlchemy docs](https://docs.sqlalchemy.org/en/20/) to find out more.
+Database, in our case, is a dictionary object.
 
 5 main patterns with databases:
 
-- `AlchemyRepository` - works with the data. Saves, reads, updates, deletes, modifies, checks, filters our data.
-- `AlchemyUnitOfWork` - works with SQLAlchemy transactions. Ensures data integrity. Should only be used when the data is changed.
-- `Specification` - some sort of filter for the repository. Filters, paginates, joins, limits the results in `AlchemyRepository`.
-- `AlchemySpecificationList` - contains links to `Specification` patterns for indirect coding.
+- `InternalRepository` - works with the data. Saves, reads, updates, deletes, modifies, checks, filters our data.
+- `InternalUnitOfWork` - works with internal transactions. Ensures data integrity. Should only be used when the data is changed.
+- `Specification` - some sort of filter for the repository. Filters, paginates, joins, limits the results in `InternalRepository`.
+- `InternalSpecificationList` - contains links to `Specification` patterns for indirect coding.
 - `LazyCommand` - database query that has been created, but not ran yet. Only runs the function when we need the results.
 
 -------------------
 
-## Starting with SQLAlchemy
-
-You should read our [Basic Tutorials](/tutorial/database/) to be able to understand basic things. We also show SQLAlchemy examples
-in there!
-
-Run this command to install our library with SQLAlchemy dependencies:
-
-`pip install py_assimilator[alchemy]`
-
-You don't need to run this command if you have PyAssimilator and SQLAlchemy installed.
-
+# STILL IN DEVELOPMENT
 
 ## Creating your models
 
-The first thing that you have to do is create your SQLAlchemy models. You can use anything from SQLAlchemy module to create
+The first thing that you have to do is create your internal models. You can use anything from SQLAlchemy module to create
 your models. All mapping types, column types, tables, foreign keys, and other things are supported by PyAssimilator.
 
 We are going to create `User` model using declarative mappings:

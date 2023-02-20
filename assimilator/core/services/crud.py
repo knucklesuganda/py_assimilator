@@ -1,4 +1,4 @@
-from typing import Type, TypeVar, Iterable, Union
+from typing import TypeVar, Iterable, Union
 
 from assimilator.core.database import UnitOfWork
 from assimilator.core.services.base import Service
@@ -8,15 +8,13 @@ ModelT = TypeVar("ModelT")
 
 
 class CRUDService(Service):
-    def __init__(self, model: Type[ModelT], uow: UnitOfWork):
-        self.model = model
+    def __init__(self, uow: UnitOfWork):
         self.uow = uow
         self._specs = self.uow.repository.specs
 
     def create(self, obj_data: dict) -> ModelT:
         with self.uow:
-            obj = self.model(**obj_data)
-            self.uow.repository.save(obj)
+            obj = self.uow.repository.save(**obj_data)
             self.uow.commit()
 
         self.uow.repository.refresh(obj)
@@ -36,9 +34,9 @@ class CRUDService(Service):
         return obj
 
     def list(
-        self, *filters, lazy: bool = False, **kwargs_filters
+        self, *filters, lazy: bool = False, **kwargs_filters,
     ) -> Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]]:
-        return self.uow.repository.get(
+        return self.uow.repository.filter(
             self._specs.filter(*filters, **kwargs_filters),
             lazy=lazy,
         )

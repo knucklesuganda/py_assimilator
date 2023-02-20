@@ -13,9 +13,9 @@ def create_user__kwargs(uow: UnitOfWork):
             username='Andrey',
             email='python.on.papyrus@gmail.com',
             balances=[
-                Balance(currency="USD", balance=2000),
-                Balance(currency="HKD", balance=123456),
-                Balance(currency="EUR", balance=50001),
+                {"currency": "USD", "balance": 2000},
+                {"currency": "HKD", "balance": 123456},
+                {"currency": "EUR", "balance": 50001},
             ]
         )
         uow.commit()
@@ -102,7 +102,7 @@ def create_many_users(uow: UnitOfWork):
                 username=f"User-{i}",
                 email=f"user-{i}@py_assimilator.com",
                 balances=[
-                    Balance(currency="USD", balance=1000),
+                    {"currency": "USD", "balance": 1000},
                 ],
             )
 
