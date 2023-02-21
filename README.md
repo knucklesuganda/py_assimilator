@@ -3,7 +3,7 @@
 ![](images/logo.png)
 
 ## Install now
-* `pip install py_assimilator`
+* `pip install py-assimilator`
 
 
 ## Simple example

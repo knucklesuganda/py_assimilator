@@ -30,6 +30,7 @@ nav:
     - Important things: tutorial/important.md
     - Database tutorial: tutorial/database.md
     - Advanced database tutorial: tutorial/advanced_database.md
+    - Architecture tutorial: tutorial/architecture_tutorial.md
     - Events tutorial: tutorial/events.md
   - SQLAlchemy:
     - Database: alchemy/database.md

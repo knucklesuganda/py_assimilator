@@ -60,7 +60,7 @@ def mongo_paginate(*, limit: Optional[int] = None, offset: Optional[int] = None,
 
 @specification
 def mongo_join(*targets: Collection, query: dict, **join_args: dict) -> dict:
-    return query    # TODO: finish join
+    return query
 
 
 @specification

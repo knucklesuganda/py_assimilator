@@ -29,7 +29,7 @@ in there!
 
 Run this command to install our library with SQLAlchemy dependencies:
 
-`pip install py_assimilator[alchemy]`
+`pip install py-assimilator[alchemy]`
 
 You don't need to run this command if you have PyAssimilator and SQLAlchemy installed.
 

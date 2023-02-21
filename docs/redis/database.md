@@ -1,1 +1,1 @@
-# Redis database - still in development
+# Redis database - IN DEVELOPMENT

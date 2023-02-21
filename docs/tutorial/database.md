@@ -373,8 +373,8 @@ from assimilator.core.database import Repository
 def join_example(repository: Repository):
     users_with_products = repository.filter(
         repository.specs.join(
-            Order.id,    # another model order that is joined with user
-            Product.product_id,    # another model product that is joined with user
+            'orders',    # indirect join with user
+            User.products,      # direct join with products
         )
     )
 ```
