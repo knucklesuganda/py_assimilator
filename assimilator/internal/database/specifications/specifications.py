@@ -62,5 +62,6 @@ __all__ = [
     'internal_order',
     'internal_paginate',
     'internal_join',
+    'internal_only',
     'InternalSpecificationList',
 ]

@@ -1,4 +1,4 @@
-from typing import Callable, Union, List, Any, Generator
+from typing import Callable, Union, List, Generator
 
 from assimilator.core.database.models import BaseModel
 from assimilator.core.database.specifications import FilterSpecification

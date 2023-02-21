@@ -151,13 +151,13 @@ However, there are specific things that you may not use, but still need to know.
 When we sort, filter, join and mutate our SQLAlchemy query, we use Alchemy specifications. Here is how they work, and what
 you can do with them.
 
-### `AlchemyFilterSpecification`
-`AlchemyFilterSpecification` is used to filter your data using some filter. You can access it with one of the following
+### `AlchemyFilter`
+`AlchemyFilter` is used to filter your data using some filter. You can access it with one of the following
 methods(ordered by code quality):
 
 1. Indirect access from Repository:
 ```Python
-# AlchemyFilterSpecification for repositories that use AlchemySpecificationList
+# AlchemyFilter for repositories that use AlchemySpecificationList
 repository.specs.filter()
 ```
 

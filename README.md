@@ -1,6 +1,6 @@
 # Assimilator - the best Python patterns for the best projects
 
-![](/images/logo.png)
+![](images/logo.png)
 
 ## Install now
 * `pip install py_assimilator`
@@ -10,42 +10,23 @@
 
 Example usage of the code to create a user using all the DDD patterns:
 ```Python
-from assimilator.alchemy.database import UnitOfWork, AlchemyRepository
-
-from sqlalchemy import create_engine, Column, String, Float, Integer
-from sqlalchemy.orm import declarative_base, sessionmaker
-
-engine = create_engine(url="sqlite:///:memory:")
-Base = declarative_base()
-DatabaseSession = sessionmaker(bind=engine)
-
-
-class User(Base):    # Create user model
-    __tablename__ = "users"
-
-    id = Column(Integer(), primary_key=True)
-    username = Column(String())
-    email = Column(String())
-    balance = Column(Float())
-
-    def __str__(self):
-        return f"{self.id} {self.username} {self.email}"
-
-
-Base.metadata.create_all(engine)
-
+from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
+from assimilator.core.database import UnitOfWork
 
 def create_user(username: str, email: str, uow: UnitOfWork):
     with uow:
-        repository = uow.repository     # get Repository pattern from unit of work
-        new_user = repository.save(username=username, email=email, balance=0)   # create the user
-        uow.commit()    # Commit session with Unit of work pattern
+        repository = uow.repository     # Get Repository pattern
+        new_user = repository.save(username=username, email=email, balance=0)
+        uow.commit()    # Securely save the data
 
     return new_user
 
 
-user_repository = AlchemyRepository(session=DatabaseSession(), model=User)
-user_uow = UnitOfWork(repository=user_repository)
+user_repository = AlchemyRepository(
+    session=alchemy_session,    # alchemy db session
+    model=User,     # alchemy user model 
+)
+user_uow = AlchemyUnitOfWork(repository=user_repository)
 
 create_user(
     username="Andrey", 
@@ -54,7 +35,19 @@ create_user(
 )
 
 ```
-Hard? Don't worry, you will only have to memorize it once. After that, you just repeat the code!
+
+## Why do I need it?
+![](images/why_assimilator_no_usage.png)
+
+Patterns are very useful for good code, but only to some extent. Most of them are not suitable for 
+real life applications. DDD(Domain-driven design) is one of the most popular ways of development
+today, but nobody explains how to write most of DDD patterns in Python. Even if they do, life gives you another
+issue that cannot be solved with a simple algorithm. That is why [Andrey](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw) created
+a library for the patterns that he uses in his projects daily.
+
+![](images/why_assimilator_usage.png)
+
+Watch our [Demo]() to find out more about pyAssimilator capabilities.
 
 ## Source
 * [Github](https://github.com/knucklesuganda/py_assimilator)
@@ -64,18 +57,17 @@ Hard? Don't worry, you will only have to memorize it once. After that, you just 
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
 
-## About patterns in coding
-They are useful, but only to some extent. Most of them are not suitable for 
-real life applications. DDD(Domain-driven design) is one of the most popular ways of development
-today, but nobody explains how to write most of DDD patterns in Python. Even if they do, life gives you another
-issue that cannot be solved with a simple algorithm. That is why [Andrey](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw) created
-a library for the patterns that he uses in his projects daily.
+
+## Stars history
+[![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
+
 
 ## Types of patterns
-These are different use cases for the patterns implemented.
+These are different use cases for the patterns implemented:
 
-- Database - patterns for database/data layer interactions
-- Events - projects with events or event-driven architecture
+- Database - patterns for database/data layer interactions.
+- Events(in development) - projects with events or event-driven architecture.
+- Unidentified - patterns that are useful for different purposes.
 
 ## Available providers
 Providers are different patterns for external modules like SQLAlchemy or FastAPI.
@@ -84,4 +76,4 @@ Providers are different patterns for external modules like SQLAlchemy or FastAPI
 - Kafka(Events) - patterns in [Kafka](https://kafka.apache.org/) related to events.
 - Internal(Database, Events) - internal is the type of provider that saves everything in memory(dict, list and all the tools within your app).
 - Redis(Database, Events) - redis_ allows us to work with [Redis](https://redis.io/) memory database.
-- Redis(MongoDB) - mongo allows us to work with [MongoDB](https://www.mongodb.com/) database.
+- MongoDB(Database) - mongo allows us to work with [MongoDB](https://www.mongodb.com/) database.

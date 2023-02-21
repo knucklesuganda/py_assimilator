@@ -10,7 +10,6 @@
 
 Example usage of the code to create a user using all the DDD patterns:
 ```Python
-from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
 from assimilator.core.database import UnitOfWork
 
 def create_user(username: str, email: str, uow: UnitOfWork):
@@ -20,21 +19,14 @@ def create_user(username: str, email: str, uow: UnitOfWork):
         uow.commit()    # Securely save the data
 
     return new_user
-
-
-user_repository = AlchemyRepository(
-    session=alchemy_session,    # alchemy db session
-    model=User,     # alchemy user model 
-)
-user_uow = AlchemyUnitOfWork(repository=user_repository)
-
-create_user(
-    username="Andrey", 
-    email="python.on.papyrus@gmail.com",
-    uow=user_uow,
-)
-
 ```
+Here is why it is superior:
+
+1. 5 lines of code
+2. 4 patterns from Domain-Driven Design
+3. Secure data management
+4. No dependencies
+5. SQL, MongoDB, Redis, Dictionaries - all of them work with this code.
 
 ## Why do I need it?
 ![](images/why_assimilator_no_usage.png)
