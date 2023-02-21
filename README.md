@@ -1,6 +1,21 @@
 # Assimilator - the best Python patterns for the best projects
 
-![](images/logo.png)
+<p align="center">
+  <a href="https://knucklesuganda.github.io/py_assimilator/"><img src="https://knucklesuganda.github.io/py_assimilator/images/logo.png" alt="PyAssimilator"></a>
+</p>
+<p align="center">
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/license/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="License">
+</a>
+
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/stars/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="Stars">
+</a>
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/last-commit/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="Last commit">
+</a>
+</p>
+
 
 ## Install now
 * `pip install py-assimilator`
