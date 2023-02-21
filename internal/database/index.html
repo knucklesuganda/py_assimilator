@@ -347,6 +347,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../tutorial/architecture_tutorial/" class="md-nav__link">
+        Architecture tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../tutorial/events/" class="md-nav__link">
         Events tutorial
       </a>
@@ -496,6 +510,102 @@
   <a href="#what-patterns-do-we-use" class="md-nav__link">
     What patterns do we use?
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-your-models" class="md-nav__link">
+    Creating your models
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-our-patterns" class="md-nav__link">
+    Creating our patterns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-our-patterns" class="md-nav__link">
+    Using our patterns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-specifications" class="md-nav__link">
+    Internal Specifications
+  </a>
+  
+    <nav class="md-nav" aria-label="Internal Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internalfilter" class="md-nav__link">
+    InternalFilter
+  </a>
+  
+    <nav class="md-nav" aria-label="InternalFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering-options" class="md-nav__link">
+    Filtering options:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-filters" class="md-nav__link">
+    Direct filters:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_order-specification" class="md-nav__link">
+    internal_order specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_paginate-specification" class="md-nav__link">
+    internal_paginate specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_join-specification" class="md-nav__link">
+    internal_join specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_only-specification" class="md-nav__link">
+    internal_only specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internalspecificationlist" class="md-nav__link">
+    InternalSpecificationList
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -719,6 +829,102 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-your-models" class="md-nav__link">
+    Creating your models
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-our-patterns" class="md-nav__link">
+    Creating our patterns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-our-patterns" class="md-nav__link">
+    Using our patterns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-specifications" class="md-nav__link">
+    Internal Specifications
+  </a>
+  
+    <nav class="md-nav" aria-label="Internal Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internalfilter" class="md-nav__link">
+    InternalFilter
+  </a>
+  
+    <nav class="md-nav" aria-label="InternalFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering-options" class="md-nav__link">
+    Filtering options:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-filters" class="md-nav__link">
+    Direct filters:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_order-specification" class="md-nav__link">
+    internal_order specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_paginate-specification" class="md-nav__link">
+    internal_paginate specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_join-specification" class="md-nav__link">
+    internal_join specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_only-specification" class="md-nav__link">
+    internal_only specification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internalspecificationlist" class="md-nav__link">
+    InternalSpecificationList
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -753,58 +959,65 @@ have a database yet, or just want to test how things will work in memory.</p>
 <li><code>LazyCommand</code> - database query that has been created, but not ran yet. Only runs the function when we need the results.</li>
 </ul>
 <hr />
-<h1 id="still-in-development">STILL IN DEVELOPMENT</h1>
 <h2 id="creating-your-models">Creating your models</h2>
-<p>The first thing that you have to do is create your internal models. You can use anything from SQLAlchemy module to create
-your models. All mapping types, column types, tables, foreign keys, and other things are supported by PyAssimilator.</p>
-<p>We are going to create <code>User</code> model using declarative mappings:</p>
+<p>The first thing that you have to do is create your internal models. PyAssimilator uses <a href="https://docs.pydantic.dev/">Pydantic</a>
+to develop models that are used as entities. We recommend using our <code>BaseModel</code> class to create your models:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># models.py</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Integer</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">declarative_base</span><span class="p">,</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">assimilator.core.database.models</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;sqlite:///:memory:&quot;</span><span class="p">)</span>
-<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
-<span class="n">DatabaseSession</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
-
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">())</span>
-    <span class="n">balance</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Float</span><span class="p">())</span>
-
-
-<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<span class="c1"># Just a normal Pydantic model with cool things in it</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">balance</span><span class="p">:</span> <span class="nb">float</span>
 </code></pre></div>
-<p>It's the same model as we have in our Basic Tutorial.</p>
-<h2 id="creating-our-patterns">Creating our patterns</h2>
-<p>Once you have your models, you are going to start creating your Alchemy patterns. We are going to create
-<code>AlchemyUnitOfWork</code> and <code>AlchemyRepository</code> to manage data and transactions:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># dependencies.py</span>
-<span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyUnitOfWork</span><span class="p">,</span> <span class="n">AlchemyRepository</span>
+<p>We recommend using <code>BaseModel</code> because it has various features such as:</p>
+<ul>
+<li>Automatic PyAssimilator configuration for better experience</li>
+<li>Parsing from/to JSON</li>
+<li>Automatic ID generation</li>
+</ul>
+<p>But, with that said, you could potentially use <code>BaseModel</code> from <code>Pydantic</code>. However, you are going to need
+to create an ID field:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># models.py</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
-<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">DatabaseSession</span><span class="p">,</span> <span class="n">User</span>
+<span class="c1"># Just a normal Pydantic model</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>     <span class="c1"># id can be any type, but must be unique </span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">balance</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div>
+<h2 id="creating-our-patterns">Creating our patterns</h2>
+<p>Once you have your models, you are going to start creating your Internal patterns. We are going to create
+<code>InternalUnitOfWork</code> and <code>InternalRepository</code> to manage data and transactions:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># dependencies.py</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database</span> <span class="kn">import</span> <span class="n">InternalRepository</span><span class="p">,</span> <span class="n">InternalUnitOfWork</span>
+
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="n">database</span> <span class="o">=</span> <span class="p">{}</span>   <span class="c1"># our data storage</span>
+
 
 <span class="k">def</span> <span class="nf">get_repository</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
-        <span class="n">session</span><span class="o">=</span><span class="n">DatabaseSession</span><span class="p">(),</span>  <span class="c1"># database session</span>
+    <span class="k">return</span> <span class="n">InternalRepository</span><span class="p">(</span>
+        <span class="n">session</span><span class="o">=</span><span class="p">{},</span>  <span class="c1"># database session is a dict</span>
         <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>     <span class="c1"># our main model </span>
     <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">get_uow</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">get_repository</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">InternalUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">get_repository</span><span class="p">())</span>
 </code></pre></div>
-<p><code>AlchemyRepository</code> must accept an SQLAlchemy session and a model that we created.</p>
+<p><code>InternalRepository</code> must accept a <code>dict()</code> for the session and a model that we created.</p>
 <ul>
-<li><code>session</code> - <a href="https://docs.sqlalchemy.org/en/20/orm/session_basics.html">SQLAlchemy</a> session to the database.</li>
-<li><code>model</code> - the model that you created. 
-You can read about different model mappings <a href="https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html">here</a>.</li>
+<li><code>session</code> - Python dictionary or it's descendants.</li>
+<li><code>model</code> - Pydantic or BaseModel entity that you created.</li>
 </ul>
 <p>You can also see that instead of exporting our patterns as objects, we create a function that can be called to create
 multiple objects whenever needed. The behaviour of creating one object or using object factories depends on your use
-case, HOWEVER, we suggest that you use different objects inside your code.</p>
+case, however, we suggest that you use different objects inside your code.</p>
 <h2 id="using-our-patterns">Using our patterns</h2>
 <p>You already know how to use the patterns from our Basic Tutorial. So, here is that code again:
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span><span class="p">,</span> <span class="n">Repository</span>
@@ -812,26 +1025,26 @@ case, HOWEVER, we suggest that you use different objects inside your code.</p>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">We use base UnitOfWork and Repository annotations in our parameters </span>
-<span class="sd">instead of their SQLAlchemy descendants.</span>
+<span class="sd">instead of their Internal descendants.</span>
 <span class="sd">We suggest you do the same in order to follow SOLID principles. </span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># We use that to start the transaction</span>
-        <span class="n">repository</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span>   <span class="c1"># access the repository from the AlchemyUnitOfWork</span>
+        <span class="n">repository</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span>   <span class="c1"># access the repository from the InternalUnitOfWork</span>
 
         <span class="c1"># Save the user using Repository.save() function and by passing all the arguments inside</span>
         <span class="n">new_user</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
         <span class="c1"># WARNING!!! We have not applied any changes up to that point.</span>
-        <span class="c1"># We must call AlchemyUnitOfWork.commit() to change that: </span>
+        <span class="c1"># We must call InternalUnitOfWork.commit() to change that: </span>
         <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span> 
         <span class="c1"># Changes are applied and used is in the database!</span>
 
     <span class="k">return</span> <span class="n">new_user</span>
 
-<span class="n">created_user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="n">get_uow</span><span class="p">())</span>   <span class="c1"># create our AlchemyUnitOfWork</span>
+<span class="n">created_user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="n">get_uow</span><span class="p">())</span>   <span class="c1"># create our InternalUnitOfWork</span>
 
 
 <span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>    <span class="c1"># only pass the Repository because we want to read the data</span>
@@ -845,65 +1058,111 @@ case, HOWEVER, we suggest that you use different objects inside your code.</p>
 </code></pre></div></p>
 <p>That's it. Nothing really changes from the basic tutorial, as all the things stay the same in all of our patterns.
 However, there are specific things that you may not use, but still need to know. You can read about them below:</p>
-<h2 id="alchemy-specifications">Alchemy Specifications</h2>
-<p>When we sort, filter, join and mutate our SQLAlchemy query, we use Alchemy specifications. Here is how they work, and what
+<h2 id="internal-specifications">Internal Specifications</h2>
+<p>When we sort, filter, join and mutate our Internal data, we use Internal specifications. Here is how they work, and what
 you can do with them.</p>
-<h3 id="alchemyfilterspecification"><code>AlchemyFilterSpecification</code></h3>
-<p><code>AlchemyFilterSpecification</code> is used to filter your data using some filter. You can access it with one of the following
+<h3 id="internalfilter"><code>InternalFilter</code></h3>
+<p><code>InternalFilter</code> is used to filter your data using some filter. You can access it with one of the following
 methods(ordered by code quality):</p>
 <ol>
 <li>
 <p>Indirect access from Repository:
-<div class="highlight"><pre><span></span><code><span class="c1"># AlchemyFilterSpecification for repositories that use AlchemySpecificationList</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># InternalFilter for repositories that use InternalSpecificationList</span>
 <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
 </code></pre></div></p>
 </li>
 <li>
 <p>Direct access using an <code>import</code> statement:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">alchemy_filter</span><span class="p">,</span> <span class="n">AlchemyFilter</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">InternalFilter</span><span class="p">,</span> <span class="n">internal_filter</span>
 <span class="c1"># Both objects are the same</span>
 
-<span class="n">alchemy_filter</span><span class="p">()</span>
-<span class="n">AlchemyFilter</span><span class="p">()</span>
+<span class="n">internal_filter</span><span class="p">()</span>
+<span class="n">InternalFilter</span><span class="p">()</span>
 </code></pre></div></p>
 </li>
 <li>
-<p>Direct access from an <code>AlchemySpecificationList</code>:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">AlchemySpecificationList</span>
+<p>Direct access from an <code>InternalSpecificationList</code>:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">InternalSpecificationList</span>
 
-<span class="n">AlchemySpecificationList</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
+<span class="n">InternalSpecificationList</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
 </code></pre></div></p>
 </li>
 </ol>
-<p>If you want to add filters, then you can use filtering options or direct alchemy filters:</p>
+<p>If you want to add filters, then you can use filtering options or direct internal filters:</p>
 <h5 id="filtering-options">Filtering options:</h5>
 <div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
     <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>   <span class="c1"># id == 1</span>
     <span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>     <span class="c1"># age &gt; 18</span>
     <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>      <span class="c1"># username == &quot;Andrey&quot;</span>
-    <span class="n">user_domain__like</span><span class="o">=</span><span class="s2">&quot;%.com%&quot;</span><span class="p">,</span>     <span class="c1"># user_domain LIKE &quot;%.com%&quot;</span>
+    <span class="n">user_domain__like</span><span class="o">=</span><span class="s2">&quot;%.com%&quot;</span><span class="p">,</span>     <span class="c1"># user_domain LIKE &quot;%.com%&quot;(yes, it works without SQL!)</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>You can check out our <a href="/tutorial/database/#data-querying">Basic Tutorials</a> for more filtering options.</p>
 <h5 id="direct-filters">Direct filters:</h5>
 <p>Sometimes you don't want to use filtering options, or you have such a complicated query,
 that filtering options do not allow you to fully execute it. Then, you can provide direct filters:</p>
-<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-    <span class="c1"># The same as in filtering options username=&quot;Andrey&quot;</span>
-    <span class="n">User</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="s2">&quot;Andrey&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">eq</span>
+
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+    <span class="c1"># The same as username=&quot;Andrey&quot; in filtering options</span>
+    <span class="n">eq</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s2">&quot;Andrey&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>Direct filter is anything that can be added to an SQLAlchemy query to specify the results. </p>
-<p>But, we expose our SQLAlchemy dependency when using direct filters. If you want to also accounts for that, then you
-can create your own specification that you can use later:</p>
+<p>Internal direct filters are special functions that can change the query and specify what we want to get.
+There is a module with all of them that you can import like this:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">internal_operator</span>
+
+<span class="n">internal_operator</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s2">&quot;Andrey&quot;</span><span class="p">)</span>
+<span class="n">internal_operator</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+</code></pre></div></p>
+<p>They are written to replicate Python's <a href="https://docs.python.org/3/library/operator.html">operator</a> library. However, there
+is another function called <code>find_attribute()</code>, and it is used to find any attribute and call a boolean function on it.
+Here is how it works:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">find_attribute</span>
+
+<span class="c1"># The following function is the same as internal_operator.eq(&#39;username&#39;, &quot;Andrey&quot;)</span>
+<span class="n">find_attribute</span><span class="p">(</span>
+    <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">,</span>   <span class="c1"># boolean function that compares field to value</span>
+    <span class="n">field</span><span class="o">=</span><span class="s1">&#39;username&#39;</span><span class="p">,</span>   <span class="c1"># field that we want to get from an object</span>
+    <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>     <span class="c1"># value that we want to compare our object&#39;s field to</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<p>You can use that function to create your own filters. Be sure to pass a real field with a boolean function:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">find_attribute</span>
+
+
+<span class="k">def</span> <span class="nf">only_adult_users</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">find_attribute</span><span class="p">(</span>
+        <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">age_field</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">age_field</span> <span class="o">==</span> <span class="n">val</span><span class="p">,</span>
+        <span class="n">field</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+    <span class="n">only_adult_users</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<p>But, you can also create specifications. However, when work with internal specifications, we need to
+make them a little differently. The thing is, that default Python structures do not support: regex, complex filters, joins,
+pagination and so on. So, what we can do is just run the specifications on results instead of the query itself. But, that
+would highly impact our algorithms, because sometimes we just need to get a value by its key. So, what do we do?</p>
+<p>We break one important programming principle💀 called Single Responsibility Principle. 
+Instead of just working with the query, we also write a specification for the list of models. Here is an example: </p>
 <div class="highlight"><pre><span></span><code><span class="c1"># specifications.py</span>
 <span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
 
 
 <span class="nd">@specification</span>
 <span class="k">def</span> <span class="nf">filter_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">username</span> <span class="o">==</span> <span class="s2">&quot;Andrey&quot;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;1&quot;</span>
 
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">model</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
 
 <span class="c1"># services.py</span>
 <span class="c1"># Then, you call your specification like this:</span>
@@ -911,9 +1170,37 @@ can create your own specification that you can use later:</p>
     <span class="n">filter_by_username</span><span class="p">(</span><span class="s2">&quot;Andrey&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>This way, you can remove SQLAlchemy dependency from your code.</p>
-<h3 id="alchemy_order-specification"><code>alchemy_order</code> specification</h3>
-<p><code>alchemy_order</code> is a specification that you can use in order to sort your results.
+<p>Here is what we did:</p>
+<ol>
+<li>Internal Repository runs your specifications twice - with query as a string(dict key), and with query as a list of models.</li>
+<li>We check that if query is a string(the first run), and our username is "Andrey", then we can return a dictionary key(id) which represents that user in the database</li>
+<li>Otherwise, we go through each model and check that it's username is "Andrey".</li>
+</ol>
+<p>Here is what we achieve with that code:</p>
+<ol>
+<li>If we want to find Andrey in the database - we just return a string key for a dictionary: O(1)</li>
+<li>If we can't use a simple algorithm - we go through each user: O(N)</li>
+</ol>
+<p>It's still a debate if we will leave that or not, but that can optimize our code a lot. Imagine that we have a big
+database with millions of users, and we want to find our entity by its ID. If that is the case, that would be very beneficial,
+but maybe there is another way of doing so.</p>
+<p>IMPORTANT: You don't always need to do something with string query in your specifications. If you are sure that the operation
+cannot be used in a normal dictionary indexing, then you can do the following:
+<div class="highlight"><pre><span></span><code><span class="c1"># specifications.py</span>
+<span class="nd">@specification</span>
+<span class="k">def</span> <span class="nf">filter_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="c1"># This specification only works with list query</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">query</span>    <span class="c1"># Do not modify the query</span>
+
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">model</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></p>
+<h3 id="internal_order-specification"><code>internal_order</code> specification</h3>
+<p><code>internal_order</code> is a specification that you can use in order to sort your results.
 You just provide the columns in your model that are going to be use for sorting.
 For example:
 <div class="highlight"><pre><span></span><code><span class="c1"># order by username</span>
@@ -923,11 +1210,11 @@ For example:
 <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">)</span>
 
 <span class="c1"># order by balance DESC with direct import</span>
-<span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">alchemy_order</span>
-<span class="n">alchemy_order</span><span class="p">(</span><span class="s1">&#39;-balance&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">internal_order</span>
+<span class="n">internal_order</span><span class="p">(</span><span class="s1">&#39;-balance&#39;</span><span class="p">)</span>
 </code></pre></div></p>
-<h3 id="alchemy_paginate-specification"><code>alchemy_paginate</code> specification</h3>
-<p><code>alchemy_paginate</code> is a specification that you can use to limit your results
+<h3 id="internal_paginate-specification"><code>internal_paginate</code> specification</h3>
+<p><code>internal_paginate</code> is a specification that you can use to limit your results
 You can provide <code>limit</code> and <code>offset</code> to paginate your data.</p>
 <p>For example:
 <div class="highlight"><pre><span></span><code><span class="c1"># only first 10</span>
@@ -938,67 +1225,45 @@ You can provide <code>limit</code> and <code>offset</code> to paginate your data
 
 <span class="c1"># offset by 10 and get the next 10 results</span>
 <span class="c1"># with direct import</span>
-<span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">alchemy_paginate</span>
-<span class="n">alchemy_paginate</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">internal_paginate</span>
+<span class="n">internal_paginate</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </code></pre></div></p>
-<h3 id="alchemy_join-specification"><code>alchemy_join</code> specification</h3>
-<p><code>alchemy_join</code> is a specification that you can use to join multiple models together.
-You can provide the name of the <a href="https://docs.sqlalchemy.org/en/20/orm/relationship_api.html#sqlalchemy.orm.relationship">relationship</a>
-or the model itself. It's better to provide just the name, as it is indirect style.</p>
+<h3 id="internal_join-specification"><code>internal_join</code> specification</h3>
+<p><code>internal_join</code> is a specification that you can use to join multiple models together.
+You only use it for back compatibility with other Repositories and to show that you are joining two entities together.
+This specification only works as a dummy now. Here it's full code:
+<div class="highlight"><pre><span></span><code><span class="nd">@specification</span>
+<span class="k">def</span> <span class="nf">internal_join</span><span class="p">(</span><span class="o">*</span><span class="n">targets</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">QueryT</span><span class="p">,</span> <span class="o">**</span><span class="n">join_args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QueryT</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">query</span>
+</code></pre></div></p>
+<blockquote>
+<p>We don't think that it is necessary to join multiple entities together, and it's really memory inefficient. Instead, we 
+suggest that you use composition(store joined object in the model itself) to replicate foreign keys. We have some ideas
+on how to do real joins, but it is not yet implemented. </p>
+</blockquote>
 <p>For example:
 <div class="highlight"><pre><span></span><code><span class="c1"># join by relationship name with addresses table</span>
 <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;addresses&#39;</span><span class="p">)</span>
 
-<span class="c1"># join by relationship itself with addresses table </span>
-<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">addresses</span><span class="p">)</span>
-
-<span class="c1"># join by model</span>
-<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Address</span><span class="p">)</span>
-
 <span class="c1"># join multiple entities</span>
 <span class="c1"># with direct import</span>
-<span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">alchemy_join</span>
-<span class="n">alchemy_join</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">addresses</span><span class="p">,</span> <span class="s1">&#39;friends&#39;</span><span class="p">,</span> <span class="s1">&#39;he_he_he_ha&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">internal_join</span>
+<span class="n">internal_join</span><span class="p">(</span><span class="s1">&#39;friends&#39;</span><span class="p">,</span> <span class="s1">&#39;he_he_he_ha&#39;</span><span class="p">)</span>
 </code></pre></div></p>
-<h5 id="join-arguments">Join arguments:</h5>
-<p>Sometimes you need to provide additional arguments to your joins(You can read about them in SQLAlchemy docs).
-You can do that as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="s1">&#39;addresses&#39;</span><span class="p">,</span>
-    <span class="n">join_args</span><span class="o">=</span><span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;full&#39;</span><span class="p">:</span> <span class="kc">True</span>    <span class="c1"># full join for addresses</span>
-        <span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-
-<span class="c1"># Here is an example with multiple joins</span>
-<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="s1">&#39;addresses&#39;</span><span class="p">,</span>
-    <span class="n">User</span><span class="o">.</span><span class="n">friends</span><span class="p">,</span>
-    <span class="n">join_args</span><span class="o">=</span><span class="p">[</span>
-        <span class="p">{</span><span class="s1">&#39;full&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>     <span class="c1"># full join for addresses</span>
-        <span class="p">{</span>
-            <span class="c1"># custom join clause for User.friends</span>
-            <span class="s2">&quot;onclause&quot;</span><span class="p">:</span> <span class="n">Friend</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="p">}</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-</code></pre></div>
-<h3 id="alchemy_only-specification"><code>alchemy_only</code> specification</h3>
-<p><code>alchemy_only</code> is a specification that you can use to only select specific columns and optimize your queries.</p>
+<h3 id="internal_only-specification"><code>internal_only</code> specification</h3>
+<p><code>internal_only</code> is a specification that you can use to only select specific columns and optimize your queries.</p>
 <p>Examples:
 <div class="highlight"><pre><span></span><code><span class="c1"># Get only id and username columns</span>
 <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">)</span>
 
 <span class="c1"># Get only balance column with direct import</span>
-<span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">alchemy_only</span>
-<span class="n">alchemy_only</span><span class="p">(</span><span class="s1">&#39;balance&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">internal_only</span>
+<span class="n">internal_only</span><span class="p">(</span><span class="s1">&#39;balance&#39;</span><span class="p">)</span>
 </code></pre></div></p>
-<h3 id="alchemyspecificationlist"><code>AlchemySpecificationList</code></h3>
-<p>If you want to create your custom <code>SpecificationList</code> using <code>AlchemySpecificationList</code> as a basis, then you can import it
+<h3 id="internalspecificationlist"><code>InternalSpecificationList</code></h3>
+<p>If you want to create your custom <code>SpecificationList</code> using <code>InternalSpecificationList</code> as a basis, then you can import it
 like this:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database.specifications</span> <span class="kn">import</span> <span class="n">AlchemySpecificationList</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.internal.database.specifications</span> <span class="kn">import</span> <span class="n">InternalSpecificationList</span>
 </code></pre></div></p>
 
 

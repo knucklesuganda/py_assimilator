@@ -12,19 +12,19 @@
         <meta name="author" content="Andrey Ivanov | Python">
       
       
-      <link rel="icon" href="../images/icon.png">
+      <link rel="icon" href="../../images/icon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
     
     
       
-        <title>Concepts - Assimilator - the best Python patterns</title>
+        <title>Architecture tutorial - Assimilator - the best Python patterns</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
         
       
       
@@ -41,7 +41,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-do-we-build-these-patterns" class="md-skip">
+        <a href="#architecture-tutorial" class="md-skip">
           Skip to content
         </a>
       
@@ -96,9 +96,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Assimilator - the best Python patterns" class="md-header__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
+    <a href="../.." title="Assimilator - the best Python patterns" class="md-header__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
       
-  <img src="../images/logo.png" alt="logo">
+  <img src="../../images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Concepts
+              Architecture tutorial
             
           </span>
         </div>
@@ -219,9 +219,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Assimilator - the best Python patterns" class="md-nav__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
+    <a href="../.." title="Assimilator - the best Python patterns" class="md-nav__button md-logo" aria-label="Assimilator - the best Python patterns" data-md-component="logo">
       
-  <img src="../images/logo.png" alt="logo">
+  <img src="../../images/logo.png" alt="logo">
 
     </a>
     Assimilator - the best Python patterns
@@ -249,7 +249,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -262,73 +262,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Concepts
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
         Concepts
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-dependency-injection" class="md-nav__link">
-    1. Dependency injection
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-solid" class="md-nav__link">
-    2. SOLID
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-domain-driven-design" class="md-nav__link">
-    3. Domain-driven design
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-reusable-patterns" class="md-nav__link">
-    4. Reusable patterns
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -339,12 +277,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -367,7 +307,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorial/important/" class="md-nav__link">
+      <a href="../important/" class="md-nav__link">
         Important things
       </a>
     </li>
@@ -381,7 +321,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorial/database/" class="md-nav__link">
+      <a href="../database/" class="md-nav__link">
         Database tutorial
       </a>
     </li>
@@ -395,7 +335,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorial/advanced_database/" class="md-nav__link">
+      <a href="../advanced_database/" class="md-nav__link">
         Advanced database tutorial
       </a>
     </li>
@@ -407,11 +347,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../tutorial/architecture_tutorial/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Architecture tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Architecture tutorial
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#repository-creation" class="md-nav__link">
+    Repository creation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repository-and-unit-of-work-synergy" class="md-nav__link">
+    Repository and Unit Of Work synergy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pattern-creations" class="md-nav__link">
+    Pattern creations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -423,7 +418,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorial/events/" class="md-nav__link">
+      <a href="../events/" class="md-nav__link">
         Events tutorial
       </a>
     </li>
@@ -471,7 +466,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alchemy/database/" class="md-nav__link">
+      <a href="../../alchemy/database/" class="md-nav__link">
         Database
       </a>
     </li>
@@ -485,7 +480,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alchemy/events/" class="md-nav__link">
+      <a href="../../alchemy/events/" class="md-nav__link">
         Events
       </a>
     </li>
@@ -533,7 +528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../internal/database/" class="md-nav__link">
+      <a href="../../internal/database/" class="md-nav__link">
         Database
       </a>
     </li>
@@ -547,7 +542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../internal/events/" class="md-nav__link">
+      <a href="../../internal/events/" class="md-nav__link">
         Events
       </a>
     </li>
@@ -595,7 +590,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../kafka/events/" class="md-nav__link">
+      <a href="../../kafka/events/" class="md-nav__link">
         Events
       </a>
     </li>
@@ -643,7 +638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../redis/database/" class="md-nav__link">
+      <a href="../../redis/database/" class="md-nav__link">
         Database
       </a>
     </li>
@@ -657,7 +652,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../redis/events/" class="md-nav__link">
+      <a href="../../redis/events/" class="md-nav__link">
         Events
       </a>
     </li>
@@ -705,7 +700,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api_reference/core/" class="md-nav__link">
+      <a href="../../api_reference/core/" class="md-nav__link">
         API Reference | Core Database
       </a>
     </li>
@@ -746,29 +741,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-dependency-injection" class="md-nav__link">
-    1. Dependency injection
+  <a href="#repository-creation" class="md-nav__link">
+    Repository creation
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-solid" class="md-nav__link">
-    2. SOLID
+  <a href="#repository-and-unit-of-work-synergy" class="md-nav__link">
+    Repository and Unit Of Work synergy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-domain-driven-design" class="md-nav__link">
-    3. Domain-driven design
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-reusable-patterns" class="md-nav__link">
-    4. Reusable patterns
+  <a href="#pattern-creations" class="md-nav__link">
+    Pattern creations
   </a>
   
 </li>
@@ -787,32 +775,34 @@
                 
                   
 
-  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/concepts.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/tutorial/architecture_tutorial.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="how-do-we-build-these-patterns">How do we build these patterns</h1>
-<h3 id="1-dependency-injection">1. Dependency injection</h3>
-<p>Dependency injection is a really important concept in assimilator. We do
-not use any additional dependency injection frameworks, but all the patterns inject 
-different components into themselves. <a href="https://www.youtube.com/watch?v=HFU4nAaU63c&amp;feature=youtu.be">If you want to know more about DI</a></p>
-<h3 id="2-solid">2. SOLID</h3>
-<p>SOLID principles are highly used in assimilator. That means, that in theory
-you can replace one pattern to another and experience no trouble in using them. 
-<em>That is why it is not advised to create your own function in patterns, but you can easily
-override them. For example, you don't want to create: createUsers() in Repository pattern, but
-can override save() function without any problems</em>. With that said, it is almost impossible
-to write such vast variety of patterns without breaking some principles. But, if you have
-any ideas on how to fix that, then be sure to check out our <a href="https://github.com/knucklesuganda/py_assimilator">GitHub</a></p>
-<h3 id="3-domain-driven-design">3. Domain-driven design</h3>
-<p>Most of the patterns here are used in Domain driven design. You do not really need to know all the intricacies, but 
-make sure that you know the basics of it.</p>
-<h3 id="4-reusable-patterns">4. Reusable patterns</h3>
-<p>The best thing about our patterns is that you can write your code for SQLAlchemy, then change it to Redis, then change
-it to Kafka, and finally test it with Python dictionaries. The thing is, you only have to change your pattern creation 
-code, everything else stays the same. All the functions work the same in all the patterns that we create.</p>
+<h1 id="architecture-tutorial">Architecture tutorial</h1>
+<p>This tutorial will bring up some points on how to create your apps.</p>
+<h2 id="repository-creation">Repository creation</h2>
+<p>When we create our repositories, we need to provide our model type in the constructor. Let's say that we have a program
+with User, Product, Order, UserAddress, Billing entities. Do we create five repositories for each model? Do we only have
+one repository for User? It depends.</p>
+<p>What you want to do in general is find your primary entities. Primary entity is a model that can live by itself, and does
+not add any information to other models. User is a primary entity in the majority of cases, because our users can be stored
+by themselves. UserAddress, on the other hand, cannot live without a User that it is bound to. So, there is no need to
+create a <code>Repository</code> for UserAddress. What you want to do is a new <code>Repository</code> for User, and write your code in such
+a way that your primary entity manages auxiliary entities. If you want to know more about that, please, read Domain-Driven
+design books. PyAssimilator does not follow them maniacally, but they have good basis that we use in here.</p>
+<h2 id="repository-and-unit-of-work-synergy">Repository and Unit Of Work synergy</h2>
+<p>When you want to change your data you are always going to use <code>UnitOfWork</code>. You have to make sure that you don't create
+any additional repositories in your business logic code. That is, you want to use <code>UnitOfWork</code> as your <code>Repository</code> source:
+<code>uow.repository</code>. We do that because we want to remove any kind of dependency from our business logic code, and because we 
+don't want to open multiple sessions when we don't need it. </p>
+<h2 id="pattern-creations">Pattern creations</h2>
+<p>It's better if you create your patterns in separate files and use Dependency Injection to provide them in your business
+logic code. Dependency Injections allow you to remove dependencies from your business logic code, and they are very
+useful for pattern substitution. There are multiple ways of using them. You could look at the way Django does that with
+string imports or find a Dependency Injection framework that can help you with that.</p>
 
 
   
@@ -837,7 +827,7 @@ code, everything else stays the same. All the functions work the same in all the
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction" rel="prev">
+        <a href="../advanced_database/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Advanced database tutorial" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -846,20 +836,20 @@ code, everything else stays the same. All the functions work the same in all the
               <span class="md-footer__direction">
                 Previous
               </span>
-              Introduction
+              Advanced database tutorial
             </div>
           </div>
         </a>
       
       
         
-        <a href="../tutorial/important/" class="md-footer__link md-footer__link--next" aria-label="Next: Important things" rel="next">
+        <a href="../events/" class="md-footer__link md-footer__link--next" aria-label="Next: Events tutorial" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Important things
+              Events tutorial
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -890,10 +880,10 @@ code, everything else stays the same. All the functions work the same in all the
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["search.suggest", "search.highlight", "content.tabs.link"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
       
     
     

@@ -423,6 +423,20 @@
   
   
     <li class="md-nav__item">
+      <a href="tutorial/architecture_tutorial/" class="md-nav__link">
+        Architecture tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="tutorial/events/" class="md-nav__link">
         Events tutorial
       </a>
@@ -811,12 +825,11 @@
 <p><img alt="" src="images/logo.png" /></p>
 <h2 id="install-now">Install now</h2>
 <ul>
-<li><code>pip install py_assimilator</code></li>
+<li><code>pip install py-assimilator</code></li>
 </ul>
 <h2 id="simple-example">Simple example</h2>
 <p>Example usage of the code to create a user using all the DDD patterns:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyUnitOfWork</span><span class="p">,</span> <span class="n">AlchemyRepository</span>
-<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
 
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>
@@ -825,20 +838,15 @@
         <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># Securely save the data</span>
 
     <span class="k">return</span> <span class="n">new_user</span>
-
-
-<span class="n">user_repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
-    <span class="n">session</span><span class="o">=</span><span class="n">alchemy_session</span><span class="p">,</span>    <span class="c1"># alchemy db session</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>     <span class="c1"># alchemy user model </span>
-<span class="p">)</span>
-<span class="n">user_uow</span> <span class="o">=</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">user_repository</span><span class="p">)</span>
-
-<span class="n">create_user</span><span class="p">(</span>
-    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> 
-    <span class="n">email</span><span class="o">=</span><span class="s2">&quot;python.on.papyrus@gmail.com&quot;</span><span class="p">,</span>
-    <span class="n">uow</span><span class="o">=</span><span class="n">user_uow</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></p>
+</code></pre></div>
+Here is why it is superior:</p>
+<ol>
+<li>5 lines of code</li>
+<li>4 patterns from Domain-Driven Design</li>
+<li>Secure data management</li>
+<li>No dependencies</li>
+<li>SQL, MongoDB, Redis, Dictionaries - all of them work with this code.</li>
+</ol>
 <h2 id="why-do-i-need-it">Why do I need it?</h2>
 <p><img alt="" src="images/why_assimilator_no_usage.png" /></p>
 <p>Patterns are very useful for good code, but only to some extent. Most of them are not suitable for 

@@ -347,6 +347,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../tutorial/architecture_tutorial/" class="md-nav__link">
+        Architecture tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../tutorial/events/" class="md-nav__link">
         Events tutorial
       </a>
@@ -474,11 +488,11 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#alchemyfilterspecification" class="md-nav__link">
-    AlchemyFilterSpecification
+  <a href="#alchemyfilter" class="md-nav__link">
+    AlchemyFilter
   </a>
   
-    <nav class="md-nav" aria-label="AlchemyFilterSpecification">
+    <nav class="md-nav" aria-label="AlchemyFilter">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -872,11 +886,11 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#alchemyfilterspecification" class="md-nav__link">
-    AlchemyFilterSpecification
+  <a href="#alchemyfilter" class="md-nav__link">
+    AlchemyFilter
   </a>
   
-    <nav class="md-nav" aria-label="AlchemyFilterSpecification">
+    <nav class="md-nav" aria-label="AlchemyFilter">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -996,7 +1010,7 @@ It can be PostgreSQL, MySQL, Oracle and others. Please, check <a href="https://d
 <p>You should read our <a href="/tutorial/database/">Basic Tutorials</a> to be able to understand basic things. We also show SQLAlchemy examples
 in there!</p>
 <p>Run this command to install our library with SQLAlchemy dependencies:</p>
-<p><code>pip install py_assimilator[alchemy]</code></p>
+<p><code>pip install py-assimilator[alchemy]</code></p>
 <p>You don't need to run this command if you have PyAssimilator and SQLAlchemy installed.</p>
 <h2 id="creating-your-models">Creating your models</h2>
 <p>The first thing that you have to do is create your SQLAlchemy models. You can use anything from SQLAlchemy module to create
@@ -1092,13 +1106,13 @@ However, there are specific things that you may not use, but still need to know.
 <h2 id="alchemy-specifications">Alchemy Specifications</h2>
 <p>When we sort, filter, join and mutate our SQLAlchemy query, we use Alchemy specifications. Here is how they work, and what
 you can do with them.</p>
-<h3 id="alchemyfilterspecification"><code>AlchemyFilterSpecification</code></h3>
-<p><code>AlchemyFilterSpecification</code> is used to filter your data using some filter. You can access it with one of the following
+<h3 id="alchemyfilter"><code>AlchemyFilter</code></h3>
+<p><code>AlchemyFilter</code> is used to filter your data using some filter. You can access it with one of the following
 methods(ordered by code quality):</p>
 <ol>
 <li>
 <p>Indirect access from Repository:
-<div class="highlight"><pre><span></span><code><span class="c1"># AlchemyFilterSpecification for repositories that use AlchemySpecificationList</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># AlchemyFilter for repositories that use AlchemySpecificationList</span>
 <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
 </code></pre></div></p>
 </li>

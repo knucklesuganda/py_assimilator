@@ -492,6 +492,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../architecture_tutorial/" class="md-nav__link">
+        Architecture tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../events/" class="md-nav__link">
         Events tutorial
       </a>
@@ -1257,8 +1271,8 @@ There are different filtering options inside of filter() specification:</p>
 <span class="k">def</span> <span class="nf">join_example</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
     <span class="n">users_with_products</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
         <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">Order</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>    <span class="c1"># another model order that is joined with user</span>
-            <span class="n">Product</span><span class="o">.</span><span class="n">product_id</span><span class="p">,</span>    <span class="c1"># another model product that is joined with user</span>
+            <span class="s1">&#39;orders&#39;</span><span class="p">,</span>    <span class="c1"># indirect join with user</span>
+            <span class="n">User</span><span class="o">.</span><span class="n">products</span><span class="p">,</span>      <span class="c1"># direct join with products</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </code></pre></div></p>
