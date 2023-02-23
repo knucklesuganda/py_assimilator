@@ -11,13 +11,13 @@ class RedisModel(BaseModel):
     keep_ttl: Optional[bool] = False
 
     class Config:
-        exclude = (
-            'expire_in',
-            'expire_in_px',
-            'only_update',
-            'only_create',
-            'keep_ttl',
-        )
+        exclude = {
+            'expire_in': True,
+            'expire_in_px': True,
+            'only_update': True,
+            'only_create': True,
+            'keep_ttl': True,
+        }
 
 
 __all__ = [

@@ -1,9 +1,10 @@
 from itertools import zip_longest
 from typing import Collection, Optional, Iterable, Any
 
-from sqlalchemy.orm import load_only
+from sqlalchemy.orm import load_only, joinedload
 from sqlalchemy import column, desc, and_, or_, not_, Select
 
+from assimilator.alchemy.database.model_utils import get_model_from_relationship
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
 from assimilator.core.database.specifications import (
     specification,
@@ -68,9 +69,16 @@ def alchemy_join(
             continue
 
         if isinstance(target, str):
-            query = query.join(getattr(model, target), **join_data)
-        else:
-            query = query.join(target, **join_data)
+            entities = target.split(".")
+            target = model
+
+            for entity in entities:
+                target, _ = get_model_from_relationship(
+                    model=target,
+                    relationship_name=entity,
+                )
+
+        query = query.join(target, **join_data).add_columns(target).select_from(model)
 
     return query
 

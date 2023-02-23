@@ -7,7 +7,7 @@ from typing import Any, Callable, Tuple, Set, List, Union, Literal, Dict
 from assimilator.core.database import BaseModel, FILTERING_OPTIONS_SEPARATOR
 
 
-Containers = (List, Set, Tuple)
+Containers = (List, Set, Tuple, map)
 
 
 def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseModel], bool]:
@@ -32,13 +32,13 @@ def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseMode
         model_val = model
         for foreign_field in foreign_fields:
             if isinstance(model_val, Containers):
-                model_val = map(lambda obj: getattr(obj, foreign_field), model_val)
+                model_val = list(getattr(obj, foreign_field) for obj in model_val)
             elif isinstance(model_val, Dict):
-                model_val = map(lambda obj: getattr(obj, foreign_field), model_val.values())
+                model_val = list(getattr(obj, foreign_field) for obj in model_val.values())
             else:
                 model_val = getattr(model_val, foreign_field)
 
-        if isinstance(model_val, map):
+        if isinstance(model_val, Containers):
             return any(func(member, value) for member in model_val)
 
         return func(model_val, value)

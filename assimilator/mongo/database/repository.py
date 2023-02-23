@@ -7,6 +7,7 @@ from assimilator.core.patterns import LazyCommand, ErrorWrapper
 from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
 from assimilator.core.database import Repository, SpecificationType, SpecificationList, NotFoundError
 from assimilator.mongo.database.specifications.specifications import MongoSpecificationList
+from assimilator.internal.database.models_utils import dict_to_models
 
 ModelT = TypeVar("ModelT", bound=MongoModel)
 
@@ -32,6 +33,9 @@ class MongoRepository(Repository):
             error_wrapper=error_wrapper or MongoErrorWrapper(),
         )
         self.database = database
+
+    def get_initial_query(self, override_query: Optional[dict] = None) -> dict:
+        return dict(super(MongoRepository, self).get_initial_query(override_query))
 
     @final
     @property
@@ -76,7 +80,7 @@ class MongoRepository(Repository):
 
     def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         if obj is None:
-            obj = self.model(**obj_data)
+            obj = self.model(**dict_to_models(data=obj_data, model=self.model))
 
         self._collection.insert_one(obj.dict())
         return obj
@@ -123,7 +127,7 @@ class MongoRepository(Repository):
             )
         elif obj is not None:
             self._collection.update_one(
-                {"_id": obj.id},
+                {"id": obj.id},
                 update={'$set': obj.dict()},
                 upsert=obj.upsert,
             )

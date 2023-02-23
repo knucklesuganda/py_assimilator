@@ -4,16 +4,15 @@ from redis import Redis
 from redis.client import Pipeline
 
 from assimilator.redis_.database import RedisModel
-from assimilator.core.exceptions import ParsingError
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
     SpecificationList,
     SpecificationType,
     Repository,
     LazyCommand,
-    make_lazy,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
+from assimilator.internal.database.models_utils import dict_to_models
 from assimilator.core.database.exceptions import (
     DataLayerError,
     NotFoundError,
@@ -100,7 +99,7 @@ class RedisRepository(Repository):
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:
-            obj = self.model(**obj_data)
+            obj = self.model(**dict_to_models(data=obj_data, model=self.model))
 
         self.transaction.set(
             name=obj.id,

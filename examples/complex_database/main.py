@@ -1,10 +1,12 @@
+from assimilator.mongo.database.repository import MongoRepository
+
 from assimilator.core.patterns import LazyCommand
 from assimilator.alchemy.database import AlchemyRepository
 from assimilator.core.database import UnitOfWork, Repository
 from assimilator.internal.database import InternalRepository, eq
 from assimilator.redis_.database import RedisRepository
 
-from dependencies import get_uow, User, Balance
+from dependencies import get_uow, User, Balance, Currency
 
 
 def create_user__kwargs(uow: UnitOfWork):
@@ -13,9 +15,27 @@ def create_user__kwargs(uow: UnitOfWork):
             username='Andrey',
             email='python.on.papyrus@gmail.com',
             balances=[
-                {"currency": "USD", "balance": 2000},
-                {"currency": "HKD", "balance": 123456},
-                {"currency": "EUR", "balance": 50001},
+                {
+                    "currency": {
+                        "currency": "USD",
+                        "country": "USA",
+                    },
+                    "balance": 2000,
+                },
+                {
+                    "currency": {
+                        "currency": "HKD",
+                        "country": "HK",
+                    },
+                    "balance": 123456,
+                },
+                {
+                    "currency": {
+                        "currency": "EUR",
+                        "country": "EU",
+                    },
+                    "balance": 50001,
+                },
             ]
         )
         uow.commit()
@@ -28,18 +48,24 @@ def create_user_model(uow: UnitOfWork):
             email='python.on.papyrus@gmail.com',
         )
 
-        user.balances.append(Balance(currency="USD", balance=0))
+        user.balances.append(
+            Balance(
+                currency=Currency(currency="USD", country="USA"),
+                balance=0,
+            )
+        )
         uow.repository.save(user)
         uow.commit()
 
 
 def read_user(username: str, balance: int, repository: Repository):
     user = repository.get(
-        repository.specs.join('balances'),
+        repository.specs.join('balances', 'balances.currency'),
         repository.specs.filter(
-            username=username,
+            username__eq=username,
             balances__balance=balance,
-            balances__currency="USD",
+            balances__currency__currency="USD",
+            balances__currency__country="USA",
         ),
     )
     print("User:", user.id, user.username, user.email)
@@ -60,9 +86,11 @@ def read_user_direct(username: str, repository: Repository):
         user = repository.get(
             repository.specs.filter(
                 eq('username', username),
-                # will call eq(model.username, username) for every user
+                # will call model.username == username for every model
             )
         )
+    elif isinstance(repository, MongoRepository):
+        user = repository.get(repository.specs.filter({ "username": username }))
     else:
         raise ValueError("Direct repository filter not found")
 
@@ -102,7 +130,13 @@ def create_many_users(uow: UnitOfWork):
                 username=f"User-{i}",
                 email=f"user-{i}@py_assimilator.com",
                 balances=[
-                    {"currency": "USD", "balance": 1000},
+                    {
+                        "currency": {
+                            "currency": "USD",
+                            "country": "USA",
+                        },
+                        "balance": 1000
+                    },
                 ],
             )
 
@@ -117,7 +151,10 @@ def create_many_users_direct(uow: UnitOfWork):
                     username=f"User-{i}",
                     email=f"user-{i}@py_assimilator.com",
                     balances=[
-                        Balance(currency="EUR", balance=i * 10),
+                        Balance(
+                            currency=Currency(currency="EUR", country="EU"),
+                            balance=i * 10,
+                        ),
                     ]
                 )
             )
@@ -140,8 +177,11 @@ def count_users(repository: Repository):
     print(
         "Users with balances greater than 5000:",
         repository.count(
-            repository.specs.join('balances'),
-            repository.specs.filter(balances__balance__gt=5000, balances__currency="EUR")
+            repository.specs.join('balances', 'balances.currency'),
+            repository.specs.filter(
+                balances__balance__gt=5000,
+                balances__currency__currency="EUR",
+            ),
         )
     )
 

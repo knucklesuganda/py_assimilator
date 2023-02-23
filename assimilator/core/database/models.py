@@ -19,17 +19,19 @@ class BaseModel(PydanticBaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    def generate_id(self, **kwargs) -> str:
-        return str(uuid4())
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
 
-    def __new__(cls, *args, **kwargs):
         if not issubclass(cls.AssimilatorConfig, BaseModel.AssimilatorConfig):
             class InheritedConfig(cls.AssimilatorConfig, BaseModel.AssimilatorConfig):
                 ...
 
             cls.AssimilatorConfig = InheritedConfig
 
-        return super().__new__(cls)
+        return cls
+
+    def generate_id(self, **kwargs) -> str:
+        return str(uuid4())
 
     def __init__(self, **kwargs):
         if self.AssimilatorConfig.autogenerate_id and kwargs.get('id') is None:

@@ -42,6 +42,8 @@ elif sys.argv[1] == "mongo":
     User = MongoUser
     client = pymongo.MongoClient()
 
+    client['test'].drop_collection(MongoUser.AssimilatorConfig.collection)
+
     def get_uow():
         repository = MongoRepository(session=client, model=MongoUser, database='test')
         return MongoUnitOfWork(repository)

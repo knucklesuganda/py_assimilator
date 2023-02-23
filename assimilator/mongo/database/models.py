@@ -6,25 +6,24 @@ from assimilator.core.database.models import BaseModel
 
 
 class MongoModel(BaseModel):
-    id: ObjectId
     upsert: bool = False
+    id: ObjectId
 
     class AssimilatorConfig(BaseModel.AssimilatorConfig):
         collection: ClassVar[str]
+        autogenerate_id: ClassVar[bool] = True
 
     class Config:
-        exclude = (
-            'collection',
-            'upsert',
-        )
+        exclude = {
+            'collection': True,
+            'upsert': True,
+        }
+        arbitrary_types_allowed = True
 
     def __init__(self, **kwargs):
         super(MongoModel, self).__init__(**kwargs)
 
-        if getattr(self.AssimilatorConfig, 'collection', None) is None:
-            self.AssimilatorConfig.collection = self.__class__.__name__.lower()
-
-    def generate_id(self, *args, **kwargs) -> ObjectId:
+    def generate_id(self, **kwargs) -> ObjectId:
         return ObjectId()
 
 

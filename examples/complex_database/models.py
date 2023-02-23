@@ -27,7 +27,7 @@ class AlchemyUser(Base):
 class AlchemyUserBalance(Base):
     __tablename__ = "balances"
     __table_args__ = (
-        UniqueConstraint("balance", "currency", "user_id"),
+        UniqueConstraint("balance", "user_id"),
     )
 
     id = Column(Integer(), primary_key=True)
@@ -36,10 +36,26 @@ class AlchemyUserBalance(Base):
     user = relationship("AlchemyUser", back_populates="balances")
 
     balance = Column(Float(), server_default='0')
-    currency = Column(String(length=20))
+
+    currency_id = Column(ForeignKey("currency.id"))
+    currency = relationship("AlchemyBalanceCurrency", uselist=False)
 
     def __str__(self):
-        return f"{self.balance} {self.currency}"
+        return f"{self.balance}{self.currency.currency}"
+
+    def __repr__(self):
+        return str(self)
+
+
+class AlchemyBalanceCurrency(Base):
+    __tablename__ = "currency"
+
+    id = Column(Integer(), primary_key=True)
+    currency = Column(String(length=20))
+    country = Column(String(length=20))
+
+    def __str__(self):
+        return self.currency
 
     def __repr__(self):
         return str(self)
@@ -48,9 +64,14 @@ class AlchemyUserBalance(Base):
 Base.metadata.create_all(engine)
 
 
+class InternalCurrency(BaseModel):
+    currency: str
+    country: str
+
+
 class InternalBalance(BaseModel):
     balance: float
-    currency: str
+    currency: InternalCurrency
 
 
 class InternalUser(BaseModel):
@@ -59,17 +80,33 @@ class InternalUser(BaseModel):
     balances: List[InternalBalance] = []
 
 
-class RedisBalance(InternalBalance, RedisModel):
+class RedisCurrency(InternalCurrency):
     pass
+
+
+class RedisBalance(InternalBalance, RedisModel):
+    currency: RedisCurrency
 
 
 class RedisUser(InternalUser, RedisModel):
     balances: List[RedisBalance] = []
 
 
-class MongoBalance(InternalBalance, MongoModel):
+class MongoCurrency(MongoModel):
+    class AssimilatorConfig:
+        collection: str = "currencies"
+        autogenerate_id = True
+
+    currency: str
+    country: str
+
+
+class MongoBalance(MongoModel):
     class AssimilatorConfig:
         collection: str = "balances"
+
+    balance: float
+    currency: MongoCurrency
 
 
 class MongoUser(MongoModel):
@@ -77,3 +114,5 @@ class MongoUser(MongoModel):
         collection: str = "users"
 
     balances: List[MongoBalance] = []
+    username: str
+    email: str

@@ -37,6 +37,9 @@ class RedisUser(RedisModel):
 
 
 class MongoUser(MongoModel):
+    class AssimilatorConfig:
+        collection = "users"
+
     username: str
     email: str
     balance: float

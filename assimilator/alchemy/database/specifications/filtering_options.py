@@ -1,13 +1,21 @@
 from sqlalchemy import column
 from sqlalchemy.sql.elements import ColumnClause
 
-from assimilator.core.database.specifications.filtering_options import FilteringOptions
+from assimilator.core.database.specifications.filtering_options import \
+    FilteringOptions, FILTERING_OPTIONS_SEPARATOR
 
 
 class AlchemyFilteringOptions(FilteringOptions):
     @staticmethod
     def _convert_field(field: str) -> ColumnClause:
-        return column(field.replace("__", "."), is_literal=True)
+        field_parts = field.split(FILTERING_OPTIONS_SEPARATOR)
+
+        if len(field_parts) > 2:
+            field = ".".join(field_parts[-2:])
+        else:
+            field = ".".join(field_parts)
+
+        return column(field, is_literal=True)
 
     @staticmethod
     def _eq(field, value):
