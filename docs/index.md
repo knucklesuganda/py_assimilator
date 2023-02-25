@@ -1,15 +1,35 @@
 # Assimilator - the best Python patterns for the best projects
 
-![](images/logo.png)
+<p align="center">
+  <a href="https://knucklesuganda.github.io/py_assimilator/"><img src="https://knucklesuganda.github.io/py_assimilator/images/logo.png" alt="PyAssimilator"></a>
+</p>
+<p align="center">
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/license/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="License">
+</a>
+
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/stars/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="Stars">
+</a>
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/last-commit/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="Last commit">
+</a>
+</p>
+
 
 ## Install now
 * `pip install py-assimilator`
+* `pip install py-assimilator[alchemy]` - Optional SQLAlchemy support 
+* `pip install py-assimilator[kafka]` - Optional Kafka support 
+* `pip install py-assimilator[redis]` - Optional Redis support 
+* `pip install py-assimilator[mongo]` - Optional MongoDB support 
 
 
 ## Simple example
 
 Example usage of the code to create a user using all the DDD patterns:
 ```Python
+from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
 from assimilator.core.database import UnitOfWork
 
 def create_user(username: str, email: str, uow: UnitOfWork):
@@ -19,14 +39,21 @@ def create_user(username: str, email: str, uow: UnitOfWork):
         uow.commit()    # Securely save the data
 
     return new_user
-```
-Here is why it is superior:
 
-1. 5 lines of code
-2. 4 patterns from Domain-Driven Design
-3. Secure data management
-4. No dependencies
-5. SQL, MongoDB, Redis, Dictionaries - all of them work with this code.
+
+user_repository = AlchemyRepository(
+    session=alchemy_session,    # alchemy db session
+    model=User,     # alchemy user model 
+)
+user_uow = AlchemyUnitOfWork(repository=user_repository)
+
+create_user(
+    username="Andrey", 
+    email="python.on.papyrus@gmail.com",
+    uow=user_uow,
+)
+
+```
 
 ## Why do I need it?
 ![](images/why_assimilator_no_usage.png)
@@ -48,6 +75,10 @@ Watch our [Demo]() to find out more about pyAssimilator capabilities.
 * [Github](https://github.com/knucklesuganda/py_assimilator)
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
+
+
+## Stars history
+[![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
 
 
 ## Types of patterns

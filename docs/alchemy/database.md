@@ -90,7 +90,7 @@ def get_uow():
 
 ```
 
-`AlchemyRepository` must accept an SQLAlchemy session and a model that we created.
+`AlchemyRepository` must accept an SQLAlchemy session and the model that we created.
 
 - `session` - [SQLAlchemy](https://docs.sqlalchemy.org/en/20/orm/session_basics.html) session to the database.
 - `model` - the model that you created. 

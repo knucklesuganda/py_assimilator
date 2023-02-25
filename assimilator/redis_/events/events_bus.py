@@ -9,6 +9,7 @@ from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 class RedisEventConsumer(EventConsumer):
     def __init__(self, channels: Iterable[str], session: Redis):
+        super(RedisEventConsumer, self).__init__()
         self.session = session
         self.channels = channels
         self._event_channel: Optional[PubSub] = None

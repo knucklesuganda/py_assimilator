@@ -48,9 +48,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self.specifications: SpecsT = specifications
 
         self.error_wrapper = error_wrapper or ErrorWrapper()
-        self.get = LazyCommand.decorate(
-            self.error_wrapper.decorate(self.get)
-        )
+        self.get = LazyCommand.decorate(self.error_wrapper.decorate(self.get))
         self.filter: Repository.filter = LazyCommand.decorate(self.error_wrapper.decorate(self.filter))
         self.save: Repository.save = self.error_wrapper.decorate(self.save)
         self.delete: Repository.delete = self.error_wrapper.decorate(self.delete)

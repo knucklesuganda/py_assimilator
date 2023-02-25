@@ -59,7 +59,12 @@ class AlchemyRepository(Repository):
         )
         return [result[0] for result in self.session.execute(query)]
 
-    def update(self, obj: Optional[AlchemyModelT] = None, *specifications, **update_values) -> None:
+    def update(
+        self,
+        obj: Optional[AlchemyModelT] = None,
+        *specifications: SpecificationType,
+        **update_values,
+    ) -> None:
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
@@ -74,7 +79,9 @@ class AlchemyRepository(Repository):
                 specifications=specifications,
             )
 
-            self.session.execute(query.values(update_values).execution_options(synchronize_session=False))
+            self.session.execute(
+                query.values(update_values).execution_options(synchronize_session=False)
+            )
 
         elif obj is not None:
             if obj not in self.session:

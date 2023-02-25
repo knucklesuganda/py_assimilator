@@ -104,11 +104,11 @@ class RedisRepository(Repository):
         self.transaction.set(
             name=obj.id,
             value=obj.json(),
-            ex=obj.expire_in,
-            px=obj.expire_in_px,
-            nx=obj.only_create,
-            xx=obj.only_update,
-            keepttl=obj.keep_ttl,
+            ex=getattr(obj, 'expire_in', None),     # for Pydantic model compatability
+            px=getattr(obj, 'expire_in_px', None),
+            nx=getattr(obj, 'only_create', None),
+            xx=getattr(obj, 'only_update', None),
+            keepttl=getattr(obj, 'keep_ttl', None),
         )
         return obj
 

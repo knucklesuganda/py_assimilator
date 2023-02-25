@@ -19,6 +19,10 @@
 
 ## Install now
 * `pip install py-assimilator`
+* `pip install py-assimilator[alchemy]` - Optional SQLAlchemy support 
+* `pip install py-assimilator[kafka]` - Optional Kafka support 
+* `pip install py-assimilator[redis]` - Optional Redis support 
+* `pip install py-assimilator[mongo]` - Optional MongoDB support 
 
 
 ## Simple example

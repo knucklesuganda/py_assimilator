@@ -23,10 +23,12 @@ if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
 
 elif sys.argv[1] == "internal":
     User = InternalUser
-    internal_session = {}
+    internal_session = {
+        'users': {}     # You can also give keys to show save entities
+    }
 
     def get_uow():
-        repository = InternalRepository(internal_session, model=InternalUser)
+        repository = InternalRepository(internal_session['users'], model=InternalUser)
         return InternalUnitOfWork(repository)
 
 elif sys.argv[1] == "redis":

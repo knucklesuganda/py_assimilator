@@ -71,7 +71,7 @@ database = {}   # our data storage
 
 def get_repository():
     return InternalRepository(
-        session={},  # database session is a dict
+        session=database,  # database session is a dict
         model=User,     # our main model 
     )
 
@@ -80,7 +80,7 @@ def get_uow():
     return InternalUnitOfWork(repository=get_repository())
 ```
 
-`InternalRepository` must accept a `dict()` for the session and a model that we created.
+`InternalRepository` must accept a `dict()` for the session and the model that we created.
 
 - `session` - Python dictionary or it's descendants.
 - `model` - Pydantic or BaseModel entity that you created.
@@ -88,6 +88,27 @@ def get_uow():
 You can also see that instead of exporting our patterns as objects, we create a function that can be called to create
 multiple objects whenever needed. The behaviour of creating one object or using object factories depends on your use
 case, however, we suggest that you use different objects inside your code.
+
+
+## Extending the session
+
+Sometimes we want to use multiple repositories with different entities in them. If that is the case, then
+we can use our sessions like this:
+
+```Python
+
+session = {
+    "users": {},     # for User entity
+    "products": {},     # for Product entity
+}
+
+def get_repository():
+    return InternalRepository(
+        session=database['users'],  # using nested dict as a session
+        model=User,     # our main model 
+    )
+
+```
 
 
 ## Using our patterns

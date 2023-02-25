@@ -31,20 +31,20 @@ nav:
     - Database tutorial: tutorial/database.md
     - Advanced database tutorial: tutorial/advanced_database.md
     - Architecture tutorial: tutorial/architecture_tutorial.md
-    - Events tutorial: tutorial/events.md
+    # - Events tutorial: tutorial/events.md
   - SQLAlchemy:
     - Database: alchemy/database.md
-    - Events: alchemy/events.md
+    # - Events: alchemy/events.md
   - Internal:
     - Database: internal/database.md
-    - Events: internal/events.md
-  - Kafka:
-    - Events: kafka/events.md
+    # - Events: internal/events.md
+  # - Kafka:
+    # - Events: kafka/events.md
   - Redis:
     - Database: redis/database.md
-    - Events: redis/events.md
+    # - Events: redis/events.md
   - API Reference:
-    - API Reference | Core Database: api_reference/core.md
+    - Core: api_reference/core.md
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator
 site_author: Andrey Ivanov | Python
@@ -59,3 +59,4 @@ extra:
   analytics:
     provider: google
     property: G-7PEMV9YSS5
+

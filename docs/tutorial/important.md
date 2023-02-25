@@ -1,6 +1,5 @@
 # Important things related to all patterns
 
-
 ## What is a pattern???
 
 Pattern - typical solution to commonly occurring problems. In our case, the problems are:
