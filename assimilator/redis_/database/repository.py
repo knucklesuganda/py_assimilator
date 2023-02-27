@@ -6,10 +6,19 @@ from redis.client import Pipeline
 from assimilator.redis_.database import RedisModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
-    SpecificationList, SpecificationType, Repository, LazyCommand, make_lazy,
+    SpecificationList,
+    SpecificationType,
+    Repository,
+    LazyCommand,
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
-from assimilator.core.database.exceptions import DataLayerError, NotFoundError, InvalidQueryError
+from assimilator.internal.database.models_utils import dict_to_models
+from assimilator.core.database.exceptions import (
+    DataLayerError,
+    NotFoundError,
+    InvalidQueryError,
+    MultipleResultsError,
+)
 
 RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
 
@@ -41,7 +50,6 @@ class RedisRepository(Repository):
         self.transaction = session
         self.use_double_specifications = use_double_filter
 
-    @make_lazy
     def get(
         self,
         *specifications: SpecificationType,
@@ -49,17 +57,27 @@ class RedisRepository(Repository):
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[RedisModelT], RedisModelT]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
-        )
+        ) or '*'
 
-        found_obj = self.session.get(query)
-        if found_obj is None:
-            raise NotFoundError(f"Redis model was not found")
+        found_objects = self.session.mget(self.session.keys(query))
 
-        return self.model.from_json(found_obj)
+        if not all(found_objects):
+            raise NotFoundError()
 
-    @make_lazy
+        parsed_objects = list(self._apply_specifications(
+            query=[self.model.loads(found_object) for found_object in found_objects],
+            specifications=specifications,
+        ))
+
+        if not parsed_objects:
+            raise NotFoundError()
+        elif len(parsed_objects) != 1:
+            raise MultipleResultsError()
+
+        return parsed_objects[0]
+
     def filter(
         self,
         *specifications: SpecificationType,
@@ -68,31 +86,29 @@ class RedisRepository(Repository):
     ) -> Union[LazyCommand[Collection[RedisModelT]], Collection[RedisModelT]]:
         if self.use_double_specifications and specifications:
             key_name = self._apply_specifications(
-                query=self.get_initial_query(initial_query),
+                query=initial_query,
                 specifications=specifications,
             ) or "*"
         else:
             key_name = "*"
 
-        key_name = key_name or "*"
-
         models = self.session.mget(self.session.keys(key_name))
         return list(self._apply_specifications(specifications=specifications, query=[
-            self.model.from_json(value) for value in models
+            self.model.loads(value) for value in models
         ]))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:
-            obj = self.model(**obj_data)
+            obj = self.model(**dict_to_models(data=obj_data, model=self.model))
 
         self.transaction.set(
             name=obj.id,
             value=obj.json(),
-            ex=obj.expire_in,
-            px=obj.expire_in_px,
-            nx=obj.only_create,
-            xx=obj.only_update,
-            keepttl=obj.keep_ttl,
+            ex=getattr(obj, 'expire_in', None),     # for Pydantic model compatability
+            px=getattr(obj, 'expire_in_px', None),
+            nx=getattr(obj, 'only_create', None),
+            xx=getattr(obj, 'only_update', None),
+            keepttl=getattr(obj, 'keep_ttl', None),
         )
         return obj
 
@@ -100,8 +116,7 @@ class RedisRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            models = self.filter(*specifications)
-            self.transaction.delete(*[str(model.id) for model in models])
+            self.transaction.delete(*[str(model.id) for model in self.filter(*specifications)])
         elif obj is not None:
             self.transaction.delete(obj.id)
 
@@ -125,7 +140,7 @@ class RedisRepository(Repository):
 
             for model in models:
                 model.__dict__.update(update_values)
-                updated_models = {model.id: model}
+                updated_models[str(model.id)] = model.json()
 
             self.transaction.mset(updated_models)
 
@@ -142,13 +157,17 @@ class RedisRepository(Repository):
         for key, value in fresh_obj.dict().items():
             setattr(obj, key, value)
 
-    @make_lazy
-    def count(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand[int], int]:
-        if specifications:
+    def count(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: Optional[str] = None,
+    ) -> Union[LazyCommand[int], int]:
+        if not specifications:
             return self.session.dbsize()
 
         filter_query = self._apply_specifications(
-            query=self.get_initial_query(),
+            query=initial_query,
             specifications=specifications,
         )
         return len(self.session.keys(filter_query))

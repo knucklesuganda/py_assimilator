@@ -13,7 +13,8 @@ class InternalEventConsumer(EventConsumer):
         pass
 
     def consume(self):
-        yield self.event_storage.pop()
+        while self.event_storage:
+            yield self.event_storage.pop()
 
 
 class InternalEventProducer(EventProducer):

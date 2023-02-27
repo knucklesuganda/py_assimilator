@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+ignore-vcs = true
+include = [
+    "assimilator"
+]
+
+[project]
+name = "py_assimilator"
+version = "0.3.1"
+authors = [
+  { name="Andrey Ivanov", email="python.on.papyrus@gmail.com" },
+]
+maintainers = [
+  { name="Andrey Ivanov", email="python.on.papyrus@gmail.com" },
+]
+keywords = ["DDD", "Domain-driven design", "Database", "Events", "Architecture", "Patterns", "Backend"]
+description = "The best Domain-driven design patterns for your projects"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Internet",
+    "Topic :: Database",
+    "Topic :: Software Development :: Testing :: Unit",
+    "Topic :: Software Development :: Testing :: Acceptance",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "pydantic >=1.6.2,<2.0.0",
+]
+
+[project.optional-dependencies]
+alchemy = [
+    'SQLAlchemy>=1.4.44'
+]
+kafka = [
+    'kafka-python>=2.0.2'
+]
+redis = [
+    'redis>=4.4.0'
+]
+mongo = [
+    'pymongo>=4.3.3'
+]
+
+[project.urls]
+'Documentation' = 'https://knucklesuganda.github.io/py_assimilator/'
+'Github' = 'https://github.com/knucklesuganda/py_assimilator/'
+'Youtube RU' = 'https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw'
+'Youtube ENG' = 'https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA'

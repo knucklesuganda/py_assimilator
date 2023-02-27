@@ -1,6 +1,7 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
 from redis import Redis
+from redis.client import PubSub
 
 from assimilator.core.events import Event, ExternalEvent
 from assimilator.core.events.events_bus import EventConsumer, EventProducer
@@ -8,31 +9,27 @@ from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 class RedisEventConsumer(EventConsumer):
     def __init__(self, channels: Iterable[str], session: Redis):
+        super(RedisEventConsumer, self).__init__()
         self.session = session
         self.channels = channels
+        self._event_channel: Optional[PubSub] = None
 
     def close(self):
-        self.session.close()
+        self._event_channel.close()
+        self._event_channel = None
 
     def start(self):
-        """ Connected by default """
+        self._event_channel = self.session.pubsub()
+        self._event_channel.subscribe(*self.channels)
 
     def consume(self) -> Iterable[ExternalEvent]:
-        publish_subscribe = self.session.pubsub()
-        publish_subscribe.subscribe(*self.channels)
+        message = self._event_channel.get_message(ignore_subscribe_messages=True)
 
-        while True:
-            message = publish_subscribe.get_message()
+        while message is not None:
+            if message['type'] == 'message':
+                yield ExternalEvent.loads(message['data'])
 
-            if (message is None) or message['type'] != 'message':
-                self.delay_function()
-                continue
-
-            yield ExternalEvent.from_json(message['data'])
-            self.delay_function()
-
-    def delay_function(self):
-        pass
+            message = self._event_channel.get_message(ignore_subscribe_messages=True)
 
 
 class RedisEventProducer(EventProducer):
@@ -47,7 +44,7 @@ class RedisEventProducer(EventProducer):
         pass
 
     def close(self):
-        self.close()
+        pass
 
 
 __all__ = [

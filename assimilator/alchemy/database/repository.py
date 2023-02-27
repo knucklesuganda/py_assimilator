@@ -1,15 +1,15 @@
 from typing import Type, Union, Optional, TypeVar, Collection
 
-from sqlalchemy import func, select, update, delete
-from sqlalchemy.orm import Session, Query
+from sqlalchemy import func, select, update, delete, Delete
+from sqlalchemy.orm import Session, Query   # TODO: change query for alchemy 2
 from sqlalchemy.inspection import inspect
 
-from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
-from assimilator.core.database.exceptions import InvalidQueryError
-from assimilator.alchemy.database.specifications import AlchemySpecificationList
-from assimilator.core.database import Repository, SpecificationList, \
-    LazyCommand, SpecificationType, make_lazy
+from assimilator.alchemy.database.model_utils import dict_to_models
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
+from assimilator.core.database.exceptions import InvalidQueryError
+from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
+from assimilator.alchemy.database.specifications import AlchemySpecificationList
+from assimilator.core.database import Repository, LazyCommand, SpecificationType
 
 
 AlchemyModelT = TypeVar("AlchemyModelT")
@@ -24,7 +24,7 @@ class AlchemyRepository(Repository):
         session: Session,
         model: Type[AlchemyModelT],
         initial_query: Query = None,
-        specifications: Type[SpecificationList] = AlchemySpecificationList,
+        specifications: Type[AlchemySpecificationList] = AlchemySpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
         super(AlchemyRepository, self).__init__(
@@ -35,7 +35,6 @@ class AlchemyRepository(Repository):
             error_wrapper=error_wrapper or AlchemyErrorWrapper(),
         )
 
-    @make_lazy
     def get(
         self,
         *specifications: SpecificationType,
@@ -43,12 +42,11 @@ class AlchemyRepository(Repository):
         initial_query: Query = None,
     ) -> Union[AlchemyModelT, LazyCommand[AlchemyModelT]]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
         return self.session.execute(query).one()[0]
 
-    @make_lazy
     def filter(
         self,
         *specifications: SpecificationType,
@@ -56,12 +54,17 @@ class AlchemyRepository(Repository):
         initial_query: Query = None,
     ) -> Union[Collection[AlchemyModelT], LazyCommand[Collection[AlchemyModelT]]]:
         query = self._apply_specifications(
-            query=self.get_initial_query(initial_query),
+            query=initial_query,
             specifications=specifications,
         )
         return [result[0] for result in self.session.execute(query)]
 
-    def update(self, obj: Optional[AlchemyModelT] = None, *specifications, **update_values) -> None:
+    def update(
+        self,
+        obj: Optional[AlchemyModelT] = None,
+        *specifications: SpecificationType,
+        **update_values,
+    ) -> None:
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
@@ -71,28 +74,31 @@ class AlchemyRepository(Repository):
                     "to the update() yet provided specifications"
                 )
 
-            query: Query = self._apply_specifications(
-                query=self.get_initial_query(update(self.model)),
+            query = self._apply_specifications(
+                query=update(self.model),
                 specifications=specifications,
             )
-            self.session.execute(query.values(update_values))
+
+            self.session.execute(
+                query.values(update_values).execution_options(synchronize_session=False)
+            )
+
         elif obj is not None:
+            if obj not in self.session:
+                obj = self.session.merge(obj)
+
             self.session.add(obj)
 
     def save(self, obj: Optional[AlchemyModelT] = None, **data) -> AlchemyModelT:
         if obj is None:
-            obj = self.model(**data)
+            obj = self.model(**dict_to_models(data=data, model=self.model))
 
         self.session.add(obj)
         return obj
 
     def refresh(self, obj: AlchemyModelT) -> None:
-        inspection = inspect(obj)
-
-        if inspection.transient or inspection.pending:
-            return
-        elif inspection.detached:
-            self.session.add(obj)
+        if obj not in self.session:
+            obj = self.session.merge(obj)
 
         self.session.refresh(obj)
 
@@ -100,29 +106,34 @@ class AlchemyRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query: Query = self._apply_specifications(
-                query=self.get_initial_query(delete(self.model)),
+            query: Delete = self._apply_specifications(
+                query=delete(self.model),
                 specifications=specifications,
             )
-            self.session.execute(query)
+            self.session.execute(query.execution_options(synchronize_session=False))
         elif obj is not None:
             self.session.delete(obj)
 
     def is_modified(self, obj: AlchemyModelT) -> bool:
-        return self.session.is_modified(obj)
+        return obj in self.session and self.session.is_modified(obj)
 
-    @make_lazy
-    def count(self, *specifications: SpecificationType, lazy: bool = False) -> Union[LazyCommand[int], int]:
+    def count(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: Query = None
+    ) -> Union[LazyCommand[int], int]:
         primary_keys = inspect(self.model).primary_key
 
         if not primary_keys:
-            raise InvalidQueryError("Your repository model does not have"
-                                    " any primary keys. We cannot use count()")
+            raise InvalidQueryError(
+                "Your repository model does not have any primary keys. We cannot use count()"
+            )
 
         return self.get(
             *specifications,
             lazy=False,
-            query=select(func.count(getattr(self.model, primary_keys[0].name))),
+            initial_query=initial_query or select(func.count(getattr(self.model, primary_keys[0].name))),
         )
 
 

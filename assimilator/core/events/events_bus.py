@@ -1,11 +1,21 @@
 from abc import abstractmethod
-from typing import Iterator
+from typing import Iterator, Callable, List, Optional, final
 
 from assimilator.core.events.events import Event
 from assimilator.core.patterns.context_managers import StartCloseContextMixin
 
 
 class EventConsumer(StartCloseContextMixin):
+    def __init__(self, callbacks: Optional[List[Callable]] = None):
+        if callbacks is None:
+            callbacks = []
+
+        self._callbacks: List[Callable] = callbacks
+
+    @final
+    def register(self, callback: Callable):
+        self._callbacks.append(callback)
+
     @abstractmethod
     def consume(self) -> Iterator[Event]:
         raise NotImplementedError("consume() is not implemented")

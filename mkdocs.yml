@@ -3,6 +3,7 @@ site_description: Assimilator Python framework, Domain-Driven Design, DDD, high 
 theme:
   name: material
   logo: images/logo.png
+  favicon: images/icon.png
   features:
     - search.suggest
     - search.highlight
@@ -25,22 +26,37 @@ theme:
 nav:
   - Introduction: index.md
   - Concepts: concepts.md
-  - Patterns types:
-    - Database: patterns/database.md
-    - Events: patterns/events.md
+  - Basic tutorials:
+    - Important things: tutorial/important.md
+    - Database tutorial: tutorial/database.md
+    - Advanced database tutorial: tutorial/advanced_database.md
+    - Architecture tutorial: tutorial/architecture_tutorial.md
+    # - Events tutorial: tutorial/events.md
+  - SQLAlchemy:
+    - Database: alchemy/database.md
+    # - Events: alchemy/events.md
   - Internal:
     - Database: internal/database.md
-    - Events: internal/events.md
-  - Alchemy:
-    - Database: alchemy/database.md
-    - Events: alchemy/events.md
-  - Kafka:
-    - Events: kafka/events.md
+    # - Events: internal/events.md
+  # - Kafka:
+    # - Events: kafka/events.md
   - Redis:
     - Database: redis/database.md
-    - Events: redis/events.md
-  - Advanced topics:
-    - Core: core/core.md
+    # - Events: redis/events.md
+  - API Reference:
+    - Core: api_reference/core.md
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator
 site_author: Andrey Ivanov | Python
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+extra:
+  analytics:
+    provider: google
+    property: G-7PEMV9YSS5
+
