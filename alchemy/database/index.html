@@ -355,20 +355,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../tutorial/events/" class="md-nav__link">
-        Events tutorial
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -576,20 +562,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -638,20 +610,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../internal/events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -675,14 +633,14 @@
       
       
         <label class="md-nav__link" for="__nav_6">
-          Kafka
+          Redis
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Kafka" data-md-level="1">
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
-          Kafka
+          Redis
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -692,8 +650,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../kafka/events/" class="md-nav__link">
-        Events
+      <a href="../../redis/database/" class="md-nav__link">
+        Database
       </a>
     </li>
   
@@ -723,74 +681,12 @@
       
       
         <label class="md-nav__link" for="__nav_7">
-          Redis
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Redis" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
-          <span class="md-nav__icon md-icon"></span>
-          Redis
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../redis/database/" class="md-nav__link">
-        Database
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../redis/events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_8">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -803,7 +699,7 @@
   
     <li class="md-nav__item">
       <a href="../../api_reference/core/" class="md-nav__link">
-        API Reference | Core Database
+        Core
       </a>
     </li>
   
@@ -1054,7 +950,7 @@ your models. All mapping types, column types, tables, foreign keys, and other th
 <span class="k">def</span> <span class="nf">get_uow</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">get_repository</span><span class="p">())</span>
 </code></pre></div>
-<p><code>AlchemyRepository</code> must accept an SQLAlchemy session and a model that we created.</p>
+<p><code>AlchemyRepository</code> must accept an SQLAlchemy session and the model that we created.</p>
 <ul>
 <li><code>session</code> - <a href="https://docs.sqlalchemy.org/en/20/orm/session_basics.html">SQLAlchemy</a> session to the database.</li>
 <li><code>model</code> - the model that you created. 
@@ -1282,7 +1178,7 @@ like this:
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../../tutorial/events/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Events tutorial" rel="prev">
+        <a href="../../tutorial/architecture_tutorial/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Architecture tutorial" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1291,20 +1187,20 @@ like this:
               <span class="md-footer__direction">
                 Previous
               </span>
-              Events tutorial
+              Architecture tutorial
             </div>
           </div>
         </a>
       
       
         
-        <a href="../events/" class="md-footer__link md-footer__link--next" aria-label="Next: Events" rel="next">
+        <a href="../../internal/database/" class="md-footer__link md-footer__link--next" aria-label="Next: Database" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Events
+              Database
             </div>
           </div>
           <div class="md-footer__button md-icon">

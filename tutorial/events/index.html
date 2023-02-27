@@ -17,7 +17,7 @@
     
     
       
-        <title>Events tutorial - Assimilator - the best Python patterns</title>
+        <title>Events patterns - STILL IN DEVELOPMENT - Assimilator - the best Python patterns</title>
       
     
     
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Events tutorial
+              Events patterns - STILL IN DEVELOPMENT
             
           </span>
         </div>
@@ -277,14 +277,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
       
       
       
@@ -357,280 +355,6 @@
 
             
           
-            
-              
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Events tutorial
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        Events tutorial
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#events-and-how-they-work" class="md-nav__link">
-    Events and how they work
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-based-systems-with-assimilator" class="md-nav__link">
-    Event based systems with Assimilator
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-example-with-user-registration" class="md-nav__link">
-    Event example with user registration:
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event" class="md-nav__link">
-    Event
-  </a>
-  
-    <nav class="md-nav" aria-label="Event">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#id-int" class="md-nav__link">
-    id: int
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#event_name-str" class="md-nav__link">
-    event_name: str
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#event_date-datetime" class="md-nav__link">
-    event_date: datetime
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from_json" class="md-nav__link">
-    from_json()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#create-a-custom-event" class="md-nav__link">
-    Create a custom event
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#eventconsumer" class="md-nav__link">
-    EventConsumer
-  </a>
-  
-    <nav class="md-nav" aria-label="EventConsumer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#start" class="md-nav__link">
-    start()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#close" class="md-nav__link">
-    close()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#consume" class="md-nav__link">
-    consume()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#externalevent" class="md-nav__link">
-    ExternalEvent
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ackevent" class="md-nav__link">
-    AckEvent
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#eventproducer" class="md-nav__link">
-    EventProducer
-  </a>
-  
-    <nav class="md-nav" aria-label="EventProducer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#start_1" class="md-nav__link">
-    start()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#close_1" class="md-nav__link">
-    close()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#produce" class="md-nav__link">
-    produce()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#eventbus" class="md-nav__link">
-    EventBus
-  </a>
-  
-    <nav class="md-nav" aria-label="EventBus">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#produce_1" class="md-nav__link">
-    produce()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#consume_1" class="md-nav__link">
-    consume()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-fails-and-transaction-management" class="md-nav__link">
-    Event fails and transaction management
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#outboxrelay" class="md-nav__link">
-    OutboxRelay
-  </a>
-  
-    <nav class="md-nav" aria-label="OutboxRelay">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#__init___1" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#start_2" class="md-nav__link">
-    start()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#acknowledge" class="md-nav__link">
-    acknowledge()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -673,20 +397,6 @@
     <li class="md-nav__item">
       <a href="../../alchemy/database/" class="md-nav__link">
         Database
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../alchemy/events/" class="md-nav__link">
-        Events
       </a>
     </li>
   
@@ -741,20 +451,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../internal/events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -778,14 +474,14 @@
       
       
         <label class="md-nav__link" for="__nav_6">
-          Kafka
+          Redis
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Kafka" data-md-level="1">
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
-          Kafka
+          Redis
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -795,8 +491,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../kafka/events/" class="md-nav__link">
-        Events
+      <a href="../../redis/database/" class="md-nav__link">
+        Database
       </a>
     </li>
   
@@ -826,74 +522,12 @@
       
       
         <label class="md-nav__link" for="__nav_7">
-          Redis
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Redis" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
-          <span class="md-nav__icon md-icon"></span>
-          Redis
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../redis/database/" class="md-nav__link">
-        Database
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../redis/events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_8">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -906,7 +540,7 @@
   
     <li class="md-nav__item">
       <a href="../../api_reference/core/" class="md-nav__link">
-        API Reference | Core Database
+        Core
       </a>
     </li>
   
@@ -1460,42 +1094,6 @@ might delete them, but the idea is that those events will not be produced twice.
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../architecture_tutorial/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Architecture tutorial" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Architecture tutorial
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../../alchemy/database/" class="md-footer__link md-footer__link--next" aria-label="Next: Database" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Database
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

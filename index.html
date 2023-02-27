@@ -311,6 +311,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#stars-history" class="md-nav__link">
+    Stars history
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#types-of-patterns" class="md-nav__link">
     Types of patterns
   </a>
@@ -431,20 +438,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="tutorial/events/" class="md-nav__link">
-        Events tutorial
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -487,20 +480,6 @@
     <li class="md-nav__item">
       <a href="alchemy/database/" class="md-nav__link">
         Database
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="alchemy/events/" class="md-nav__link">
-        Events
       </a>
     </li>
   
@@ -555,20 +534,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="internal/events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -592,14 +557,14 @@
       
       
         <label class="md-nav__link" for="__nav_6">
-          Kafka
+          Redis
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Kafka" data-md-level="1">
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
-          Kafka
+          Redis
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -609,8 +574,8 @@
   
   
     <li class="md-nav__item">
-      <a href="kafka/events/" class="md-nav__link">
-        Events
+      <a href="redis/database/" class="md-nav__link">
+        Database
       </a>
     </li>
   
@@ -640,74 +605,12 @@
       
       
         <label class="md-nav__link" for="__nav_7">
-          Redis
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Redis" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
-          <span class="md-nav__icon md-icon"></span>
-          Redis
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="redis/database/" class="md-nav__link">
-        Database
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="redis/events/" class="md-nav__link">
-        Events
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_8">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -720,7 +623,7 @@
   
     <li class="md-nav__item">
       <a href="api_reference/core/" class="md-nav__link">
-        API Reference | Core Database
+        Core
       </a>
     </li>
   
@@ -788,6 +691,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#stars-history" class="md-nav__link">
+    Stars history
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#types-of-patterns" class="md-nav__link">
     Types of patterns
   </a>
@@ -822,14 +732,34 @@
 
 
 <h1 id="assimilator-the-best-python-patterns-for-the-best-projects">Assimilator - the best Python patterns for the best projects</h1>
-<p><img alt="" src="images/logo.png" /></p>
+<p align="center">
+  <a href="https://knucklesuganda.github.io/py_assimilator/"><img src="https://knucklesuganda.github.io/py_assimilator/images/logo.png" alt="PyAssimilator"></a>
+</p>
+<p align="center">
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/license/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="License">
+</a>
+
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/stars/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="Stars">
+</a>
+<a href="https://pypi.org/project/py-assimilator/" target="_blank">
+    <img src="https://img.shields.io/github/last-commit/knucklesuganda/py_assimilator?color=%237e56c2&style=for-the-badge" alt="Last commit">
+</a>
+</p>
+
 <h2 id="install-now">Install now</h2>
 <ul>
 <li><code>pip install py-assimilator</code></li>
+<li><code>pip install py-assimilator[alchemy]</code> - Optional SQLAlchemy support </li>
+<li><code>pip install py-assimilator[kafka]</code> - Optional Kafka support </li>
+<li><code>pip install py-assimilator[redis]</code> - Optional Redis support </li>
+<li><code>pip install py-assimilator[mongo]</code> - Optional MongoDB support </li>
 </ul>
 <h2 id="simple-example">Simple example</h2>
 <p>Example usage of the code to create a user using all the DDD patterns:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyUnitOfWork</span><span class="p">,</span> <span class="n">AlchemyRepository</span>
+<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
 
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>
@@ -838,15 +768,20 @@
         <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># Securely save the data</span>
 
     <span class="k">return</span> <span class="n">new_user</span>
-</code></pre></div>
-Here is why it is superior:</p>
-<ol>
-<li>5 lines of code</li>
-<li>4 patterns from Domain-Driven Design</li>
-<li>Secure data management</li>
-<li>No dependencies</li>
-<li>SQL, MongoDB, Redis, Dictionaries - all of them work with this code.</li>
-</ol>
+
+
+<span class="n">user_repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">alchemy_session</span><span class="p">,</span>    <span class="c1"># alchemy db session</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>     <span class="c1"># alchemy user model </span>
+<span class="p">)</span>
+<span class="n">user_uow</span> <span class="o">=</span> <span class="n">AlchemyUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">user_repository</span><span class="p">)</span>
+
+<span class="n">create_user</span><span class="p">(</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> 
+    <span class="n">email</span><span class="o">=</span><span class="s2">&quot;python.on.papyrus@gmail.com&quot;</span><span class="p">,</span>
+    <span class="n">uow</span><span class="o">=</span><span class="n">user_uow</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></p>
 <h2 id="why-do-i-need-it">Why do I need it?</h2>
 <p><img alt="" src="images/why_assimilator_no_usage.png" /></p>
 <p>Patterns are very useful for good code, but only to some extent. Most of them are not suitable for 
@@ -865,6 +800,8 @@ a library for the patterns that he uses in his projects daily.</p>
 <li><a href="https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw">Author's YouTube RU</a></li>
 <li><a href="https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA">Author's YouTube ENG</a></li>
 </ul>
+<h2 id="stars-history">Stars history</h2>
+<p><a href="https://star-history.com/#knucklesuganda/py_assimilator&amp;Date"><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&amp;type=Date" /></a></p>
 <h2 id="types-of-patterns">Types of patterns</h2>
 <p>These are different use cases for the patterns implemented:</p>
 <ul>
