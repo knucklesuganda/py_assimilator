@@ -1,7 +1,7 @@
 from typing import Type, Union, Optional, TypeVar, Collection
 
 from sqlalchemy import func, select, update, delete, Delete
-from sqlalchemy.orm import Session, Query   # TODO: change query for alchemy 2
+from sqlalchemy.orm import Session, Query
 from sqlalchemy.inspection import inspect
 
 from assimilator.alchemy.database.model_utils import dict_to_models

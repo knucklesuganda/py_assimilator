@@ -43,6 +43,8 @@ nav:
   - Redis:
     - Database: redis/database.md
     # - Events: redis/events.md
+  - MongoDB:
+    - Database: mongo/database.md
   - API Reference:
     - Core: api_reference/core.md
 repo_url: https://github.com/knucklesuganda/py_assimilator

@@ -42,7 +42,7 @@ class CRUDService(Service):
         )
 
     def get(self, *filters, lazy: bool = False, **kwargs_filters):
-        return self.uow.repository.filter(
+        return self.uow.repository.get(
             self._specs.filter(*filters, **kwargs_filters),
             lazy=lazy,
         )
@@ -52,6 +52,9 @@ class CRUDService(Service):
             obj = self.get(*filters, **kwargs_filters)
             self.uow.repository.delete(obj)
             self.uow.commit()
+
+    def __str__(self):
+        return f"CRUD({self.uow.repository.model})"
 
 
 __all__ = [

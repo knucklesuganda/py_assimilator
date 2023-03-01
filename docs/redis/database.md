@@ -14,7 +14,9 @@ Database, in our case, is a dictionary object.
 - `InternalSpecificationList` - contains links to `Specification` patterns for indirect coding.
 - `LazyCommand` - database query that has been created, but not ran yet. Only runs the function when we need the results.
 
--------------------
+
+--------------------------------------------------------------------
+
 
 ## Creating your models
 
@@ -135,6 +137,8 @@ def get_user(repository: Repository):    # only pass the Repository because we w
 user = get_user(get_repository())
 ```
 
+--------------------------------------------------------------------
+
 ## Redis problems🥴
 
 Redis is really fast, and we want to use that speed as our main advantage, however, it is really difficult to do now. 
@@ -143,6 +147,8 @@ just store the keys in the database and query most of them when we need to do so
 the performance, but it is a viable solution for lost of the projects.
 
 
+--------------------------------------------------------------------
+
 ## Redis Specifications
 
 Redis does not have its own specifications yet. We use [Internal Specifications](/internal/database/#internal-specifications)
@@ -150,3 +156,52 @@ for now.
 
 The only thing that you should know is that it is always faster to query your data using the ID since we store our entities
 as redis keys.
+
+
+--------------------------------------------------------------------
+
+## RedisModel
+
+`RedisModel` is a special Pydantic model provided by PyAssimilator. It has a lot of interesting settings, and that part
+will tell you about that.
+
+### RedisModel configuration
+
+`RedisModel` has a special inner-class called `AssimilatorConfig`. That class allows you to set up various values for your
+model:
+
+```Python
+from typing import ClassVar
+
+from assimilator.redis_.database import RedisModel
+
+
+class User(RedisModel):
+    username: str
+    
+    class AssimilatorConfig:
+        autogenerate_id: ClassVar[bool] = True  # should you autogenerate your ids
+
+```
+
+You can recreate that class and change the following values:
+
+- `autogenerate_id` - whether to generate model's ID automatically. `True` by default.
+
+If your `autogenerate_id` is `True`, then you can still provide a custom ID to the model:
+```Python
+User(
+    username="Andrey",
+    id="custom-id",  # generate a new redis key
+)
+```
+
+But, if your `autogenerate_id` is `False`, then you **must** provide an ID to the constructor. 
+
+### Special model values
+
+- `expire_in` - how many seconds should pass for that entity to be deleted. `None` by default.
+- `expire_in_px` - how many milliseconds should pass for that entity to be deleted. `None` by default.
+- `only_update` - only update this entity(no creation). `False` by default.
+- `only_create` - only create this entity(no update). `False` by default.
+- `keep_ttl` - whether to keep the TTL associated with this entity. `False` by default.

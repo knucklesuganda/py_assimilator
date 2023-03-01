@@ -14,7 +14,9 @@ Database, in our case, is a dictionary object.
 - `InternalSpecificationList` - contains links to `Specification` patterns for indirect coding.
 - `LazyCommand` - database query that has been created, but not ran yet. Only runs the function when we need the results.
 
--------------------
+
+--------------------------------------------------------------------
+
 
 ## Creating your models
 
@@ -155,6 +157,10 @@ user = get_user(get_repository())
 
 That's it. Nothing really changes from the basic tutorial, as all the things stay the same in all of our patterns.
 However, there are specific things that you may not use, but still need to know. You can read about them below:
+
+
+--------------------------------------------------------------------
+
 
 ## Internal Specifications
 
@@ -373,7 +379,7 @@ def internal_join(*targets: Collection, query: QueryT, **join_args: dict) -> Que
 
 > We don't think that it is necessary to join multiple entities together, and it's really memory inefficient. Instead, we 
 > suggest that you use composition(store joined object in the model itself) to replicate foreign keys. We have some ideas
-> on how to do real joins, but it is not yet implemented. 
+> on how to do real joins, but it is not implemented yet. 
 
 
 For example:
@@ -408,3 +414,43 @@ like this:
 ```Python
 from assimilator.internal.database.specifications import InternalSpecificationList
 ```
+
+--------------------------------------------------------------------
+
+## BaseModel
+
+`BaseModel` is a special Pydantic model provided by PyAssimilator. It has a lot of interesting settings, and that part
+will tell you about that.
+
+### BaseModel configuration
+
+`BaseModel` has a special inner-class called `AssimilatorConfig`. That class allows you to set up various values for your
+model:
+
+```Python
+from typing import ClassVar
+
+from assimilator.core.database import BaseModel
+
+
+class User(BaseModel):
+    username: str
+    
+    class AssimilatorConfig:
+        autogenerate_id: ClassVar[bool] = True  # should you autogenerate your ids
+
+```
+
+You can recreate that class and change the following values:
+- 
+- `autogenerate_id` - whether to generate model's ID automatically. `True` by default.
+
+If your `autogenerate_id` is `True`, then you can still provide a custom ID to the mode:
+```Python
+User(
+    username="Andrey",
+    id=ObjectId(),  # generate a new mongo ObjectId
+)
+```
+
+But, if your `autogenerate_id` is `False`, then you **must** provide an ID to the constructor. 

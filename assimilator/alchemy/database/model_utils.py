@@ -8,7 +8,10 @@ T = TypeVar("T")
 
 def get_model_from_relationship(model: T, relationship_name: str):
     foreign_prop = getattr(model, relationship_name).property
-    return foreign_prop.mapper.class_, foreign_prop.uselist
+    try:
+        return foreign_prop.mapper_registry.class_, foreign_prop.uselist
+    except AttributeError:
+        return foreign_prop.entity.class_, foreign_prop.uselist
 
 
 def dict_to_models(data: dict, model: Type[T]) -> T:

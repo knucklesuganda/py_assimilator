@@ -148,6 +148,12 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
     ) -> Union[LazyCommand[int], int]:
         raise NotImplementedError("count() is not implemented in the repository")
 
+    def __str__(self):
+        return f"{self.__class__.__name__}({self.model})"
+
+    def __repr__(self):
+        return str(self)
+
 
 __all__ = [
     'LazyCommand',

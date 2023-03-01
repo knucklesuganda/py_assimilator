@@ -46,6 +46,12 @@ class UnitOfWork(ABC):
         else:
             self.close()
 
+    def __str__(self):
+        return f"{self.__class__.__name__}({self.repository.model})"
+
+    def __repr__(self):
+        return str(self)
+
 
 __all__ = [
     'UnitOfWork',
