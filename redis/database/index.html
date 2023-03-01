@@ -568,6 +568,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#redismodel" class="md-nav__link">
+    RedisModel
+  </a>
+  
+    <nav class="md-nav" aria-label="RedisModel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redismodel-configuration" class="md-nav__link">
+    RedisModel configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-model-values" class="md-nav__link">
+    Special model values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -600,12 +627,60 @@
       
       
         <label class="md-nav__link" for="__nav_7">
+          MongoDB
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MongoDB" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          MongoDB
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mongo/database/" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
+        <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -696,6 +771,33 @@
   <a href="#redis-specifications" class="md-nav__link">
     Redis Specifications
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redismodel" class="md-nav__link">
+    RedisModel
+  </a>
+  
+    <nav class="md-nav" aria-label="RedisModel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redismodel-configuration" class="md-nav__link">
+    RedisModel configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-model-values" class="md-nav__link">
+    Special model values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -835,16 +937,55 @@ case, however, we suggest that you use different objects inside your code.</p>
 
 <span class="n">user</span> <span class="o">=</span> <span class="n">get_user</span><span class="p">(</span><span class="n">get_repository</span><span class="p">())</span>
 </code></pre></div></p>
+<hr />
 <h2 id="redis-problems">Redis problems🥴</h2>
 <p>Redis is really fast, and we want to use that speed as our main advantage, however, it is really difficult to do now. 
 We are going to change the way <code>RedisRepository</code> stores data once we find the best way to query it quickly. For now, we
 just store the keys in the database and query most of them when we need to do something with our data. This may decrease
 the performance, but it is a viable solution for lost of the projects.</p>
+<hr />
 <h2 id="redis-specifications">Redis Specifications</h2>
 <p>Redis does not have its own specifications yet. We use <a href="/internal/database/#internal-specifications">Internal Specifications</a>
 for now.</p>
 <p>The only thing that you should know is that it is always faster to query your data using the ID since we store our entities
 as redis keys.</p>
+<hr />
+<h2 id="redismodel">RedisModel</h2>
+<p><code>RedisModel</code> is a special Pydantic model provided by PyAssimilator. It has a lot of interesting settings, and that part
+will tell you about that.</p>
+<h3 id="redismodel-configuration">RedisModel configuration</h3>
+<p><code>RedisModel</code> has a special inner-class called <code>AssimilatorConfig</code>. That class allows you to set up various values for your
+model:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span>
+
+<span class="kn">from</span> <span class="nn">assimilator.redis_.database</span> <span class="kn">import</span> <span class="n">RedisModel</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">RedisModel</span><span class="p">):</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">class</span> <span class="nc">AssimilatorConfig</span><span class="p">:</span>
+        <span class="n">autogenerate_id</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># should you autogenerate your ids</span>
+</code></pre></div>
+<p>You can recreate that class and change the following values:</p>
+<ul>
+<li><code>autogenerate_id</code> - whether to generate model's ID automatically. <code>True</code> by default.</li>
+</ul>
+<p>If your <code>autogenerate_id</code> is <code>True</code>, then you can still provide a custom ID to the model:
+<div class="highlight"><pre><span></span><code><span class="n">User</span><span class="p">(</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span>
+    <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;custom-id&quot;</span><span class="p">,</span>  <span class="c1"># generate a new redis key</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<p>But, if your <code>autogenerate_id</code> is <code>False</code>, then you <strong>must</strong> provide an ID to the constructor. </p>
+<h3 id="special-model-values">Special model values</h3>
+<ul>
+<li><code>expire_in</code> - how many seconds should pass for that entity to be deleted. <code>None</code> by default.</li>
+<li><code>expire_in_px</code> - how many milliseconds should pass for that entity to be deleted. <code>None</code> by default.</li>
+<li><code>only_update</code> - only update this entity(no creation). <code>False</code> by default.</li>
+<li><code>only_create</code> - only create this entity(no update). <code>False</code> by default.</li>
+<li><code>keep_ttl</code> - whether to keep the TTL associated with this entity. <code>False</code> by default.</li>
+</ul>
 
 
   
@@ -885,13 +1026,13 @@ as redis keys.</p>
       
       
         
-        <a href="../../api_reference/core/" class="md-footer__link md-footer__link--next" aria-label="Next: Core" rel="next">
+        <a href="../../mongo/database/" class="md-footer__link md-footer__link--next" aria-label="Next: Database" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Core
+              Database
             </div>
           </div>
           <div class="md-footer__button md-icon">
