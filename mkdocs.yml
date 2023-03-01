@@ -45,8 +45,9 @@ nav:
     # - Events: redis/events.md
   - MongoDB:
     - Database: mongo/database.md
-  - API Reference:
-    - Core: api_reference/core.md
+  - Services Tutorial: services.md
+  - Unidentified Patterns: unidentified_patterns.md
+
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator
 site_author: Andrey Ivanov | Python

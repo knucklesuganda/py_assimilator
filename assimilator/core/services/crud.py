@@ -12,9 +12,13 @@ class CRUDService(Service):
         self.uow = uow
         self._specs = self.uow.repository.specs
 
-    def create(self, obj_data: dict) -> ModelT:
+    def create(self, obj_data: Union[dict, ModelT]) -> ModelT:
         with self.uow:
-            obj = self.uow.repository.save(**obj_data)
+            if isinstance(obj_data, dict):
+                obj = self.uow.repository.save(**obj_data)
+            else:
+                obj = self.uow.repository.save(obj_data)
+
             self.uow.commit()
 
         self.uow.repository.refresh(obj)

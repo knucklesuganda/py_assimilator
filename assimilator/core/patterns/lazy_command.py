@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Union, Callable, Iterable, Container, TypeVar, Generic, Iterator
+from typing import Union, Callable, Iterable, TypeVar, Generic, Iterator
 
 T = TypeVar("T")
 
@@ -11,7 +11,7 @@ class LazyCommand(Generic[T]):
         self.kwargs = kwargs
         self._results: T = None
 
-    def __call__(self) -> Union[Container[T], T]:
+    def __call__(self) -> Union[T]:
         if self._results is not None:
             return self._results
 
