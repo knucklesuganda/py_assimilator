@@ -4,12 +4,12 @@ from assimilator.mongo.database.specifications import MongoFilteringOptions
 from assimilator.core.database import SpecificationList, FilterSpecification, specification
 
 
-class MongoFilterSpecification(FilterSpecification):
+class MongoFilter(FilterSpecification):
     filters: dict
     filtering_options_cls = MongoFilteringOptions
 
     def __init__(self, *filters, **named_filters):
-        super(MongoFilterSpecification, self).__init__(*filters, **named_filters)
+        super(MongoFilter, self).__init__(*filters, **named_filters)
         parsed_filters = {}
 
         for filter_ in self.filters:
@@ -21,22 +21,25 @@ class MongoFilterSpecification(FilterSpecification):
         return filter_func(field, value)
 
     def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
-        return MongoFilterSpecification({"$or": [self.filters, other.filters]})
+        return MongoFilter({"$or": [self.filters, other.filters]})
 
     def __and__(self, other: 'FilterSpecification') -> 'FilterSpecification':
-        return MongoFilterSpecification({**self.filters, **other.filters})
+        return MongoFilter({**self.filters, **other.filters})
 
-    def __invert__(self) -> 'MongoFilterSpecification':
+    def __invert__(self) -> 'MongoFilter':
         inverted_filters = []
 
         for column, value in self.filters.items():
             inverted_filters.append({column: {"$not": value}})
 
-        return MongoFilterSpecification(*inverted_filters)
+        return MongoFilter(*inverted_filters)
 
     def apply(self, query: dict, **context: Any) -> dict:
         query['filter'] = {**query.get('filter', {}), **self.filters}
         return query
+
+
+mongo_filter = MongoFilter
 
 
 @specification
@@ -70,7 +73,7 @@ def mongo_only(*only_fields: str, query: dict) -> dict:
 
 
 class MongoSpecificationList(SpecificationList):
-    filter = MongoFilterSpecification
+    filter = MongoFilter
     order = mongo_order
     paginate = mongo_paginate
     join = mongo_join
@@ -79,7 +82,8 @@ class MongoSpecificationList(SpecificationList):
 
 __all__ = [
     'MongoSpecificationList',
-    'MongoFilterSpecification',
+    'MongoFilter',
+    'mongo_filter',
     'mongo_order',
     'mongo_paginate',
     'mongo_join',

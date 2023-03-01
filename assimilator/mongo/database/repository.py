@@ -129,7 +129,7 @@ class MongoRepository(Repository):
             self._collection.update_one(
                 {"id": obj.id},
                 update={'$set': obj.dict()},
-                upsert=obj.upsert,
+                upsert=getattr('obj', 'upsert', False),
             )
 
     def is_modified(self, obj: ModelT) -> bool:

@@ -12,9 +12,13 @@ class CRUDService(Service):
         self.uow = uow
         self._specs = self.uow.repository.specs
 
-    def create(self, obj_data: dict) -> ModelT:
+    def create(self, obj_data: Union[dict, ModelT]) -> ModelT:
         with self.uow:
-            obj = self.uow.repository.save(**obj_data)
+            if isinstance(obj_data, dict):
+                obj = self.uow.repository.save(**obj_data)
+            else:
+                obj = self.uow.repository.save(obj_data)
+
             self.uow.commit()
 
         self.uow.repository.refresh(obj)
@@ -42,7 +46,7 @@ class CRUDService(Service):
         )
 
     def get(self, *filters, lazy: bool = False, **kwargs_filters):
-        return self.uow.repository.filter(
+        return self.uow.repository.get(
             self._specs.filter(*filters, **kwargs_filters),
             lazy=lazy,
         )
@@ -52,6 +56,9 @@ class CRUDService(Service):
             obj = self.get(*filters, **kwargs_filters)
             self.uow.repository.delete(obj)
             self.uow.commit()
+
+    def __str__(self):
+        return f"CRUD({self.uow.repository.model})"
 
 
 __all__ = [

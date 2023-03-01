@@ -106,9 +106,9 @@ class RedisRepository(Repository):
             value=obj.json(),
             ex=getattr(obj, 'expire_in', None),     # for Pydantic model compatability
             px=getattr(obj, 'expire_in_px', None),
-            nx=getattr(obj, 'only_create', None),
-            xx=getattr(obj, 'only_update', None),
-            keepttl=getattr(obj, 'keep_ttl', None),
+            nx=getattr(obj, 'only_create', False),
+            xx=getattr(obj, 'only_update', False),
+            keepttl=getattr(obj, 'keep_ttl', False),
         )
         return obj
 
