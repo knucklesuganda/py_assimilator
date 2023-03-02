@@ -8,7 +8,7 @@ internal_filter = InternalFilter
 
 
 @specification
-def internal_order(*clauses: str, query: QueryT) -> Iterable[BaseModel]:
+def internal_order(*clauses: str, query: QueryT, **_) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 
@@ -28,6 +28,7 @@ def internal_paginate(
     query: QueryT,
     limit: Optional[int] = None,
     offset: Optional[int] = None,
+    **_,
 ) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
@@ -41,7 +42,7 @@ def internal_join(*targets: Collection, query: QueryT, **join_args: dict) -> Que
 
 
 @specification
-def internal_only(*only_fields: Iterable[str], query: QueryT) -> Iterable[BaseModel]:
+def internal_only(*only_fields: Iterable[str], query: QueryT, **_) -> Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 

@@ -34,7 +34,7 @@ alchemy_filter = AlchemyFilter
 
 
 @specification
-def alchemy_order(*clauses: str, query: Select) -> Select:
+def alchemy_order(*clauses: str, query: Select, **_) -> Select:
     parsed_clauses = []
 
     for clause in clauses:
@@ -47,7 +47,13 @@ def alchemy_order(*clauses: str, query: Select) -> Select:
 
 
 @specification
-def alchemy_paginate(*, limit: Optional[int] = None, offset: Optional[int] = None, query: Select) -> Select:
+def alchemy_paginate(
+    *,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+    query: Select,
+    **_,
+) -> Select:
     if offset is not None:
         query = query.offset(offset)
     if limit is not None:
@@ -84,7 +90,11 @@ def alchemy_join(
 
 
 @specification
-def alchemy_only(*only_fields: Iterable[str], query: Select):
+def alchemy_only(
+    *only_fields: Iterable[str],
+    query: Select,
+    **_,
+):
     return query.options(load_only(*only_fields))
 
 

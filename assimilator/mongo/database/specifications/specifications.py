@@ -43,7 +43,7 @@ mongo_filter = MongoFilter
 
 
 @specification
-def mongo_order(*clauses: str, query: dict) -> dict:
+def mongo_order(*clauses: str, query: dict, **_) -> dict:
     query['sort'] = {
         **query.get('sort', {}),
         **{column: -1 if column.startswith("-") else 1 for column in clauses}
@@ -52,7 +52,13 @@ def mongo_order(*clauses: str, query: dict) -> dict:
 
 
 @specification
-def mongo_paginate(*, limit: Optional[int] = None, offset: Optional[int] = None, query: dict) -> dict:
+def mongo_paginate(
+    *,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+    query: dict,
+    **_,
+) -> dict:
     if offset is not None:
         query['skip'] = offset
     if limit is not None:
@@ -67,7 +73,7 @@ def mongo_join(*targets: Collection, query: dict, **join_args: dict) -> dict:
 
 
 @specification
-def mongo_only(*only_fields: str, query: dict) -> dict:
+def mongo_only(*only_fields: str, query: dict, **_) -> dict:
     query['projection'] = only_fields
     return query
 
