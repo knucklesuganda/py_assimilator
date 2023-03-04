@@ -10,7 +10,7 @@ class RedisModel(BaseModel):
     only_create: Optional[bool] = False   # Same as nx in redis set. Only set if key does not exist
     keep_ttl: Optional[bool] = False
 
-    class Config:
+    class AssimilatorConfig:
         exclude = {
             'expire_in': True,
             'expire_in_px': True,

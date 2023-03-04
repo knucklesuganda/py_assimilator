@@ -43,10 +43,11 @@ def internal_join(*targets: Collection, query: QueryT, **join_args: dict) -> Que
 
 @specification
 def internal_only(*only_fields: Iterable[str], query: QueryT, **_) -> Iterable[BaseModel]:
-    if isinstance(query, str):
-        return query
-
-    return (model.copy(include=set(only_fields)) for model in query)
+    """
+    This specification will do nothing since we waste more resources trying to remove all the fields.
+    Also, we must provide a deference mechanisms for fields to be loaded which is impossible.
+    """
+    return query
 
 
 class InternalSpecificationList(SpecificationList):
