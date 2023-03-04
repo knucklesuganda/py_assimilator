@@ -10,7 +10,7 @@ include = [
 
 [project]
 name = "py_assimilator"
-version = "1.0.3"
+version = "1.1.0"
 authors = [
   { name="Andrey Ivanov", email="python.on.papyrus@gmail.com" },
 ]

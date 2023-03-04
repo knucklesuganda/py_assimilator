@@ -1,4 +1,4 @@
-from typing import Union, Optional, Collection, Type, TypeVar, final
+from typing import Union, Optional, Collection, Type, TypeVar, Any, Dict
 
 from pymongo import MongoClient
 
@@ -37,16 +37,17 @@ class MongoRepository(Repository):
     def get_initial_query(self, override_query: Optional[dict] = None) -> dict:
         return dict(super(MongoRepository, self).get_initial_query(override_query))
 
-    @final
     @property
-    def _collection(self):
+    def _collection_name(self):
         config = getattr(self.model, 'AssimilatorConfig', None)
         if config is not None:
-            collection = self.model.AssimilatorConfig.collection
-        else:
-            collection = getattr(self.model, 'collection', self.model.__class__.__name__.lower())
+            return self.model.AssimilatorConfig.collection
 
-        return self.session[self.database][collection]
+        return getattr(self.model, 'collection', self.model.__class__.__name__.lower())
+
+    @property
+    def _collection(self):
+        return self.session[self.database][self._collection_name]
 
     def get(
         self,

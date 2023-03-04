@@ -1,8 +1,8 @@
 from itertools import zip_longest
-from typing import Collection, Optional, Iterable, Any
+from typing import Collection, Optional, Iterable, Any, Dict
 
-from sqlalchemy.orm import load_only, joinedload
-from sqlalchemy import column, desc, and_, or_, not_, Select
+from sqlalchemy.orm import load_only, Load
+from sqlalchemy import column, desc, and_, or_, not_, Select, inspect
 
 from assimilator.alchemy.database.model_utils import get_model_from_relationship
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
@@ -12,10 +12,15 @@ from assimilator.core.database.specifications import (
     SpecificationType,
     FilterSpecification,
 )
+from core.database import FILTERING_OPTIONS_SEPARATOR
 
 
 class AlchemyFilter(FilterSpecification):
     filtering_options_cls = AlchemyFilteringOptions
+
+    def __init__(self, *filters, **named_filters):
+        super(AlchemyFilter, self).__init__(*filters)
+        self._named_filters = named_filters
 
     def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
         return AlchemyFilter(or_(*self.filters, *other.filters))
@@ -27,6 +32,11 @@ class AlchemyFilter(FilterSpecification):
         return AlchemyFilter(not_(*self.filters))
 
     def apply(self, query: Select, **context: Any) -> Select:
+        self.filtering_options.table_name = str(inspect(context['model']).selectable)
+
+        for field, value in self._named_filters.items():
+            self.filters.append(self.filtering_options.parse_field(raw_field=field, value=value))
+
         return query.filter(*self.filters)
 
 
@@ -91,11 +101,49 @@ def alchemy_join(
 
 @specification
 def alchemy_only(
-    *only_fields: Iterable[str],
+    *only_fields: str,
     query: Select,
+    model,
     **_,
 ):
-    return query.options(load_only(*only_fields))
+    models_to_fields: Dict[Load, Any] = {}
+    parsed_loads = list(field for field in only_fields if not isinstance(field, str))
+
+    if parsed_loads:
+        query = query.options(load_only(*parsed_loads))
+
+    for field in (field for field in only_fields if isinstance(field, str)):
+        parts = field.split('.')
+        if len(parts) == 1:
+            models_to_fields[Load(model)] = [
+                getattr(model, field),
+                *models_to_fields.get(model, []),
+            ]
+            continue
+
+        current_load = model
+        for part in parts:
+            model_relationships = set(inspect(current_load).relationships.keys())
+
+            if part in model_relationships:
+                current_load, _ = get_model_from_relationship(current_load, relationship_name=part)
+            else:
+                models_to_fields[Load(current_load)] = [
+                    getattr(current_load, part),
+                    *models_to_fields.get(current_load, []),
+                ]
+                break
+
+        else:
+            models_to_fields[Load(current_load)] = []
+
+    for loader, load_fields in models_to_fields.items():
+        if load_fields:
+            query = query.options(loader.load_only(*load_fields))
+        else:
+            query = query.options(loader)
+
+    return query
 
 
 class AlchemySpecificationList(SpecificationList):

@@ -1,4 +1,4 @@
-from typing import Callable, Union, List, Generator
+from typing import Callable, Union, List, Generator, Any
 
 from assimilator.core.database.models import BaseModel
 from assimilator.core.database.specifications import FilterSpecification
@@ -22,13 +22,16 @@ class InternalFilter(FilterSpecification):
             **named_filters,
         )
 
-    def apply(self, query: QueryT, **context) -> Union[str, Generator[bool, bool, None]]:
+    def apply(self, query: QueryT, **context) -> Union[str, Generator[BaseModel, Any, None]]:
         if isinstance(query, str):
             return f'{query}{"".join(self.text_filters)}'
         elif not self.filters:
             return query
 
-        return (model for model in query if all(filter_func(model) for filter_func in self.filters))
+        return (
+            model for model in query
+            if all(filter_func(model) for filter_func in self.filters)
+        )
 
     def __or__(self, other: 'InternalFilter') -> 'InternalFilter':
         return OrInternalFilter(first_spec=self, second_spec=other)

@@ -7,8 +7,11 @@ from assimilator.internal.database.specifications.internal_operator import (
 )
 
 
+AttrFinderType = Callable[[Callable, str, Any], Callable[[BaseModel], bool]]
+
+
 class InternalFilteringOptions(FilteringOptions):
-    def __init__(self, attr_finder: Callable[[Callable, str, Any], Callable[[BaseModel], bool]] = find_attribute):
+    def __init__(self, attr_finder: AttrFinderType = find_attribute):
         super(InternalFilteringOptions, self).__init__()
         self.attr_finder = attr_finder
 

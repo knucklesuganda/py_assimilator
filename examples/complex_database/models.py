@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import create_engine, Column, String, Float, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship
@@ -114,5 +114,5 @@ class MongoUser(MongoModel):
         collection: str = "users"
 
     balances: List[MongoBalance] = []
-    username: str
-    email: str
+    username: Optional[str]     # For only specification
+    email: Optional[str]

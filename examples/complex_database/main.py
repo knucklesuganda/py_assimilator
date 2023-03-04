@@ -67,6 +67,7 @@ def read_user(username: str, balance: int, repository: Repository):
             balances__currency__currency="USD",
             balances__currency__country="USA",
         ),
+        repository.specs.only('username', 'balances.currency', 'balances.balance'),
     )
     print("User:", user.id, user.username, user.email)
 

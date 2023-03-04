@@ -9,19 +9,10 @@ class MongoModel(BaseModel):
     upsert: bool = False
     id: ObjectId
 
-    class AssimilatorConfig(BaseModel.AssimilatorConfig):
+    class AssimilatorConfig:
         collection: ClassVar[str]
         autogenerate_id: ClassVar[bool] = True
-
-    class Config:
-        exclude = {
-            'collection': True,
-            'upsert': True,
-        }
-        arbitrary_types_allowed = True
-
-    def __init__(self, **kwargs):
-        super(MongoModel, self).__init__(**kwargs)
+        exclude = {'collection', 'upsert'}
 
     def generate_id(self, **kwargs) -> ObjectId:
         return ObjectId()
