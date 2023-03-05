@@ -12,7 +12,7 @@ from assimilator.core.database import (
 )
 from assimilator.internal.database.specifications import InternalSpecificationList
 from assimilator.core.database import MultipleResultsError
-from internal.database.models_utils import dict_to_models
+from assimilator.internal.database.models_utils import dict_to_models
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 

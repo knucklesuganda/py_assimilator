@@ -8,7 +8,7 @@ from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
 from assimilator.internal.database import InternalRepository, InternalUnitOfWork
 from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
 from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
-from core.services import CRUDService
+from assimilator.core.services import CRUDService
 
 from examples.complex_database.models import (
     engine, AlchemyUser, AlchemyUserBalance, AlchemyBalanceCurrency,
