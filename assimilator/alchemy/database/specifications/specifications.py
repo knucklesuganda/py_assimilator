@@ -12,7 +12,7 @@ from assimilator.core.database.specifications import (
     SpecificationType,
     FilterSpecification,
 )
-from core.database import FILTERING_OPTIONS_SEPARATOR
+from assimilator.core.database import FILTERING_OPTIONS_SEPARATOR
 
 
 class AlchemyFilter(FilterSpecification):

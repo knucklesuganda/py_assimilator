@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 
-from core.database import NotFoundError
-from core.services import CRUDService
+from assimilator.core.database import NotFoundError
+from assimilator.core.services import CRUDService
 from examples.fastapi_crud_example.dependencies import get_service
 from examples.fastapi_crud_example.schema import UserSchema
 
