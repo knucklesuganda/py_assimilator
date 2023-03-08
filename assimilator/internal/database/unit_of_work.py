@@ -1,16 +1,22 @@
 from copy import deepcopy
 from typing import Optional
 
-from assimilator.core.database import UnitOfWork
-from assimilator.core.database.repository import Repository
+from assimilator.core.database import UnitOfWork, NotFoundError, DataLayerError, Repository
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
+from assimilator.core.patterns import ErrorWrapper
 
 
 class InternalUnitOfWork(UnitOfWork):
-    def __init__(self, repository: Repository):
+    def __init__(
+        self,
+        repository: Repository,
+        error_wrapper: Optional[ErrorWrapper] = None,
+        autocommit: bool = False,
+    ):
         super(InternalUnitOfWork, self).__init__(
             repository=repository,
-            error_wrapper=InternalErrorWrapper(),
+            error_wrapper=error_wrapper or InternalErrorWrapper(),
+            autocommit=autocommit,
         )
         self._saved_data: Optional[dict] = None
 

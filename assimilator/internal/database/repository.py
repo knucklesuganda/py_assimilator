@@ -57,9 +57,9 @@ class InternalRepository(Repository):
         ))
 
         if not found_models:
-            raise NotFoundError()
+            raise NotFoundError(f"{self} repository did not find an entity")
         elif len(found_models) != 1:
-            raise MultipleResultsError()
+            raise MultipleResultsError(f"{self} repository found multiple results: {found_models}")
 
         return found_models[0]
 

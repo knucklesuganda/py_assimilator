@@ -1,4 +1,4 @@
-from typing import Union, Optional, Collection, Type, TypeVar, Any, Dict
+from typing import Union, Optional, Collection, Type, TypeVar
 
 from pymongo import MongoClient
 
@@ -8,6 +8,7 @@ from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
 from assimilator.core.database import Repository, SpecificationType, SpecificationList, NotFoundError
 from assimilator.mongo.database.specifications.specifications import MongoSpecificationList
 from assimilator.internal.database.models_utils import dict_to_models
+from assimilator.core.database import MultipleResultsError
 
 ModelT = TypeVar("ModelT", bound=MongoModel)
 
@@ -60,12 +61,16 @@ class MongoRepository(Repository):
             specifications=specifications,
         )
 
-        data = self._collection.find_one(**query)
+        data = list(self._collection.find(**query))
 
-        if data is None:
-            raise NotFoundError()
+        if not data:
+            raise NotFoundError(f"{self} repository get() did not find "
+                                f"any entities with {self.__unpack_query(query)} filter")
+        elif len(data) != 1:
+            raise MultipleResultsError(f"{self} repository get() returned"
+                                       f" multiple results with {self.__unpack_query(query)} query")
 
-        return self.model(**data)
+        return self.model(**data[0])
 
     def filter(
         self,
@@ -90,9 +95,9 @@ class MongoRepository(Repository):
         return {
             **query.get("filter", {}),
             **query.get("sort", {}),
-            **query.get("skip", {}),
-            **query.get("limit", {}),
-            **query.get("projection", {}),
+            'skip': query.get("skip", None),
+            'limit': query.get("limit", None),
+            'projection': query.get("projection", ()),
         }
 
     def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:

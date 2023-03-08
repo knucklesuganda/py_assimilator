@@ -68,10 +68,22 @@ class InternalCurrency(BaseModel):
     currency: str
     country: str
 
+    def __str__(self):
+        return self.currency
+
+    def __repr__(self):
+        return str(self)
+
 
 class InternalBalance(BaseModel):
     balance: float
     currency: InternalCurrency
+
+    def __str__(self):
+        return f"{self.balance}{self.currency.currency}"
+
+    def __repr__(self):
+        return str(self)
 
 
 class InternalUser(BaseModel):
@@ -79,17 +91,33 @@ class InternalUser(BaseModel):
     email: str
     balances: List[InternalBalance] = []
 
+    def __str__(self):
+        return f"{self.id} {self.username} {self.email}"
+
 
 class RedisCurrency(InternalCurrency):
-    pass
+    def __str__(self):
+        return self.currency
+
+    def __repr__(self):
+        return str(self)
 
 
 class RedisBalance(InternalBalance, RedisModel):
     currency: RedisCurrency
 
+    def __str__(self):
+        return f"{self.balance}{self.currency.currency}"
+
+    def __repr__(self):
+        return str(self)
+
 
 class RedisUser(InternalUser, RedisModel):
     balances: List[RedisBalance] = []
+
+    def __str__(self):
+        return f"{self.id} {self.username} {self.email}"
 
 
 class MongoCurrency(MongoModel):
@@ -100,6 +128,12 @@ class MongoCurrency(MongoModel):
     currency: str
     country: str
 
+    def __str__(self):
+        return self.currency
+
+    def __repr__(self):
+        return str(self)
+
 
 class MongoBalance(MongoModel):
     class AssimilatorConfig:
@@ -107,6 +141,12 @@ class MongoBalance(MongoModel):
 
     balance: float
     currency: MongoCurrency
+
+    def __str__(self):
+        return f"{self.balance}{self.currency.currency}"
+
+    def __repr__(self):
+        return str(self)
 
 
 class MongoUser(MongoModel):
@@ -116,3 +156,6 @@ class MongoUser(MongoModel):
     balances: List[MongoBalance] = []
     username: Optional[str]     # For only specification
     email: Optional[str]
+
+    def __str__(self):
+        return f"{self.id} {self.username} {self.email}"

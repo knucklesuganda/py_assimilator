@@ -1,3 +1,4 @@
+import json
 from typing import Type, Union, Optional, TypeVar, Collection
 
 from redis import Redis
@@ -19,6 +20,7 @@ from assimilator.core.database.exceptions import (
     InvalidQueryError,
     MultipleResultsError,
 )
+from assimilator.core.database import BaseModel
 
 RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
 
@@ -64,7 +66,7 @@ class RedisRepository(Repository):
         found_objects = self.session.mget(self.session.keys(query))
 
         if not all(found_objects):
-            raise NotFoundError()
+            raise NotFoundError(f"{self} repository get() did not find any results with this query: {query}")
 
         parsed_objects = list(self._apply_specifications(
             query=[self.model.loads(found_object) for found_object in found_objects],
@@ -72,9 +74,10 @@ class RedisRepository(Repository):
         ))
 
         if not parsed_objects:
-            raise NotFoundError()
+            raise NotFoundError(f"{self} repository get() did not find any results with this query: {query}")
         elif len(parsed_objects) != 1:
-            raise MultipleResultsError()
+            raise MultipleResultsError(f"{self} repository get() did not"
+                                       f" find any results with this query: {query}")
 
         return parsed_objects[0]
 
@@ -93,9 +96,13 @@ class RedisRepository(Repository):
             key_name = "*"
 
         models = self.session.mget(self.session.keys(key_name))
-        return list(self._apply_specifications(specifications=specifications, query=[
-            self.model.loads(value) for value in models
-        ]))
+
+        if isinstance(self.model, BaseModel):
+            query = [self.model.loads(value) for value in models]
+        else:
+            query = [self.model(**json.loads(value)) for value in models]
+
+        return list(self._apply_specifications(specifications=specifications, query=query))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:

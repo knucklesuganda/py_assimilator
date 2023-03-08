@@ -87,7 +87,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
             raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 
     def _get_specifications_context(self) -> Dict[str, Any]:
-        return {"model": self.model}
+        return {"model": self.model, "repository": self}
 
     @final
     def _apply_specifications(
