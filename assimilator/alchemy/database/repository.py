@@ -106,11 +106,10 @@ class AlchemyRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query: Delete = self._apply_specifications(
+            self.session.execute(self._apply_specifications(
                 query=delete(self.model),
                 specifications=specifications,
-            )
-            self.session.execute(query.execution_options(synchronize_session=False))
+            ))
         elif obj is not None:
             self.session.delete(obj)
 

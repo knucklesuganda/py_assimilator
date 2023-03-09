@@ -27,13 +27,13 @@ Base.metadata.create_all(engine)
 class InternalUser(BaseModel):
     username: str
     email: str
-    balance: float
+    balance: float = 0
 
 
 class RedisUser(RedisModel):
     username: str
     email: str
-    balance: float
+    balance: float = 0
 
 
 class MongoUser(MongoModel):
@@ -42,4 +42,4 @@ class MongoUser(MongoModel):
 
     username: str
     email: str
-    balance: float
+    balance: float = 0

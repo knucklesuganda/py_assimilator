@@ -16,6 +16,8 @@ class MongoFilter(FilterSpecification):
             parsed_filters.update(filter_)
 
         self.filters = parsed_filters
+        if self.filters.get('filter') is not None:
+            self.filters = self.filters['filter']
 
     def get_parsed_filter(self, filter_func: Callable, field: str, value: Any) -> dict:
         return filter_func(field, value)
@@ -24,7 +26,7 @@ class MongoFilter(FilterSpecification):
         return MongoFilter({"$or": [self.filters, other.filters]})
 
     def __and__(self, other: 'FilterSpecification') -> 'FilterSpecification':
-        return MongoFilter({**self.filters, **other.filters})
+        return MongoFilter({"$and": [self.filters, other.filters]})
 
     def __invert__(self) -> 'MongoFilter':
         inverted_filters = []

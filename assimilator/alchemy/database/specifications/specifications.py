@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Collection, Optional, Iterable, Any, Dict
+from typing import Collection, Optional, Iterable, Any, Dict, Callable
 
 from sqlalchemy.orm import load_only, Load
 from sqlalchemy import column, desc, and_, or_, not_, Select, inspect
@@ -20,23 +20,43 @@ class AlchemyFilter(FilterSpecification):
     def __init__(self, *filters, **named_filters):
         super(AlchemyFilter, self).__init__(*filters)
         self._named_filters = named_filters
+        self._filters_parsed: bool = False
 
     def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
-        return AlchemyFilter(or_(*self.filters, *other.filters))
+        return AlchemyChainSpecification(self, other, or_)
 
     def __and__(self, other: 'AlchemyFilter') -> SpecificationType:
-        return AlchemyFilter(and_(*self.filters, *other.filters))
+        return AlchemyChainSpecification(self, other, and_)
 
     def __invert__(self):
         return AlchemyFilter(not_(*self.filters))
 
-    def apply(self, query: Select, **context: Any) -> Select:
-        self.filtering_options.table_name = str(inspect(context['model']).selectable)
+    def parse_filters(self, model):
+        if self._filters_parsed:
+            return
 
+        self.filtering_options.table_name = str(inspect(model).selectable)
         for field, value in self._named_filters.items():
             self.filters.append(self.filtering_options.parse_field(raw_field=field, value=value))
 
+        self._filters_parsed = True
+
+    def apply(self, query: Select, **context: Any) -> Select:
+        self.parse_filters(context['repository'].model)
         return query.filter(*self.filters)
+
+
+class AlchemyChainSpecification(AlchemyFilter):
+    def __init__(self, first: AlchemyFilter, second: AlchemyFilter, func: Callable):
+        super(AlchemyChainSpecification, self).__init__()
+        self.first = first
+        self.second = second
+        self.func = func
+
+    def apply(self, query: Select, **context: Any) -> Select:
+        self.first.parse_filters(context['repository'].model)
+        self.second.parse_filters(context['repository'].model)
+        return query.filter(self.func(*self.first.filters, *self.second.filters))
 
 
 alchemy_filter = AlchemyFilter

@@ -6,7 +6,7 @@ from typing import (
     Collection, Tuple, Any, Dict,
 )
 
-from assimilator.core.patterns import ErrorWrapper
+from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
 from assimilator.core.database.specifications import SpecificationType, SpecificationList
 

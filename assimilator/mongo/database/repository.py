@@ -65,10 +65,10 @@ class MongoRepository(Repository):
 
         if not data:
             raise NotFoundError(f"{self} repository get() did not find "
-                                f"any entities with {self.__unpack_query(query)} filter")
+                                f"any entities with {query} filter")
         elif len(data) != 1:
             raise MultipleResultsError(f"{self} repository get() returned"
-                                       f" multiple results with {self.__unpack_query(query)} query")
+                                       f" multiple results with {query} query")
 
         return self.model(**data[0])
 
@@ -91,25 +91,16 @@ class MongoRepository(Repository):
         self._collection.insert_one(obj.dict())
         return obj
 
-    def __unpack_query(self, query: dict) -> dict:
-        return {
-            **query.get("filter", {}),
-            **query.get("sort", {}),
-            'skip': query.get("skip", None),
-            'limit': query.get("limit", None),
-            'projection': query.get("projection", ()),
-        }
-
     def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query: dict = self._apply_specifications(
+            results = self._collection.find(**self._apply_specifications(
                 query=self.get_initial_query(),
-                specifications=specifications,
-            )
+                specifications=(*specifications, self.specs.only('_id')),
+            ))
 
-            self._collection.delete_many(self.__unpack_query(query))
+            self._collection.delete_many({"_id": {"$in": [result['_id'] for result in results]}})
         elif obj is not None:
             self._collection.delete_one(obj.dict())
 
@@ -122,13 +113,13 @@ class MongoRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query = self._apply_specifications(
+            results = self._collection.find(**self._apply_specifications(
                 query=self.get_initial_query(),
-                specifications=specifications,
-            )
+                specifications=(*specifications, self.specs.only('_id')),
+            ))
 
             self._collection.update_many(
-                filter=self.__unpack_query(query),
+                filter={"_id": {"$in": [result['_id'] for result in results]}},
                 update={'$set': update_values},
             )
         elif obj is not None:

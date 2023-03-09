@@ -2,8 +2,6 @@ import sys
 from functools import wraps
 from typing import Dict, Type, Optional, Callable, Container
 
-from assimilator.core.database.exceptions import DataLayerError
-
 
 class ErrorWrapper:
     def __init__(
@@ -12,6 +10,8 @@ class ErrorWrapper:
         default_error: Optional[Type[Exception]] = None,
         skipped_errors: Optional[Container[Type[Exception]]] = None,
     ):
+        from assimilator.core.database.exceptions import DataLayerError
+
         self.error_mappings = error_mappings or {}
         self.default_error = default_error
         self.skipped_errors = {
