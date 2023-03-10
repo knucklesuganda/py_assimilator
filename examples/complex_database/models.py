@@ -1,4 +1,5 @@
 from typing import List, Optional
+from uuid import uuid4, UUID
 
 from sqlalchemy import create_engine, Column, String, Float, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship

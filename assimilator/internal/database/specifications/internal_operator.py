@@ -87,6 +87,16 @@ def like(field: str, value: str):
     return regex(field, f'^{value.replace("%", ".*?")}$')
 
 
+def invert(func: Callable):
+
+    @wraps(func)
+    def invert_wrapper(model):
+        return not func(model)
+
+    invert_wrapper: func
+    return invert_wrapper
+
+
 __all__ = [
     'find_attribute',
     'eq',
@@ -98,4 +108,5 @@ __all__ = [
     'is_',
     'regex',
     'like',
+    'invert',
 ]

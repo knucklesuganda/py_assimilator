@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Collection, Optional, Iterable, Any, Dict, Callable
+from typing import Collection, Optional, Iterable, Any, Dict, Callable, Union
 
 from sqlalchemy.orm import load_only, Load
 from sqlalchemy import column, desc, and_, or_, not_, Select, inspect
@@ -19,44 +19,47 @@ class AlchemyFilter(FilterSpecification):
 
     def __init__(self, *filters, **named_filters):
         super(AlchemyFilter, self).__init__(*filters)
-        self._named_filters = named_filters
-        self._filters_parsed: bool = False
+        self.filters.append(named_filters)
 
     def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
-        return AlchemyChainSpecification(self, other, or_)
+        return CompositeFilter(self, other, func=or_)
 
     def __and__(self, other: 'AlchemyFilter') -> SpecificationType:
-        return AlchemyChainSpecification(self, other, and_)
+        return CompositeFilter(self, other, func=and_)
 
     def __invert__(self):
-        return AlchemyFilter(not_(*self.filters))
+        return CompositeFilter(self, func=not_)
 
     def parse_filters(self, model):
-        if self._filters_parsed:
-            return
-
         self.filtering_options.table_name = str(inspect(model).selectable)
-        for field, value in self._named_filters.items():
-            self.filters.append(self.filtering_options.parse_field(raw_field=field, value=value))
+        named_filters = list(filter_ for filter_ in self.filters if isinstance(filter_, Dict))
 
-        self._filters_parsed = True
+        for filter_ in named_filters:
+            for field, value in filter_.items():
+                self.filters.append(
+                    self.filtering_options.parse_field(raw_field=field, value=value)
+                )
+
+            self.filters.remove(filter_)
 
     def apply(self, query: Select, **context: Any) -> Select:
         self.parse_filters(context['repository'].model)
         return query.filter(*self.filters)
 
 
-class AlchemyChainSpecification(AlchemyFilter):
-    def __init__(self, first: AlchemyFilter, second: AlchemyFilter, func: Callable):
-        super(AlchemyChainSpecification, self).__init__()
-        self.first = first
-        self.second = second
+class CompositeFilter(AlchemyFilter):
+    def __init__(self, *filters: AlchemyFilter, func: Callable):
+        super(CompositeFilter, self).__init__()
+        self.filter_specs = filters
         self.func = func
-
+    
     def apply(self, query: Select, **context: Any) -> Select:
-        self.first.parse_filters(context['repository'].model)
-        self.second.parse_filters(context['repository'].model)
-        return query.filter(self.func(*self.first.filters, *self.second.filters))
+        parsed_specs = []
+
+        for spec in self.filter_specs:
+            parsed_specs.append(spec(query=Select(), **context).whereclause)
+
+        return query.filter(self.func(*parsed_specs))
 
 
 alchemy_filter = AlchemyFilter
@@ -96,9 +99,10 @@ def alchemy_join(
     *targets: Collection,
     join_args: Iterable[dict] = None,
     query: Select,
-    model,
-    **_,
+    **context,
 ) -> Select:
+    model = context['repository'].model
+
     for target, join_data in zip_longest(targets, (join_args or {}), fillvalue=dict()):
         if not target:
             continue
@@ -113,7 +117,8 @@ def alchemy_join(
                     relationship_name=entity,
                 )
 
-        query = query.join(target, **join_data).add_columns(target).select_from(model)
+        query = query.join_from(model, target, **join_data)\
+            .add_columns(target).select_from(model)
 
     return query
 

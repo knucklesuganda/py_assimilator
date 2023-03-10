@@ -6,8 +6,8 @@ from assimilator.redis_.database import RedisRepository
 from assimilator.core.database import UnitOfWork, Repository
 from assimilator.internal.database import InternalRepository
 from assimilator.internal.database.specifications.filtering_options import find_attribute
-from assimilator.core.database import filter_, paginate
 from assimilator.mongo.database import MongoRepository
+from assimilator.core.database import filter_
 
 from dependencies import get_uow, User
 
@@ -34,7 +34,7 @@ def create_user_model(uow: UnitOfWork):
 
 
 def read_user(username: str, repository: Repository):
-    user = repository.get(filter_(username=username) & filter_(email="python.on.papyrus@gmail.com"))
+    user = repository.get(filter_(username=username, email="python.on.papyrus@gmail.com"))
     print("User:", user.id, user.username, user.email, user.balance)
     return user
 
@@ -102,15 +102,8 @@ def create_many_users_direct(uow: UnitOfWork):
 
 
 def filter_users(repository: Repository):
-    print((filter_(balance__gt=50) & filter_(balance__gt=50)) & filter_(balance__eq=10))
-
-    a = filter_(balance__gt=50) & filter_(balance__lt=50)
-
-    import pprint
-    pprint.pprint((a | filter_(balance__eq=10))(repository.get_initial_query(), repository))
-
     users = repository.filter(
-        filter_(balance__gt=50) & filter_(balance__gt=50) & filter_(balance__eq=10),
+        repository.specs.filter(balance__gt=50) & filter_(balance__gt=50) & filter_(balance__eq=10),
     )
 
     for user in users:

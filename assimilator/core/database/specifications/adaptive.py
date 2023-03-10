@@ -1,5 +1,5 @@
 import operator
-from typing import Optional, Iterable, Union, Callable, Tuple
+from typing import Optional, Iterable, Union, Callable, Any
 
 from assimilator.core.database.specifications.specifications import specification, FilterSpecification
 
@@ -8,9 +8,6 @@ class Filter:
     def __init__(self, *fields, **kwargs_fields):
         self.fields = fields
         self.kwargs_fields = kwargs_fields
-
-    def _get_specification(self, repository, *fields, **kwargs_fields) -> 'FilterSpecification':
-        return repository.specs.filter(*fields, **kwargs_fields)
 
     def __or__(self, other: Union['Filter', 'FilterSpecification']) -> 'CompositeFilter':
         return CompositeFilter(first=self, second=other, func=operator.or_)
@@ -22,10 +19,8 @@ class Filter:
         return Filter(self.fields, self.kwargs_fields)
 
     def __call__(self, query, repository, **context):
-        return self._get_specification(
-            repository,
-            *self.fields,
-            **self.kwargs_fields,
+        return repository.specs.filter(
+            *self.fields, **self.kwargs_fields,
         )(query=query, repository=repository)
 
 
@@ -34,30 +29,28 @@ class CompositeFilter(Filter):
         self,
         first: Union['Filter', 'FilterSpecification'],
         second: Union['Filter', 'FilterSpecification'],
-        func: Callable,
+        func: Callable[['Filter', 'Filter'], Any],
     ):
         super(CompositeFilter, self).__init__()
         self.first = first
         self.second = second
         self.func = func
 
-    def _parse_specification(
-        self, repository, spec: Union['Filter', 'FilterSpecification']
-    ) -> Tuple[Union['FilterSpecification', 'CompositeFilter'], bool]:
-        if isinstance(spec, Filter) and not isinstance(spec, CompositeFilter):
-            return self._get_specification(
-                repository=repository,
-                *spec.fields,
-                **spec.kwargs_fields,
-            ), True
+    def _parse_specification(self, filter_spec, repository):
+        if isinstance(filter_spec, CompositeFilter):
+            first = self._parse_specification(filter_spec=filter_spec.first, repository=repository)
+            second = self._parse_specification(filter_spec=filter_spec.second, repository=repository)
+            return filter_spec.func(first, second)
 
-        return spec, False
+        elif isinstance(filter_spec, Filter):
+            return repository.specs.filter(*filter_spec.fields, **filter_spec.kwargs_fields)
+        else:
+            return filter_spec
 
     def __call__(self, query, repository, **context):
-        first, first_is_simple = self._parse_specification(repository=repository, spec=self.first)
-        second, _ = self._parse_specification(repository=repository, spec=self.second)
-
-        return self.func(second, first)(query=query, repository=repository, **context)
+        first = self._parse_specification(filter_spec=self.first, repository=repository)
+        second = self._parse_specification(filter_spec=self.first, repository=repository)
+        return self.func(first, second)(query=query, repository=repository, **context)
 
 
 filter_ = Filter

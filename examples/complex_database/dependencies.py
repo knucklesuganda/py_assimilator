@@ -16,11 +16,11 @@ from examples.complex_database.models import (
     MongoUser, MongoCurrency, MongoBalance,
 )
 
-
 if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
     User = AlchemyUser
     Balance = AlchemyUserBalance
     Currency = AlchemyBalanceCurrency
+
 
     def get_uow():
         DatabaseSession = sessionmaker(bind=engine)
@@ -46,9 +46,11 @@ elif sys.argv[1] == "redis":
     Balance = RedisBalance
     Currency = RedisCurrency
 
+
     def get_uow():
         repository = RedisRepository(redis_session, model=User)
         return RedisUnitOfWork(repository)
+
 
     redis_session.flushdb()
 
@@ -59,6 +61,7 @@ elif sys.argv[1] == "mongo":
     mongo_client = pymongo.MongoClient()
 
     mongo_client['assimilator_complex'].drop_collection(MongoUser.AssimilatorConfig.collection)
+
 
     def get_uow():
         repository = MongoRepository(session=mongo_client, model=User, database='assimilator_complex')

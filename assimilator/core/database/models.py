@@ -1,12 +1,12 @@
 import json
-from uuid import uuid4
+from uuid import uuid4, UUID
 from typing import (
     Type, TypeVar, ClassVar, Union,
     Optional, Callable, Any, AbstractSet,
     Mapping, Dict,
 )
 
-from pydantic import BaseModel as PydanticBaseModel, Extra, ValidationError
+from pydantic import BaseModel as PydanticBaseModel, Extra, ValidationError, Field
 
 from assimilator.core.exceptions import ParsingError
 
@@ -17,7 +17,7 @@ MappingIntStrAny = Mapping[Union[int, str], Any]
 
 
 class BaseModel(PydanticBaseModel):
-    id: str
+    id: str = Field(allow_mutation=False)
 
     class AssimilatorConfig(PydanticBaseModel, extra=Extra.allow):
         autogenerate_id: ClassVar[bool] = True
@@ -25,6 +25,10 @@ class BaseModel(PydanticBaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+        validate_assignment = True
+
+    def __hash__(self):
+        return UUID(self.id).int
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
