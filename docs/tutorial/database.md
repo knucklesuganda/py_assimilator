@@ -549,6 +549,10 @@ You have probably wondered how to do OR statement in the filter specification. W
 implement all these things without using direct coding? You can use special operations like these:
 
 ```Python
+# Foreign entity operation(nested entity operation)
+repository.specs.filter(
+    balances__amount__gt=10,    # Balances entity amount field > 10
+)
 
 # OR operation. username=="Andrey" or username=="Python":
 repository.specs.filter(username="Andrey") | repository.specs.filter(username="Python")
@@ -599,9 +603,9 @@ def read_users(repository: Repository):
         order("balances.amount"),
     )
 
-
 ```
 
+All the specifications work the same way as their `repository.specs` versions.
 
 
 ---------------
@@ -662,6 +666,53 @@ were updated:
 repository.refresh(old_user)
 assert old_user.updated_field == repository.get(repository.specs.filter(id=old_user.id)).updated_field
 ```
+
+-------------------
+
+
+## Foreign/Nested entities
+
+When we work with foreign or nested entities in our model, we must know these assimilator concepts:
+
+```Python
+# First, you want to join your entities like this:
+
+repository.specs.join(
+    'balances', # Add nested/foreign balances entity
+    'balances.currency',    # Add nested/foreign currency entity from balances entity
+)
+
+# Filter using a foreign/nested entity
+
+repository.specs.filter(
+    balances__amount__gt=10,    # Balances foreign/nested entity amount field > 10    
+)
+
+# You show your foreign/nested entity with dunders. You can do that infinitely many times:
+
+repository.specs.filter(
+    balances__amount__another__other__foreign__field="Value"
+    # Balances entity -> Amount entity -> Another entity -> Other entity -> Foreign entity -> Field == "Value"
+)
+
+
+# Only and Order specifications with foreign/nested values has the same idea, 
+# but you split your values with dots:
+
+repository.specs.only(
+    'balances.amount',   # Only get balances entity amount field
+    'balances.amount.another.other.foreign.field',
+)
+
+repository.specs.order(
+    'balances.amount',   # Order by balances entity amount field
+    'balances.amount.another.other.foreign.field',
+)
+```
+
+> Some data storages do not require you to join other entities. For example, you will not join data in MongoDB, and can
+> easily omit `join()` specification in your queries. But, we advise you to still do that to show entity relations and for
+> possible pattern substitution in the future.
 
 
 -------------------

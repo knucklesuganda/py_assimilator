@@ -25,6 +25,7 @@ theme:
         name: Switch to dark mode
 nav:
   - Introduction: index.md
+  - ✨New in 1.2.0✨: new_changes.md
   - Concepts: concepts.md
   - Basic tutorials:
     - Important things: tutorial/important.md
