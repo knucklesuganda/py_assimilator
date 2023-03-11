@@ -8,7 +8,7 @@ from assimilator.internal.database import InternalRepository
 from assimilator.internal.database.specifications.filtering_options import find_attribute
 from assimilator.mongo.database import MongoRepository
 from assimilator.core.database import filter_
-from core.database import NotFoundError
+from assimilator.core.database import NotFoundError
 
 from dependencies import get_uow, User
 
