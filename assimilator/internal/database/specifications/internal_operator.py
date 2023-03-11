@@ -6,7 +6,7 @@ from typing import Any, Callable, Union, Literal
 
 from assimilator.core.database.models import BaseModel
 from assimilator.core.database.specifications.filtering_options import FILTERING_OPTIONS_SEPARATOR
-from internal.database.specifications.utils import InternalContainers, find_model_value
+from assimilator.internal.database.specifications.utils import InternalContainers, find_model_value
 
 
 def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseModel], bool]:
