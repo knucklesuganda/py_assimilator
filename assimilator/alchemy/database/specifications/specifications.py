@@ -6,7 +6,7 @@ from sqlalchemy import column, desc, and_, or_, not_, Select, inspect
 
 from assimilator.alchemy.database.model_utils import get_model_from_relationship
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
-from assimilator.core.database.specifications import (
+from assimilator.core.database.specifications.specifications import (
     specification,
     SpecificationList,
     SpecificationType,
@@ -21,10 +21,10 @@ class AlchemyFilter(FilterSpecification):
         super(AlchemyFilter, self).__init__(*filters)
         self.filters.append(named_filters)
 
-    def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
+    def __or__(self, other: 'FilterSpecification') -> SpecificationType:
         return CompositeFilter(self, other, func=or_)
 
-    def __and__(self, other: 'AlchemyFilter') -> SpecificationType:
+    def __and__(self, other: 'FilterSpecification') -> SpecificationType:
         return CompositeFilter(self, other, func=and_)
 
     def __invert__(self):
@@ -37,23 +37,25 @@ class AlchemyFilter(FilterSpecification):
         for filter_ in named_filters:
             for field, value in filter_.items():
                 self.filters.append(
-                    self.filtering_options.parse_field(raw_field=field, value=value)
+                    self.filtering_options.parse_field(
+                        raw_field=field, value=value,
+                    )
                 )
 
             self.filters.remove(filter_)
 
-    def apply(self, query: Select, **context: Any) -> Select:
+    def __call__(self, query: Select, **context: Any) -> Select:
         self.parse_filters(context['repository'].model)
         return query.filter(*self.filters)
 
 
 class CompositeFilter(AlchemyFilter):
-    def __init__(self, *filters: AlchemyFilter, func: Callable):
+    def __init__(self, *filters: Union[FilterSpecification, 'CompositeFilter'], func: Callable):
         super(CompositeFilter, self).__init__()
         self.filter_specs = filters
         self.func = func
     
-    def apply(self, query: Select, **context: Any) -> Select:
+    def __call__(self, query: Select, **context: Any) -> Select:
         parsed_specs = []
 
         for spec in self.filter_specs:
@@ -71,9 +73,9 @@ def alchemy_order(*clauses: str, query: Select, **_) -> Select:
 
     for clause in clauses:
         if clause.startswith("-"):
-            parsed_clauses.append(desc(column(clause[1:])))
+            parsed_clauses.append(desc(column(clause[1:], is_literal=True)))
         else:
-            parsed_clauses.append(clause)
+            parsed_clauses.append(column(clause, is_literal=True))
 
     return query.order_by(*parsed_clauses)
 

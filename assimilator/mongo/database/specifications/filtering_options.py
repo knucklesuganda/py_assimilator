@@ -3,7 +3,8 @@ from assimilator.core.database.specifications.filtering_options import\
 
 
 class MongoFilteringOptions(FilteringOptions):
-    def _convert_field(self, field: str) -> str:
+    @staticmethod
+    def _convert_field(field: str) -> str:
         return field.replace(FILTERING_OPTIONS_SEPARATOR, ".")
 
     def _eq(self, field: str, value):

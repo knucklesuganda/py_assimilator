@@ -8,6 +8,7 @@ from assimilator.internal.database import InternalRepository
 from assimilator.internal.database.specifications.filtering_options import find_attribute
 from assimilator.mongo.database import MongoRepository
 from assimilator.core.database import filter_
+from core.database import NotFoundError
 
 from dependencies import get_uow, User
 
@@ -144,6 +145,37 @@ def delete_many_users(uow: UnitOfWork):
     print("Total users left:", uow.repository.count())
 
 
+def create_users_error(uow: UnitOfWork):
+    with uow:
+        uow.repository.save(
+            username='Not saved',
+            email='not-saved@user.com',
+            balance=0,
+        )
+        uow.repository.save(
+            username='Not saved 2',
+            email='not-saved-2@user.com',
+            balance=0,
+        )
+
+        1 / 0   # Error. Changes are discarded
+        uow.commit()
+
+
+def check_users_not_saved(uow: UnitOfWork):
+    try:
+        read_user(username="Not saved", repository=uow.repository)  # Must return NotFound
+        raise ValueError("User 1 was saved!")
+    except NotFoundError:
+        print("User 1 changes were discarded!")
+
+    try:
+        read_user(username="Not saved 2", repository=uow.repository)  # Must return NotFound
+        raise ValueError("User 2 was saved!")
+    except NotFoundError:
+        print("User 2 changes were discarded!")
+
+
 if __name__ == '__main__':
     create_user__kwargs(get_uow())
     create_user_model(get_uow())
@@ -156,6 +188,13 @@ if __name__ == '__main__':
 
     second_user = read_user(username="Andrey-2", repository=get_uow().repository)
     update_user_direct(user=second_user, uow=get_uow())
+
+    try:
+        create_users_error(uow=get_uow())
+    except ZeroDivisionError:
+        pass
+
+    check_users_not_saved(uow=get_uow())
 
     create_many_users(get_uow())
     create_many_users_direct(get_uow())

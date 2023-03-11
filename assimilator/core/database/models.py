@@ -35,7 +35,7 @@ class BaseModel(PydanticBaseModel):
 
         if not issubclass(cls.AssimilatorConfig, BaseModel.AssimilatorConfig):
             base_configs = [
-                base_class.AssimilatorConfig for base_class in cls.mro()
+                getattr(base_class, 'AssimilatorConfig') for base_class in cls.mro()
                 if hasattr(base_class, 'AssimilatorConfig')
             ]
 

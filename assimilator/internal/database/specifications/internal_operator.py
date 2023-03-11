@@ -2,12 +2,11 @@ import operator
 import re
 from functools import wraps
 from numbers import Number
-from typing import Any, Callable, Tuple, Set, List, Union, Literal, Dict
+from typing import Any, Callable, Union, Literal
 
-from assimilator.core.database import BaseModel, FILTERING_OPTIONS_SEPARATOR
-
-
-Containers = (List, Set, Tuple, map)
+from assimilator.core.database.models import BaseModel
+from assimilator.core.database.specifications.filtering_options import FILTERING_OPTIONS_SEPARATOR
+from internal.database.specifications.utils import InternalContainers, find_model_value
 
 
 def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseModel], bool]:
@@ -16,10 +15,10 @@ def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseMode
     We do that because we need to get the value of the field in the internal specifications, not just the name
     of it. For example, User(id=1) will use field='id' to get 1 as the result.
 
-    :param func: filtering option function that is going to be decorated
+    :param func: filtering option function that is going to be decorated.
     :param field: field name that is used in getattr(model, field)
-    :param value: value of the field
-    :return: function to be called with a model to find an attribute and call the comparison function
+    :param value: value of the field.
+    :return: function to be called with a model to find an attribute and call the comparison function.
     """
 
     @wraps(func)
@@ -29,16 +28,8 @@ def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseMode
         if len(foreign_fields) == 1:
             return func(getattr(model, foreign_fields[0]), value)
 
-        model_val = model
-        for foreign_field in foreign_fields:
-            if isinstance(model_val, Containers):
-                model_val = list(getattr(obj, foreign_field) for obj in model_val)
-            elif isinstance(model_val, Dict):
-                model_val = list(getattr(obj, foreign_field) for obj in model_val.values())
-            else:
-                model_val = getattr(model_val, foreign_field)
-
-        if isinstance(model_val, Containers):
+        model_val = find_model_value(fields=foreign_fields, model=model)
+        if isinstance(model_val, InternalContainers):
             return any(func(member, value) for member in model_val)
 
         return func(model_val, value)

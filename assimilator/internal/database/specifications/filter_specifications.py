@@ -2,7 +2,7 @@ from operator import or_, and_
 from typing import Union, List, Generator, Any
 
 from assimilator.core.database.models import BaseModel
-from assimilator.core.database.specifications import FilterSpecification
+from assimilator.core.database import FilterSpecification
 from assimilator.internal.database.specifications.internal_operator import invert
 from assimilator.internal.database.specifications.filtering_options import InternalFilteringOptions
 
@@ -23,7 +23,7 @@ class InternalFilter(FilterSpecification):
             **named_filters,
         )
 
-    def apply(self, query: QueryT, **context) -> Union[str, Generator[BaseModel, Any, None]]:
+    def __call__(self, query: QueryT, **context) -> Union[str, Generator[BaseModel, Any, None]]:
         if isinstance(query, str):
             return f'{query}{"".join(self.text_filters)}'
         elif not self.filters:
@@ -56,9 +56,11 @@ class CompositeFilter(InternalFilter):
         self.second = second
         self.operation = operation
 
-    def apply(self, query: QueryT, **context) -> Union[str, QueryT]:
+    def __call__(self, query: QueryT, **context) -> Union[str, QueryT]:
         if isinstance(query, str):
-            return f'{query}{"".join(self.first.text_filters + self.second.text_filters)}'
+            first_result = self.first(query=query, **context)
+            second_result = self.second(query=query, **context)
+            return f'{query}{first_result.replace(query, "")}{second_result.replace(query, "")}'
 
         first_result = self.first(query=query, **context)
         second_result = self.second(query=query, **context)

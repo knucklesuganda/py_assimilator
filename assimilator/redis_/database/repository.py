@@ -1,10 +1,9 @@
 import json
-from typing import Type, Union, Optional, TypeVar, Collection
+from typing import Type, Union, Optional, TypeVar, List
 
 from redis import Redis
 from redis.client import Pipeline
 
-from assimilator.redis_.database import RedisModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
     SpecificationList,
@@ -12,7 +11,7 @@ from assimilator.core.database import (
     Repository,
     LazyCommand,
 )
-from assimilator.internal.database.specifications import InternalSpecificationList
+from assimilator.internal.database import InternalSpecificationList
 from assimilator.internal.database.models_utils import dict_to_models
 from assimilator.core.database.exceptions import (
     DataLayerError,
@@ -22,7 +21,7 @@ from assimilator.core.database.exceptions import (
 )
 from assimilator.core.database import BaseModel
 
-RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
+RedisModelT = TypeVar("RedisModelT", bound=BaseModel)
 
 
 class RedisRepository(Repository):
@@ -86,7 +85,7 @@ class RedisRepository(Repository):
         *specifications: SpecificationType,
         lazy: bool = False,
         initial_query: Optional[str] = None,
-    ) -> Union[LazyCommand[Collection[RedisModelT]], Collection[RedisModelT]]:
+    ) -> Union[LazyCommand[List[RedisModelT]], List[RedisModelT]]:
         if self.use_double_specifications and specifications:
             key_name = self._apply_specifications(
                 query=initial_query,

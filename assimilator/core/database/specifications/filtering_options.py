@@ -1,4 +1,4 @@
-from abc import abstractmethod, abstractstaticmethod
+from abc import abstractstaticmethod
 from typing import Dict, Protocol, Any, Callable
 
 

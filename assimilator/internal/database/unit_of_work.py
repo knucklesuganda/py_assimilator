@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Optional
 
-from assimilator.core.database import UnitOfWork, NotFoundError, DataLayerError, Repository
+from assimilator.core.database import UnitOfWork, Repository
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 from assimilator.core.patterns import ErrorWrapper
 

@@ -579,6 +579,31 @@ andrey_username_spec = repository.specs.filter(username="Andrey")
 andrey = repository.filter(andrey_username_spec)
 ```
 
+
+### 🤩New Adaptive Specifications!🤩
+
+What is adaptive specification? It is a function that you can call without accessing `repository.specs`. You can
+do it like this:
+
+```Python
+# Import adaptive specifications
+from assimilator.core.database import filter_, join, order, only, paginate, Repository
+
+
+def read_users(repository: Repository):
+    return repository.filter(
+        filter_(username__like="%Andrey%"),
+        join("balances"),
+        only("username", "balances.amount"),
+        paginate(limit=10),
+        order("balances.amount"),
+    )
+
+
+```
+
+
+
 ---------------
 ### Data changes
 Let's finally change some data.

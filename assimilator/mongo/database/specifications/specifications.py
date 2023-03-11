@@ -1,7 +1,7 @@
-from typing import Callable, Any, Optional, Collection
+from typing import Any, Optional, Collection
 
-from assimilator.mongo.database.specifications import MongoFilteringOptions
-from assimilator.core.database import SpecificationList, FilterSpecification, specification
+from assimilator.mongo.database.specifications.filtering_options import MongoFilteringOptions
+from assimilator.core.database import SpecificationList, FilterSpecification, specification, AdaptiveFilter
 
 
 class MongoFilter(FilterSpecification):
@@ -19,13 +19,16 @@ class MongoFilter(FilterSpecification):
         if self.filters.get('filter') is not None:
             self.filters = self.filters['filter']
 
-    def get_parsed_filter(self, filter_func: Callable, field: str, value: Any) -> dict:
-        return filter_func(field, value)
-
     def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
+        if isinstance(other, AdaptiveFilter):
+            other = MongoFilter(*other.fields, **other.kwargs_fields)
+
         return MongoFilter({"$or": [self.filters, other.filters]})
 
     def __and__(self, other: 'FilterSpecification') -> 'FilterSpecification':
+        if isinstance(other, AdaptiveFilter):
+            other = MongoFilter(*other.fields, **other.kwargs_fields)
+
         return MongoFilter({"$and": [self.filters, other.filters]})
 
     def __invert__(self) -> 'MongoFilter':
@@ -36,7 +39,7 @@ class MongoFilter(FilterSpecification):
 
         return MongoFilter(*inverted_filters)
 
-    def apply(self, query: dict, **context: Any) -> dict:
+    def __call__(self, query: dict, **context: Any) -> dict:
         query['filter'] = {**query.get('filter', {}), **self.filters}
         return query
 
@@ -46,10 +49,10 @@ mongo_filter = MongoFilter
 
 @specification
 def mongo_order(*clauses: str, query: dict, **_) -> dict:
-    query['sort'] = {
-        **query.get('sort', {}),
-        **{column: -1 if column.startswith("-") else 1 for column in clauses}
-    }
+    query['sort'] = query.get('sort', []) + [
+        (column, -1 if column.startswith("-") else 1)
+        for column in clauses
+    ]
     return query
 
 

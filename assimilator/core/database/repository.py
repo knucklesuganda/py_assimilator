@@ -8,7 +8,7 @@ from typing import (
 
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
-from assimilator.core.database.specifications import SpecificationType, SpecificationList
+from assimilator.core.database.specifications.specifications import SpecificationType, SpecificationList
 
 
 def make_lazy(func: Callable):

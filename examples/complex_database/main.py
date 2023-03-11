@@ -5,7 +5,7 @@ from assimilator.alchemy.database import AlchemyRepository
 from assimilator.core.database import UnitOfWork, Repository
 from assimilator.internal.database import InternalRepository, eq
 from assimilator.redis_.database import RedisRepository
-from assimilator.core.database.specifications.adaptive import join, only, filter_
+from assimilator.core.database.specifications.adaptive import join, only, filter_, order
 
 from dependencies import get_uow, User, Balance, Currency
 
@@ -166,6 +166,7 @@ def create_many_users_direct(uow: UnitOfWork):
 def filter_users(repository: Repository):
     users = repository.filter(
         join('balances'),
+        order("balances.balance"),
         filter_(balances__balance__gt=50),
     )
 

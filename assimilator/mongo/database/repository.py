@@ -5,10 +5,10 @@ from pymongo import MongoClient
 from assimilator.mongo.database.models import MongoModel
 from assimilator.core.patterns import LazyCommand, ErrorWrapper
 from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
-from assimilator.core.database import Repository, SpecificationType, SpecificationList, NotFoundError
+from assimilator.core.database import Repository, SpecificationType, \
+    SpecificationList, NotFoundError, MultipleResultsError
 from assimilator.mongo.database.specifications.specifications import MongoSpecificationList
 from assimilator.internal.database.models_utils import dict_to_models
-from assimilator.core.database import MultipleResultsError
 
 ModelT = TypeVar("ModelT", bound=MongoModel)
 

@@ -2,9 +2,21 @@ from typing import List, Iterable, Union, Optional, Collection
 
 from assimilator.core.database import specification, SpecificationList, BaseModel
 from assimilator.internal.database.specifications.filter_specifications import InternalFilter
+from assimilator.internal.database.specifications.utils import find_model_value
 
 QueryT = Union[str, List[BaseModel]]
 internal_filter = InternalFilter
+
+
+def _internal_ordering(sorting_field: str):
+    fields = sorting_field.strip("-").split(".")
+
+    def _internal_ordering_wrapper(item: BaseModel):
+        current = find_model_value(fields=fields, model=item)
+
+        return current
+
+    return _internal_ordering_wrapper
 
 
 @specification
@@ -15,7 +27,7 @@ def internal_order(*clauses: str, query: QueryT, **_) -> Iterable[BaseModel]:
     query = list(query)
     for field in clauses:
         query.sort(
-            key=lambda item: getattr(item, field.strip("-")),
+            key=_internal_ordering(sorting_field=field),
             reverse=field.startswith("-"),
         )
 

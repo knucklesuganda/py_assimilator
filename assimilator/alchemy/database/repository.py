@@ -8,7 +8,7 @@ from assimilator.alchemy.database.model_utils import dict_to_models
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
-from assimilator.alchemy.database.specifications import AlchemySpecificationList
+from assimilator.alchemy.database.specifications.specifications import AlchemySpecificationList
 from assimilator.core.database import Repository, LazyCommand, SpecificationType
 
 
