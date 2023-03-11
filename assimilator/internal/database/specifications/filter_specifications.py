@@ -1,9 +1,10 @@
-from typing import Callable, Union, List, Generator, Any
+from operator import or_, and_
+from typing import Union, List, Generator, Any
 
 from assimilator.core.database.models import BaseModel
-from assimilator.core.database.specifications import FilterSpecification
+from assimilator.core.database import FilterSpecification
+from assimilator.internal.database.specifications.internal_operator import invert
 from assimilator.internal.database.specifications.filtering_options import InternalFilteringOptions
-
 
 QueryT = Union[str, List[BaseModel]]
 
@@ -22,7 +23,7 @@ class InternalFilter(FilterSpecification):
             **named_filters,
         )
 
-    def apply(self, query: QueryT, **context) -> Union[str, Generator[BaseModel, Any, None]]:
+    def __call__(self, query: QueryT, **context) -> Union[str, Generator[BaseModel, Any, None]]:
         if isinstance(query, str):
             return f'{query}{"".join(self.text_filters)}'
         elif not self.filters:
@@ -33,40 +34,41 @@ class InternalFilter(FilterSpecification):
             if all(filter_func(model) for filter_func in self.filters)
         )
 
-    def __or__(self, other: 'InternalFilter') -> 'InternalFilter':
-        return OrInternalFilter(first_spec=self, second_spec=other)
+    def __or__(self, other: Union['InternalFilter', 'CompositeFilter']) -> 'InternalFilter':
+        return CompositeFilter(first=self, second=other, operation=or_)
 
-    def __and__(self, other: 'InternalFilter') -> 'InternalFilter':
-        specification = InternalFilter(*self.filters, *other.filters)
-        specification.text_filters = self.text_filters + other.text_filters
-        return specification
-
-    @staticmethod
-    def __inversion_func(func: Callable):
-        def __inversion_func_wrapper(field, value):
-            return not func(field, value)
-        return __inversion_func_wrapper
+    def __and__(self, other: Union['InternalFilter', 'CompositeFilter']) -> 'InternalFilter':
+        return CompositeFilter(first=self, second=other, operation=and_)
 
     def __invert__(self):
-        return InternalFilter(*map(
-            lambda func, field, value: (self.__inversion_func(func), field, value),
-            self.filters,
-        ))
+        return InternalFilter(*(invert(func) for func in self.filters))
 
 
-class OrInternalFilter(InternalFilter):
-    def __init__(self, first_spec: InternalFilter, second_spec: InternalFilter):
-        super(OrInternalFilter, self).__init__()
-        self.first_spec = first_spec
-        self.second_spec = second_spec
+class CompositeFilter(InternalFilter):
+    def __init__(
+        self,
+        first: Union[FilterSpecification, 'CompositeFilter'],
+        second: Union[FilterSpecification, 'CompositeFilter'],
+        operation: Union[or_, and_],
+    ):
+        super(CompositeFilter, self).__init__()
+        self.first = first
+        self.second = second
+        self.operation = operation
 
-    def apply(self, query: QueryT, **context) -> Union[str, QueryT]:
+    def __call__(self, query: QueryT, **context) -> Union[str, QueryT]:
         if isinstance(query, str):
-            return f'{query}{"".join(self.first_spec.text_filters + self.second_spec.text_filters)}'
+            first_result = self.first(query=query, **context)
+            second_result = self.second(query=query, **context)
+            return f'{query}{first_result.replace(query, "")}{second_result.replace(query, "")}'
 
-        first_filter = self.first_spec.apply(query)
-        second_filter = self.second_spec.apply(query)
-        return list(set(first_filter) | set(second_filter))
+        first_result = self.first(query=query, **context)
+        second_result = self.second(query=query, **context)
+
+        return list(self.operation(set(first_result), set(second_result)))
+
+    def __str__(self):
+        return f"{self.first} {self.operation} {self.second}"
 
 
 __all__ = ['InternalFilter']

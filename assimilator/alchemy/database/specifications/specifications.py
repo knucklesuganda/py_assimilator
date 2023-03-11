@@ -1,18 +1,17 @@
 from itertools import zip_longest
-from typing import Collection, Optional, Iterable, Any, Dict
+from typing import Collection, Optional, Iterable, Any, Dict, Callable, Union
 
 from sqlalchemy.orm import load_only, Load
 from sqlalchemy import column, desc, and_, or_, not_, Select, inspect
 
 from assimilator.alchemy.database.model_utils import get_model_from_relationship
 from assimilator.alchemy.database.specifications.filtering_options import AlchemyFilteringOptions
-from assimilator.core.database.specifications import (
+from assimilator.core.database.specifications.specifications import (
     specification,
     SpecificationList,
     SpecificationType,
     FilterSpecification,
 )
-from assimilator.core.database import FILTERING_OPTIONS_SEPARATOR
 
 
 class AlchemyFilter(FilterSpecification):
@@ -20,24 +19,49 @@ class AlchemyFilter(FilterSpecification):
 
     def __init__(self, *filters, **named_filters):
         super(AlchemyFilter, self).__init__(*filters)
-        self._named_filters = named_filters
+        self.filters.append(named_filters)
 
-    def __or__(self, other: 'AlchemyFilter') -> SpecificationType:
-        return AlchemyFilter(or_(*self.filters, *other.filters))
+    def __or__(self, other: 'FilterSpecification') -> SpecificationType:
+        return CompositeFilter(self, other, func=or_)
 
-    def __and__(self, other: 'AlchemyFilter') -> SpecificationType:
-        return AlchemyFilter(and_(*self.filters, *other.filters))
+    def __and__(self, other: 'FilterSpecification') -> SpecificationType:
+        return CompositeFilter(self, other, func=and_)
 
     def __invert__(self):
-        return AlchemyFilter(not_(*self.filters))
+        return CompositeFilter(self, func=not_)
 
-    def apply(self, query: Select, **context: Any) -> Select:
-        self.filtering_options.table_name = str(inspect(context['model']).selectable)
+    def parse_filters(self, model):
+        self.filtering_options.table_name = str(inspect(model).selectable)
+        named_filters = list(filter_ for filter_ in self.filters if isinstance(filter_, Dict))
 
-        for field, value in self._named_filters.items():
-            self.filters.append(self.filtering_options.parse_field(raw_field=field, value=value))
+        for filter_ in named_filters:
+            for field, value in filter_.items():
+                self.filters.append(
+                    self.filtering_options.parse_field(
+                        raw_field=field, value=value,
+                    )
+                )
 
+            self.filters.remove(filter_)
+
+    def __call__(self, query: Select, **context: Any) -> Select:
+        self.parse_filters(context['repository'].model)
         return query.filter(*self.filters)
+
+
+class CompositeFilter(AlchemyFilter):
+    def __init__(self, *filters: Union[FilterSpecification, 'CompositeFilter'], func: Callable):
+        super(CompositeFilter, self).__init__()
+        self.filter_specs = filters
+        self.func = func
+    
+    def __call__(self, query: Select, **context: Any) -> Select:
+        parsed_specs = []
+
+        for spec in self.filter_specs:
+            parsed_specs.append(spec(query=Select(), **context).whereclause)
+
+        return query.filter(self.func(*parsed_specs))
 
 
 alchemy_filter = AlchemyFilter
@@ -49,9 +73,9 @@ def alchemy_order(*clauses: str, query: Select, **_) -> Select:
 
     for clause in clauses:
         if clause.startswith("-"):
-            parsed_clauses.append(desc(column(clause[1:])))
+            parsed_clauses.append(desc(column(clause[1:], is_literal=True)))
         else:
-            parsed_clauses.append(clause)
+            parsed_clauses.append(column(clause, is_literal=True))
 
     return query.order_by(*parsed_clauses)
 
@@ -77,9 +101,10 @@ def alchemy_join(
     *targets: Collection,
     join_args: Iterable[dict] = None,
     query: Select,
-    model,
-    **_,
+    **context,
 ) -> Select:
+    model = context['repository'].model
+
     for target, join_data in zip_longest(targets, (join_args or {}), fillvalue=dict()):
         if not target:
             continue
@@ -94,7 +119,8 @@ def alchemy_join(
                     relationship_name=entity,
                 )
 
-        query = query.join(target, **join_data).add_columns(target).select_from(model)
+        query = query.join_from(model, target, **join_data)\
+            .add_columns(target).select_from(model)
 
     return query
 

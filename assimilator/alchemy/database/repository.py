@@ -8,7 +8,7 @@ from assimilator.alchemy.database.model_utils import dict_to_models
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
-from assimilator.alchemy.database.specifications import AlchemySpecificationList
+from assimilator.alchemy.database.specifications.specifications import AlchemySpecificationList
 from assimilator.core.database import Repository, LazyCommand, SpecificationType
 
 
@@ -106,11 +106,10 @@ class AlchemyRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query: Delete = self._apply_specifications(
+            self.session.execute(self._apply_specifications(
                 query=delete(self.model),
                 specifications=specifications,
-            )
-            self.session.execute(query.execution_options(synchronize_session=False))
+            ))
         elif obj is not None:
             self.session.delete(obj)
 

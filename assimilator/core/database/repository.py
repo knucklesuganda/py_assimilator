@@ -6,9 +6,9 @@ from typing import (
     Collection, Tuple, Any, Dict,
 )
 
-from assimilator.core.patterns import ErrorWrapper
+from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
-from assimilator.core.database.specifications import SpecificationType, SpecificationList
+from assimilator.core.database.specifications.specifications import SpecificationType, SpecificationList
 
 
 def make_lazy(func: Callable):
@@ -87,7 +87,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
             raise NotImplementedError("You must either pass the initial query or define get_initial_query()")
 
     def _get_specifications_context(self) -> Dict[str, Any]:
-        return {"model": self.model}
+        return {"model": self.model, "repository": self}
 
     @final
     def _apply_specifications(

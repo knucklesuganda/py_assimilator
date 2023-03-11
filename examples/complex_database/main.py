@@ -5,6 +5,7 @@ from assimilator.alchemy.database import AlchemyRepository
 from assimilator.core.database import UnitOfWork, Repository
 from assimilator.internal.database import InternalRepository, eq
 from assimilator.redis_.database import RedisRepository
+from assimilator.core.database.specifications.adaptive import join, only, filter_, order
 
 from dependencies import get_uow, User, Balance, Currency
 
@@ -60,14 +61,13 @@ def create_user_model(uow: UnitOfWork):
 
 def read_user(username: str, balance: int, repository: Repository):
     user = repository.get(
-        repository.specs.join('balances', 'balances.currency'),
-        repository.specs.filter(
+        join('balances', 'balances.currency'),
+        filter_(
             username__eq=username,
             balances__balance=balance,
-            balances__currency__currency="USD",
-            balances__currency__country="USA",
-        ),
-        repository.specs.only('username', 'balances.currency', 'balances.balance'),
+        ) | repository.specs.filter(balances__currency__country="USA")
+        & ~repository.specs.filter(balances__currency__currency="USD"),
+        only('username', 'balances.currency', 'balances.balance'),
     )
     print("User:", user.id, user.username, user.email)
 
@@ -165,8 +165,9 @@ def create_many_users_direct(uow: UnitOfWork):
 
 def filter_users(repository: Repository):
     users = repository.filter(
-        repository.specs.join('balances'),
-        repository.specs.filter(balances__balance__gt=50),
+        join('balances'),
+        order("balances.balance"),
+        filter_(balances__balance__gt=50),
     )
 
     for user in users:

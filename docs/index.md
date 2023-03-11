@@ -68,7 +68,8 @@ a library for the patterns that he uses in his projects daily.
 
 Watch our [Demo]() to find out more about pyAssimilator capabilities.
 
-## Source
+
+## Sources
 * [Github](https://github.com/knucklesuganda/py_assimilator)
 * [PyPI](https://pypi.org/project/py-assimilator/)
 * [Documentation](https://knucklesuganda.github.io/py_assimilator/)
@@ -76,6 +77,10 @@ Watch our [Demo]() to find out more about pyAssimilator capabilities.
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
 
+
+## Video tutorials
+
+There are also [video tutorials](/py_assimilator/video_tutorials/) that help you get everything you need to know about the library.
 
 ## Stars history
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)

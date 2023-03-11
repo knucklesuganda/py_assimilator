@@ -8,11 +8,17 @@ from assimilator.core.patterns import ErrorWrapper
 class UnitOfWork(ABC):
     error_wrapper: ErrorWrapper = ErrorWrapper()
 
-    def __init__(self, repository: Repository, error_wrapper: Optional[ErrorWrapper] = None):
+    def __init__(
+        self,
+        repository: Repository,
+        error_wrapper: Optional[ErrorWrapper] = None,
+        autocommit: bool = False,
+    ):
         self.repository = repository
         if error_wrapper is not None:
             self.error_wrapper = error_wrapper
 
+        self.autocommit = autocommit
         self.begin = self.error_wrapper.decorate(self.begin)
         self.rollback = self.error_wrapper.decorate(self.rollback)
         self.commit = self.error_wrapper.decorate(self.commit)
@@ -44,6 +50,9 @@ class UnitOfWork(ABC):
             self.close()
             raise exc_val
         else:
+            if self.autocommit:
+                self.commit()
+
             self.close()
 
     def __str__(self):

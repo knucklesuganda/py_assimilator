@@ -25,6 +25,7 @@ theme:
         name: Switch to dark mode
 nav:
   - Introduction: index.md
+  - ✨New in 1.2.0✨: new_changes.md
   - Concepts: concepts.md
   - Basic tutorials:
     - Important things: tutorial/important.md
@@ -47,6 +48,7 @@ nav:
     - Database: mongo/database.md
   - Services Tutorial: services.md
   - Unidentified Patterns: unidentified_patterns.md
+  - Video Tutorials: video_tutorials.md
 
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator

@@ -1,6 +1,6 @@
 from functools import wraps
-from abc import ABC, abstractmethod
-from typing import Callable, Union, TypeVar, Type, final, Any
+from abc import ABC
+from typing import Callable, TypeVar, Type, Any, Union
 
 from assimilator.core.database.specifications.filtering_options import FilteringOptions
 from assimilator.core.database.specifications.types import (
@@ -14,13 +14,8 @@ QueryT = TypeVar("QueryT")
 
 
 class Specification(ABC):
-    @abstractmethod
-    def apply(self, query: QueryT, **context: Any) -> QueryT:
-        raise NotImplementedError("Specification must specify apply()")
-
-    @final
     def __call__(self, query: QueryT, **context: Any) -> QueryT:
-        return self.apply(query, **context)
+        raise NotImplementedError("Specification must specify __call__()")
 
 
 class FilterSpecification(Specification, ABC):
@@ -35,10 +30,10 @@ class FilterSpecification(Specification, ABC):
                 self.filtering_options.parse_field(raw_field=field, value=value)
             )
 
-    def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
+    def __or__(self, other: 'SpecificationType') -> 'FilterSpecification':
         raise NotImplementedError("or() is not implemented for FilterSpecification")
 
-    def __and__(self, other: 'FilterSpecification') -> 'FilterSpecification':
+    def __and__(self, other: 'SpecificationType') -> 'FilterSpecification':
         raise NotImplementedError("and() is not implemented for FilterSpecification")
 
     def __invert__(self):
@@ -60,15 +55,15 @@ def specification(func: Callable) -> Callable:
     return create_specification
 
 
-SpecificationType = Union[Type[Specification], Callable]
-
-
 class SpecificationList:
     filter: Type[FilterSpecification]
     order: OrderSpecificationProtocol
     paginate: PaginateSpecificationProtocol
     join: JoinSpecificationProtocol
     only: OnlySpecificationProtocol
+
+
+SpecificationType = Union[Callable, Specification]
 
 
 __all__ = [

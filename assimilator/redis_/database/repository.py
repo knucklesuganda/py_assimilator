@@ -1,9 +1,9 @@
-from typing import Type, Union, Optional, TypeVar, Collection
+import json
+from typing import Type, Union, Optional, TypeVar, List
 
 from redis import Redis
 from redis.client import Pipeline
 
-from assimilator.redis_.database import RedisModel
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database import (
     SpecificationList,
@@ -11,7 +11,7 @@ from assimilator.core.database import (
     Repository,
     LazyCommand,
 )
-from assimilator.internal.database.specifications import InternalSpecificationList
+from assimilator.internal.database import InternalSpecificationList
 from assimilator.internal.database.models_utils import dict_to_models
 from assimilator.core.database.exceptions import (
     DataLayerError,
@@ -19,8 +19,9 @@ from assimilator.core.database.exceptions import (
     InvalidQueryError,
     MultipleResultsError,
 )
+from assimilator.core.database import BaseModel
 
-RedisModelT = TypeVar("RedisModelT", bound=RedisModel)
+RedisModelT = TypeVar("RedisModelT", bound=BaseModel)
 
 
 class RedisRepository(Repository):
@@ -64,7 +65,7 @@ class RedisRepository(Repository):
         found_objects = self.session.mget(self.session.keys(query))
 
         if not all(found_objects):
-            raise NotFoundError()
+            raise NotFoundError(f"{self} repository get() did not find any results with this query: {query}")
 
         parsed_objects = list(self._apply_specifications(
             query=[self.model.loads(found_object) for found_object in found_objects],
@@ -72,9 +73,10 @@ class RedisRepository(Repository):
         ))
 
         if not parsed_objects:
-            raise NotFoundError()
+            raise NotFoundError(f"{self} repository get() did not find any results with this query: {query}")
         elif len(parsed_objects) != 1:
-            raise MultipleResultsError()
+            raise MultipleResultsError(f"{self} repository get() did not"
+                                       f" find any results with this query: {query}")
 
         return parsed_objects[0]
 
@@ -83,7 +85,7 @@ class RedisRepository(Repository):
         *specifications: SpecificationType,
         lazy: bool = False,
         initial_query: Optional[str] = None,
-    ) -> Union[LazyCommand[Collection[RedisModelT]], Collection[RedisModelT]]:
+    ) -> Union[LazyCommand[List[RedisModelT]], List[RedisModelT]]:
         if self.use_double_specifications and specifications:
             key_name = self._apply_specifications(
                 query=initial_query,
@@ -93,9 +95,13 @@ class RedisRepository(Repository):
             key_name = "*"
 
         models = self.session.mget(self.session.keys(key_name))
-        return list(self._apply_specifications(specifications=specifications, query=[
-            self.model.loads(value) for value in models
-        ]))
+
+        if isinstance(self.model, BaseModel):
+            query = [self.model.loads(value) for value in models]
+        else:
+            query = [self.model(**json.loads(value)) for value in models]
+
+        return list(self._apply_specifications(specifications=specifications, query=query))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:

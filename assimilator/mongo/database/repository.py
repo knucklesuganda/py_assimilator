@@ -1,11 +1,12 @@
-from typing import Union, Optional, Collection, Type, TypeVar, Any, Dict
+from typing import Union, Optional, Collection, Type, TypeVar
 
 from pymongo import MongoClient
 
 from assimilator.mongo.database.models import MongoModel
 from assimilator.core.patterns import LazyCommand, ErrorWrapper
 from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
-from assimilator.core.database import Repository, SpecificationType, SpecificationList, NotFoundError
+from assimilator.core.database import Repository, SpecificationType, \
+    SpecificationList, NotFoundError, MultipleResultsError
 from assimilator.mongo.database.specifications.specifications import MongoSpecificationList
 from assimilator.internal.database.models_utils import dict_to_models
 
@@ -60,12 +61,16 @@ class MongoRepository(Repository):
             specifications=specifications,
         )
 
-        data = self._collection.find_one(**query)
+        data = list(self._collection.find(**query))
 
-        if data is None:
-            raise NotFoundError()
+        if not data:
+            raise NotFoundError(f"{self} repository get() did not find "
+                                f"any entities with {query} filter")
+        elif len(data) != 1:
+            raise MultipleResultsError(f"{self} repository get() returned"
+                                       f" multiple results with {query} query")
 
-        return self.model(**data)
+        return self.model(**data[0])
 
     def filter(
         self,
@@ -86,25 +91,16 @@ class MongoRepository(Repository):
         self._collection.insert_one(obj.dict())
         return obj
 
-    def __unpack_query(self, query: dict) -> dict:
-        return {
-            **query.get("filter", {}),
-            **query.get("sort", {}),
-            **query.get("skip", {}),
-            **query.get("limit", {}),
-            **query.get("projection", {}),
-        }
-
     def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query: dict = self._apply_specifications(
+            results = self._collection.find(**self._apply_specifications(
                 query=self.get_initial_query(),
-                specifications=specifications,
-            )
+                specifications=(*specifications, self.specs.only('_id')),
+            ))
 
-            self._collection.delete_many(self.__unpack_query(query))
+            self._collection.delete_many({"_id": {"$in": [result['_id'] for result in results]}})
         elif obj is not None:
             self._collection.delete_one(obj.dict())
 
@@ -117,13 +113,13 @@ class MongoRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
-            query = self._apply_specifications(
+            results = self._collection.find(**self._apply_specifications(
                 query=self.get_initial_query(),
-                specifications=specifications,
-            )
+                specifications=(*specifications, self.specs.only('_id')),
+            ))
 
             self._collection.update_many(
-                filter=self.__unpack_query(query),
+                filter={"_id": {"$in": [result['_id'] for result in results]}},
                 update={'$set': update_values},
             )
         elif obj is not None:
