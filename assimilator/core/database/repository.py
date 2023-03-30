@@ -89,6 +89,14 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
     def _get_specifications_context(self) -> Dict[str, Any]:
         return {"model": self.model, "repository": self}
 
+    @abstractmethod
+    def dict_to_models(self, data: dict) -> dict:
+        """
+        Converts data from Python dictionaries to models that Repository uses.
+        You don't need to use that function directly 99% of the times.
+        """
+        raise NotImplementedError()
+
     @final
     def _apply_specifications(
         self, query: Union[QueryT, None],

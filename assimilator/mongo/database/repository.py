@@ -8,7 +8,7 @@ from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
 from assimilator.core.database import Repository, SpecificationType, \
     SpecificationList, NotFoundError, MultipleResultsError
 from assimilator.mongo.database.specifications.specifications import MongoSpecificationList
-from assimilator.internal.database.models_utils import dict_to_models
+from assimilator.internal.database.models_utils import dict_to_internal_models
 
 ModelT = TypeVar("ModelT", bound=MongoModel)
 
@@ -38,6 +38,9 @@ class MongoRepository(Repository):
     def get_initial_query(self, override_query: Optional[dict] = None) -> dict:
         return dict(super(MongoRepository, self).get_initial_query(override_query))
 
+    def dict_to_models(self, data: dict) -> dict:
+        return dict_to_internal_models(data, model=self.model)
+
     @property
     def _collection_name(self):
         config = getattr(self.model, 'AssimilatorConfig', None)
@@ -56,11 +59,7 @@ class MongoRepository(Repository):
         lazy: bool = False,
         initial_query: dict = None,
     ):
-        query = self._apply_specifications(
-            query=initial_query,
-            specifications=specifications,
-        )
-
+        query = self._apply_specifications(query=initial_query, specifications=specifications)
         data = list(self._collection.find(**query))
 
         if not data:
@@ -86,7 +85,7 @@ class MongoRepository(Repository):
 
     def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         if obj is None:
-            obj = self.model(**dict_to_models(data=obj_data, model=self.model))
+            obj = self.model(**self.dict_to_models(data=obj_data))
 
         self._collection.insert_one(obj.dict())
         return obj

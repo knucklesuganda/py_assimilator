@@ -1,10 +1,10 @@
 from typing import Type, Union, Optional, TypeVar, Collection
 
-from sqlalchemy import func, select, update, delete, Delete
+from sqlalchemy import func, select, update, delete
 from sqlalchemy.orm import Session, Query
 from sqlalchemy.inspection import inspect
 
-from assimilator.alchemy.database.model_utils import dict_to_models
+from assimilator.alchemy.database.model_utils import dict_to_alchemy_models
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
@@ -89,9 +89,12 @@ class AlchemyRepository(Repository):
 
             self.session.add(obj)
 
+    def dict_to_models(self, data: dict) -> dict:
+        return dict_to_alchemy_models(data=data, model=self.model)
+
     def save(self, obj: Optional[AlchemyModelT] = None, **data) -> AlchemyModelT:
         if obj is None:
-            obj = self.model(**dict_to_models(data=data, model=self.model))
+            obj = self.model(**self.dict_to_models(data))
 
         self.session.add(obj)
         return obj

@@ -25,34 +25,33 @@ class CRUDService(Service):
         self.uow.repository.refresh(obj)
         return obj
 
-    def update(self, update_data: dict, *filters, **kwargs_filters) -> ModelT:
+    def update(self, update_obj: Union[dict, ModelT], *filters, **kwargs_filters) -> ModelT:
         with self.uow:
-            obj = self.get(*filters, **kwargs_filters)
+            if isinstance(update_obj, dict):
+                obj = self.get(*filters, **kwargs_filters)
 
-            for key, value in update_data.items():
-                setattr(obj, key, value)
+                update_obj = self.uow.repository.update(
+                    
+                )
 
-            self.uow.repository.update(obj)
+                obj.__dict__.update(update_obj.__dict__)
+                update_obj = obj
+
+            self.uow.repository.update(update_obj)
             self.uow.commit()
 
-        self.uow.repository.refresh(obj)
-        return obj
+        self.uow.repository.refresh(update_obj)
+        return update_obj
 
     def list(
         self, *filters, lazy: bool = False, **kwargs_filters,
     ) -> Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]]:
-        return self.uow.repository.filter(
-            self._specs.filter(*filters, **kwargs_filters),
-            lazy=lazy,
-        )
+        return self.uow.repository.filter(self._specs.filter(*filters, **kwargs_filters), lazy=lazy)
 
-    def get(self, *filters, lazy: bool = False, **kwargs_filters):
-        return self.uow.repository.get(
-            self._specs.filter(*filters, **kwargs_filters),
-            lazy=lazy,
-        )
+    def get(self, *filters, lazy: bool = False, **kwargs_filters) -> Union[ModelT, LazyCommand[ModelT]]:
+        return self.uow.repository.get(self._specs.filter(*filters, **kwargs_filters), lazy=lazy)
 
-    def delete(self, *filters, **kwargs_filters):
+    def delete(self, *filters, **kwargs_filters) -> None:
         with self.uow:
             obj = self.get(*filters, **kwargs_filters)
             self.uow.repository.delete(obj)

@@ -16,7 +16,7 @@ from examples.complex_database.models import (
     RedisUser, RedisBalance, RedisCurrency,
     MongoUser, MongoCurrency, MongoBalance,
 )
-
+from examples.fastapi_crud_example.models import mapper_registry
 
 storage = os.environ.get('storage', 'alchemy')
 
@@ -25,6 +25,7 @@ if storage == "alchemy":
     User = AlchemyUser
     Balance = AlchemyUserBalance
     Currency = AlchemyBalanceCurrency
+    mapper_registry.metadata.create_all(engine)
 
     def get_uow():
         DatabaseSession = sessionmaker(bind=engine)
