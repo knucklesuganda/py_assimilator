@@ -26,15 +26,11 @@ class ErrorWrapper:
         return self
 
     def is_already_wrapped(self, exc_type: Type[Exception]) -> bool:
-        return any(
-            issubclass(exc_type, error)
-            for error in self.skipped_errors
-            if not callable(error)      # TODO: remove this
-        )
+        return any(issubclass(exc_type, error) for error in self.skipped_errors)
 
-    def create_error(self, original_error: Exception, wrapped_error: Type[Exception]):
+    def create_error(self, original_error: Exception, wrapped_error_type: Type[Exception]):
         _, _, tb = sys.exc_info()
-        raise wrapped_error(original_error).with_traceback(tb)
+        raise wrapped_error_type(original_error).with_traceback(tb)
 
     def __exit__(self, exc_type: Type[Exception], exc_val: Exception, exc_tb):
         if exc_val is None:
@@ -47,7 +43,7 @@ class ErrorWrapper:
         if wrapped_error is not None:
             raise self.create_error(
                 original_error=exc_val,
-                wrapped_error=wrapped_error,
+                wrapped_error_type=wrapped_error,
             )
         elif self.default_error is not None:
             raise self.create_error(

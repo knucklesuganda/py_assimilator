@@ -1,4 +1,27 @@
+# PyAssimilator concepts
+
+We want to write the best code. Our code must use the best techniques that other programmers created, have
+no dependencies, and be readable. On the other hand, we don't want to spend a lot of time writing that code, because the
+only final measure for our program is **result**.
+
+That is why we use PyAssimilator. What we want to do is create patterns that allow us to remove dependencies from our code
+and make it cleaner. Our patterns can either:
+
+1. Talk to a database - `Repository, UnitOfWork`
+2. Optimize our code - `LazyCommand, ErrorWrapper`
+3. Make it more readable - `CRUDService, Service`
+4. Make it more secure - `UnitOfWork`
+5. Help other patterns - `Specification, SpecificationList, AdaptiveSpecification`
+ 
+We use these patterns and tick all of the boxes above. That is the whole point of this library. Now, you can start
+reading [Basic Tutorials](/tutorial/database/).
+
+-------------------------------------
+
 # How do we build these patterns
+
+You don't really need to read about these concepts below as you will see them later. But, if you want to know all the things
+that were put into this library - be free to check out things below!
 
 ### 1. Dependency injection
 Dependency injection is a really important concept in assimilator. We do
