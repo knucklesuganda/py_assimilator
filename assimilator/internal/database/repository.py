@@ -12,7 +12,7 @@ from assimilator.core.database import (
 )
 from assimilator.core.database import MultipleResultsError
 from assimilator.internal.database.specifications.specifications import InternalSpecificationList
-from assimilator.internal.database.models_utils import dict_to_models
+from assimilator.internal.database.models_utils import dict_to_internal_models
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -74,9 +74,12 @@ class InternalRepository(Repository):
             specifications=specifications,
         ))
 
+    def dict_to_models(self, data: dict) -> dict:
+        return dict_to_internal_models(data=data, model=self.model)
+
     def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         if obj is None:
-            obj = self.model(**dict_to_models(data=obj_data, model=self.model))
+            obj = self.model(**self.dict_to_models(obj_data))
 
         self.session[obj.id] = obj
         return obj

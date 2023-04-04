@@ -95,3 +95,57 @@ lazy_command = get_user_from_api(id=1, lazy=True)
 # We can also execute it normally:
 user = get_user_from_api(id=1)
 ```
+
+-----------------------------
+
+## ErrorWrapper
+
+`ErrorWrapper` is a pattern that allows you to change the type of your error. We want to do that to completely remove any
+kind of dependency that other libraries may introduce. It is mainly used internally, but you can  use it in your code as well. 
+
+Before:
+```Python
+
+def func():
+    raise ValueError()
+
+
+def foo():
+    try:
+        func()
+    except ValueError:  # DEPENDENCY(KIND OF)
+        print("Invalid data!")
+    except sqlalchemy.exc.NotFoundError:    # DEPENDENCY
+        print("Not found!")
+    except redis.LOLError:  # DEPENDENCY
+        print("Lol error!")
+
+```
+
+After:
+```Python
+from assimilator.core.patterns import ErrorWrapper
+
+wrapper = ErrorWrapper(error_mappings={
+    ValueError: InvalidDataError,
+    sqlalchemy.exc.NotFoundError: NotFoundCustomError,
+    redis.LOLError: CustomLOLError,
+})
+
+def func():
+    raise ValueError()
+
+
+def foo():
+    with error_wrapper:
+        try:
+            func()
+        except InvalidDataError:  # NO DEPENDENCY
+            print("Invalid data!")
+        except NotFoundCustomError:    # NO DEPENDENCY
+            print("Not found!")
+        except CustomLOLError:  # NO DEPENDENCY
+            print("Lol error!")
+
+```
+

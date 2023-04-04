@@ -64,4 +64,5 @@ extra:
   analytics:
     provider: google
     property: G-7PEMV9YSS5
-
+extra_javascript:
+  - https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8262462913055533

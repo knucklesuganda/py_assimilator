@@ -133,9 +133,9 @@ This function allows you to update one entity. Used for Update operation in CRUD
 # For example, you may use it like this:
 
 service.update(
-    id=1,   # user with ID 1
-    update_data={
-        "username": "Andrey-2",     # will have this new username
+    id=1,  # user with ID 1
+    update_obj={
+        "username": "Andrey-2",  # will have this new username
     },
 )
 ```

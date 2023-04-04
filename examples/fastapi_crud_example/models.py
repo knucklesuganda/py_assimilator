@@ -23,11 +23,12 @@ users = Table(
 balances = Table(
     "balances",
     mapper_registry.metadata,
-    UniqueConstraint("balance", "user_id"),
     Column('id', Integer(), primary_key=True),
     Column('user_id', ForeignKey("users.id", ondelete="CASCADE")),
     Column('balance', Float(), server_default='0'),
     Column('currency_id', ForeignKey("currency.id")),
+
+    UniqueConstraint("balance", "user_id"),
 )
 
 
@@ -56,7 +57,7 @@ mapper_registry.map_imperatively(
     AlchemyUser,
     users,
     properties={
-        "balances": relationship(AlchemyBalance, backref='user', uselist=True),
+        "balances": relationship(AlchemyBalance, backref='user', uselist=True, lazy='joined'),
     },
 )
 
@@ -64,8 +65,8 @@ mapper_registry.map_imperatively(
     AlchemyBalance,
     balances,
     properties={
-        "currency": relationship(AlchemyCurrency, uselist=False),
-        "user": relationship(AlchemyUser, backref="balances"),
+        "currency": relationship(AlchemyCurrency, uselist=False, lazy='joined'),
+        "user": relationship(AlchemyUser, backref="balances", lazy='joined'),
     },
 )
 

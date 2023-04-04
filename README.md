@@ -25,50 +25,79 @@
 * `pip install py-assimilator[mongo]` - Optional MongoDB support 
 
 
-## Simple example
+## What is that all about?
 
-Example usage of the code to create a user using all the DDD patterns:
+1. We want to write the best code.
+2. We need the best patterns and techniques for this.
+3. We use PyAssimilator and save lots of time.
+4. We use PyAssimilator and write the best code.
+4. We use PyAssimilator and use the best patterns.
+6. We use PyAssimilator and have no dependencies in our code.
+7. We use PyAssimilator and can switch one database to another in a matter of seconds.
+7. We learn PyAssimilator once and use it forever!
+7. **And most importantly, we make Python projects better!**
+
+
+## Code comparison
+
+Before PyAssimilator:
 ```Python
-from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
-from assimilator.core.database import UnitOfWork
+# BAD CODE :(
 
-def create_user(username: str, email: str, uow: UnitOfWork):
-    with uow:
-        repository = uow.repository     # Get Repository pattern
-        new_user = repository.save(username=username, email=email, balance=0)
-        uow.commit()    # Securely save the data
-
+def create_user(username: str, email: str):
+    # NO PATTERNS!
+    # ONLY ONE DATABASE CHOICE!
+    new_user = User(username=username, email=email, balance=0) # DEPENDENCY!
+    session = db_session()  # DEPENDENCY!
+    session.add(new_user)
+    session.commit()  # NO ACID TRANSACTIONS!
     return new_user
-
-
-user_repository = AlchemyRepository(
-    session=alchemy_session,    # alchemy db session
-    model=User,     # alchemy user model 
-)
-user_uow = AlchemyUnitOfWork(repository=user_repository)
-
-create_user(
-    username="Andrey", 
-    email="python.on.papyrus@gmail.com",
-    uow=user_uow,
-)
 
 ```
 
-## Why do I need it?
-![](images/why_assimilator_no_usage.png)
+After:
+```Python
+# GOOD CODE :)
 
-Patterns are very useful for good code, but only to some extent. Most of them are not suitable for 
-real life applications. DDD(Domain-driven design) is one of the most popular ways of development
-today, but nobody explains how to write most of DDD patterns in Python. Even if they do, life gives you another
-issue that cannot be solved with a simple algorithm. That is why [Andrey](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw) created
-a library for the patterns that he uses in his projects daily.
+def create_user(username: str, email: str, uow: UnitOfWork):
+    # BEST DDD PATTERNS
+    # PATTERN SUBSTITUTION/MULTIPLE DATABASES AT ONCE
 
-![](images/why_assimilator_usage.png)
+    with uow:   # ACID TRANSACTIONS IN ANY DATABASE
+        new_user = uow.repository.save(
+            username=username,  # NO MODEL DEPENDENCIES
+            email=email,
+            balance=0,
+        )
+        uow.commit()    # AUTO ROLLBACK
 
-Watch our [Demo]() to find out more about pyAssimilator capabilities.
+    return new_user
 
-## Source
+```
+
+## So, do I really need it?
+
+If you want to spend less time writing your code, but write better code - then you must use PyAssimilator.
+It can be hard to start if you have no experience with good code, so you can watch creator's [video tutorials](https://knucklesuganda.github.io/py_assimilator/video_tutorials/).
+
+
+## Our vision
+
+Make Python the best programming language for enterprise development and use all of its dynamic capabilities to write
+things that other languages can't even comprehend!
+
+- Pattern substitution(switch databases easily) ✔️
+- Event-based apps(in development) 🛠️
+- 45% of all Python projects use PyAssimilator 🛠️
+- Independent code(in development) 🛠️
+- Adaptive patterns(in development) 🛠️
+- Automatic code improvements(in development) 🛠️
+- Decentralized code management(in development) 🛠️
+
+If you want to help with any of those things - be free to contribute to the project. Remember, you never do anything for
+free - and that will not be the case either.
+
+## Sources
 * [Github](https://github.com/knucklesuganda/py_assimilator)
 * [PyPI](https://pypi.org/project/py-assimilator/)
 * [Documentation](https://knucklesuganda.github.io/py_assimilator/)
@@ -78,6 +107,7 @@ Watch our [Demo]() to find out more about pyAssimilator capabilities.
 
 
 ## Stars history
+
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
 
 
