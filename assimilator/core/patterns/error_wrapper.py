@@ -48,7 +48,7 @@ class ErrorWrapper:
         elif self.default_error is not None:
             raise self.create_error(
                 original_error=exc_val,
-                wrapped_error=self.default_error,
+                wrapped_error_type=self.default_error,
             )
 
         return False   # No wrapping error was found
