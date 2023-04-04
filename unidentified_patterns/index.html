@@ -654,6 +654,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#errorwrapper" class="md-nav__link">
+    ErrorWrapper
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -732,6 +739,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errorwrapper" class="md-nav__link">
+    ErrorWrapper
+  </a>
   
 </li>
       
@@ -838,6 +852,49 @@ case, then you can use LazyCommand decorator:</p>
 <span class="c1"># We can also execute it normally:</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_from_api</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
+<hr />
+<h2 id="errorwrapper">ErrorWrapper</h2>
+<p><code>ErrorWrapper</code> is a pattern that allows you to change the type of your error. We want to do that to completely remove any
+kind of dependency that other libraries may introduce. It is mainly used internally, but you can  use it in your code as well. </p>
+<p>Before:
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">func</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># DEPENDENCY(KIND OF)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid data!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">NotFoundError</span><span class="p">:</span>    <span class="c1"># DEPENDENCY</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not found!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">redis</span><span class="o">.</span><span class="n">LOLError</span><span class="p">:</span>  <span class="c1"># DEPENDENCY</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lol error!&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<p>After:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.patterns</span> <span class="kn">import</span> <span class="n">ErrorWrapper</span>
+
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">ErrorWrapper</span><span class="p">(</span><span class="n">error_mappings</span><span class="o">=</span><span class="p">{</span>
+    <span class="ne">ValueError</span><span class="p">:</span> <span class="n">InvalidDataError</span><span class="p">,</span>
+    <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">NotFoundError</span><span class="p">:</span> <span class="n">NotFoundCustomError</span><span class="p">,</span>
+    <span class="n">redis</span><span class="o">.</span><span class="n">LOLError</span><span class="p">:</span> <span class="n">CustomLOLError</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">error_wrapper</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">func</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">InvalidDataError</span><span class="p">:</span>  <span class="c1"># NO DEPENDENCY</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid data!&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NotFoundCustomError</span><span class="p">:</span>    <span class="c1"># NO DEPENDENCY</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not found!&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">CustomLOLError</span><span class="p">:</span>  <span class="c1"># NO DEPENDENCY</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lol error!&quot;</span><span class="p">)</span>
+</code></pre></div></p>
 
 
   

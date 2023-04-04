@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-do-we-build-these-patterns" class="md-skip">
+        <a href="#pyassimilator-concepts" class="md-skip">
           Skip to content
         </a>
       
@@ -288,61 +288,9 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Concepts
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         Concepts
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-dependency-injection" class="md-nav__link">
-    1. Dependency injection
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-solid" class="md-nav__link">
-    2. SOLID
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-domain-driven-design" class="md-nav__link">
-    3. Domain-driven design
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-reusable-patterns" class="md-nav__link">
-    4. Reusable patterns
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -695,42 +643,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-dependency-injection" class="md-nav__link">
-    1. Dependency injection
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-solid" class="md-nav__link">
-    2. SOLID
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-domain-driven-design" class="md-nav__link">
-    3. Domain-driven design
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-reusable-patterns" class="md-nav__link">
-    4. Reusable patterns
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -749,7 +661,25 @@
   </a>
 
 
+<h1 id="pyassimilator-concepts">PyAssimilator concepts</h1>
+<p>We want to write the best code. Our code must use the best techniques that other programmers created, have
+no dependencies, and be readable. On the other hand, we don't want to spend a lot of time writing that code, because the
+only final measure for our program is <strong>result</strong>.</p>
+<p>That is why we use PyAssimilator. What we want to do is create patterns that allow us to remove dependencies from our code
+and make it cleaner. Our patterns can either:</p>
+<ol>
+<li>Talk to a database - <code>Repository, UnitOfWork</code></li>
+<li>Optimize our code - <code>LazyCommand, ErrorWrapper</code></li>
+<li>Make it more readable - <code>CRUDService, Service</code></li>
+<li>Make it more secure - <code>UnitOfWork</code></li>
+<li>Help other patterns - <code>Specification, SpecificationList, AdaptiveSpecification</code></li>
+</ol>
+<p>We use these patterns and tick all of the boxes above. That is the whole point of this library. Now, you can start
+reading <a href="/tutorial/database/">Basic Tutorials</a>.</p>
+<hr />
 <h1 id="how-do-we-build-these-patterns">How do we build these patterns</h1>
+<p>You don't really need to read about these concepts below as you will see them later. But, if you want to know all the things
+that were put into this library - be free to check out things below!</p>
 <h3 id="1-dependency-injection">1. Dependency injection</h3>
 <p>Dependency injection is a really important concept in assimilator. We do
 not use any additional dependency injection frameworks, but all the patterns inject 
