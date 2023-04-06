@@ -105,10 +105,24 @@ free - and that will not be the case either.
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
 
+ ## Contributors
+
+<a href="https://github.com/knucklesuganda/py_assimilator/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=knucklesuganda/py_assimilator" />
+</a>
 
 ## Stars history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
+
+
+## ⭐Stargazers⭐
+
+We love all people who star our library. You can look at all stargazers in the documentation:
+
+https://knucklesuganda.github.io/py_assimilator/#stars-history
+
+> If you star the library you will appear there as well!
 
 
 ## Types of patterns
