@@ -115,6 +115,9 @@ free - and that will not be the case either.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
 
+
+## ⭐Stargazers⭐
+
 <div id="stargazers" style="display: flex;
     align-items: baseline; flex-wrap: wrap; align-content: center;
     flex-direction: row; padding: 0.2em;"></div>
