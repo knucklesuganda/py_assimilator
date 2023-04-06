@@ -105,10 +105,74 @@ free - and that will not be the case either.
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
 
+ ## Contributors
+
+<a href="https://github.com/knucklesuganda/py_assimilator/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=knucklesuganda/py_assimilator" />
+</a>
 
 ## Stars history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
+
+<div id="stargazers" style="display: flex;
+    align-items: baseline; flex-wrap: wrap; align-content: center;
+    flex-direction: row; padding: 0.2em;"></div>
+
+<script>
+    fetch("https://pyassimilator.azurewebsites.net/api/create_stars").then(async (response) => {
+        const stargazers = await response.json();
+        let stargazersHTML = '';
+
+        const chunkSize = 10;
+        for (let i = 0; i < stargazers.length; i += chunkSize) {
+            let chunkHTML = "<div style='display: flex; width: 100%; justify-content: space-evenly'>";
+
+            for(const stargazer of stargazers.slice(i, i + chunkSize)){
+                chunkHTML += `<a href='${stargazer.url}' class='stargazer'>
+                    <img src='${stargazer.avatar}'  style='width: 4em'>
+                    <span style='display: none'>${stargazer.login}</span>
+                </a>`;
+            }
+
+            stargazersHTML += chunkHTML + "</div>";
+        }
+
+        document.getElementById("stargazers").innerHTML = stargazersHTML;
+    });
+</script>
+
+<style>
+.stargazer:hover{
+
+    transition: 100ms;
+    border: 2px solid white;
+    
+    overflow: hidden;
+    display: flex;
+    
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: space-evenly;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.stargazer:hover > img{
+
+    transition: 100ms;
+    width: 12em!important;
+
+}
+
+.stargazer:hover > span{
+    transition: 100ms;
+    display: inherit!important;
+    color: white;
+    font-size: 1.4em;
+}
+</style>
 
 
 ## Types of patterns
