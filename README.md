@@ -118,64 +118,11 @@ free - and that will not be the case either.
 
 ## ⭐Stargazers⭐
 
-<div id="stargazers" style="display: flex;
-    align-items: baseline; flex-wrap: wrap; align-content: center;
-    flex-direction: row; padding: 0.2em;"></div>
+We love all people who star our library. You can look at all stargazers in the documentation:
 
-<script>
-    fetch("https://pyassimilator.azurewebsites.net/api/create_stars").then(async (response) => {
-        const stargazers = await response.json();
-        let stargazersHTML = '';
+https://knucklesuganda.github.io/py_assimilator/#stars-history
 
-        const chunkSize = 10;
-        for (let i = 0; i < stargazers.length; i += chunkSize) {
-            let chunkHTML = "<div style='display: flex; width: 100%; justify-content: space-evenly'>";
-
-            for(const stargazer of stargazers.slice(i, i + chunkSize)){
-                chunkHTML += `<a href='${stargazer.url}' class='stargazer'>
-                    <img src='${stargazer.avatar}'  style='width: 4em'>
-                    <span style='display: none'>${stargazer.login}</span>
-                </a>`;
-            }
-
-            stargazersHTML += chunkHTML + "</div>";
-        }
-
-        document.getElementById("stargazers").innerHTML = stargazersHTML;
-    });
-</script>
-
-<style>
-.stargazer:hover{
-
-    transition: 100ms;
-    border: 2px solid white;
-    
-    overflow: hidden;
-    display: flex;
-    
-    align-items: flex-start;
-    align-content: flex-start;
-    justify-content: space-evenly;
-    flex-direction: column;
-    text-align: center;
-
-}
-
-.stargazer:hover > img{
-
-    transition: 100ms;
-    width: 12em!important;
-
-}
-
-.stargazer:hover > span{
-    transition: 100ms;
-    display: inherit!important;
-    color: white;
-    font-size: 1.4em;
-}
-</style>
+> If you star the library you will appear there as well!
 
 
 ## Types of patterns
