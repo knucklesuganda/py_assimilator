@@ -54,7 +54,7 @@
   <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-7PEMV9YSS5"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-7PEMV9YSS5",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-7PEMV9YSS5",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
 
   
-    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+    <script>var consent;"undefined"==typeof __md_analytics||(consent=__md_get("__consent"))&&consent.analytics&&__md_analytics()</script>
   
 
     
@@ -320,6 +320,13 @@
         <li class="md-nav__item">
   <a href="#sources" class="md-nav__link">
     Sources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributors" class="md-nav__link">
+    Contributors
   </a>
   
 </li>
@@ -779,6 +786,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#contributors" class="md-nav__link">
+    Contributors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#stars-history" class="md-nav__link">
     Stars history
   </a>
@@ -912,8 +926,71 @@ free - and that will not be the case either.</p>
 <li><a href="https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw">Author's YouTube RU</a></li>
 <li><a href="https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA">Author's YouTube ENG</a></li>
 </ul>
+<h2 id="contributors">Contributors</h2>
+<p><a href="https://github.com/knucklesuganda/py_assimilator/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=knucklesuganda/py_assimilator" />
+</a></p>
 <h2 id="stars-history">Stars history</h2>
 <p><a href="https://star-history.com/#knucklesuganda/py_assimilator&amp;Date"><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&amp;type=Date" /></a></p>
+<div id="stargazers" style="display: flex;
+    align-items: baseline; flex-wrap: wrap; align-content: center;
+    flex-direction: row; padding: 0.2em;"></div>
+
+<script>
+    fetch("https://pyassimilator.azurewebsites.net/api/create_stars").then(async (response) => {
+        const stargazers = await response.json();
+        let stargazersHTML = '';
+
+        const chunkSize = 10;
+        for (let i = 0; i < stargazers.length; i += chunkSize) {
+            let chunkHTML = "<div style='display: flex; width: 100%; justify-content: space-evenly'>";
+
+            for(const stargazer of stargazers.slice(i, i + chunkSize)){
+                chunkHTML += `<a href='${stargazer.url}' class='stargazer'>
+                    <img src='${stargazer.avatar}'  style='width: 4em'>
+                    <span style='display: none'>${stargazer.login}</span>
+                </a>`;
+            }
+
+            stargazersHTML += chunkHTML + "</div>";
+        }
+
+        document.getElementById("stargazers").innerHTML = stargazersHTML;
+    });
+</script>
+
+<style>
+.stargazer:hover{
+
+    transition: 100ms;
+    border: 2px solid white;
+
+    overflow: hidden;
+    display: flex;
+
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: space-evenly;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.stargazer:hover > img{
+
+    transition: 100ms;
+    width: 12em!important;
+
+}
+
+.stargazer:hover > span{
+    transition: 100ms;
+    display: inherit!important;
+    color: white;
+    font-size: 1.4em;
+}
+</style>
+
 <h2 id="types-of-patterns">Types of patterns</h2>
 <p>These are different use cases for the patterns implemented:</p>
 <ul>
@@ -975,6 +1052,10 @@ free - and that will not be the case either.</p>
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Andrey Ivanov
+    </div>
+  
   
     Made with
     <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
@@ -992,12 +1073,90 @@ free - and that will not be the case either.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["search.suggest", "search.highlight", "content.tabs.link"], "search": "assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+  
+    
+  
+
+
+  
+    
+  
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="analytics" checked>
+          <span class="task-list-indicator"></span>
+          Google Analytics
+        <label>
+      </li>
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        <label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["search.suggest", "search.highlight", "content.tabs.link", "navigation.footer"], "search": "assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.5a2dcb6a.min.js"></script>
       
         <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8262462913055533"></script>
+      
+        <script src="scripts/add_footer.js"></script>
+      
+        <script src="scripts/feedback.js"></script>
       
     
     
