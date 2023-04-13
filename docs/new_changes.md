@@ -1,4 +1,3 @@
-
 ## Adaptive specifications
 
 While working with different queries, you are going to use specifications. However, accessing them from repository can

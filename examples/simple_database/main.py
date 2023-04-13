@@ -1,5 +1,8 @@
 import operator
 
+import os
+os.environ['PY_ASSIMILATOR_MESSAGE'] = 'False'
+
 from assimilator.alchemy.database import AlchemyRepository
 from assimilator.core.patterns import LazyCommand
 from assimilator.redis_.database import RedisRepository
