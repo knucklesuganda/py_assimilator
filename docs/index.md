@@ -19,11 +19,6 @@
 
 ## Install now
 * `pip install py-assimilator`
-* `pip install py-assimilator[alchemy]` - Optional SQLAlchemy support 
-* `pip install py-assimilator[kafka]` - Optional Kafka support 
-* `pip install py-assimilator[redis]` - Optional Redis support 
-* `pip install py-assimilator[mongo]` - Optional MongoDB support 
-
 
 ## What is that all about?
 
@@ -104,8 +99,9 @@ free - and that will not be the case either.
 * [Github](https://github.com/knucklesuganda/py_assimilator)
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
+* [Discord channel](https://discord.gg/gTVaGu7DHN)
 
- ## Contributors
+## Contributors
 
 <a href="https://github.com/knucklesuganda/py_assimilator/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=knucklesuganda/py_assimilator" />
@@ -114,7 +110,6 @@ free - and that will not be the case either.
 ## Stars history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
-
 
 ## ⭐Stargazers⭐
 
@@ -176,7 +171,6 @@ free - and that will not be the case either.
     font-size: 1.4em;
 }
 </style>
-
 
 ## Types of patterns
 These are different use cases for the patterns implemented:
