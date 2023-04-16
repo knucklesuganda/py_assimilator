@@ -1,0 +1,53 @@
+
+.code_switch_button {
+    background-color: #7e57c2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    display: block;
+    transition: 200ms;
+}
+
+.code_switch_button:hover {
+    background-color: #673ab7;
+}
+
+.code_example_buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.code_preview_container{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.code_examples > .highlight{
+    max-width: inherit;
+}
+
+.code_examples{
+    flex-grow: 1;
+    transition: 200ms;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
