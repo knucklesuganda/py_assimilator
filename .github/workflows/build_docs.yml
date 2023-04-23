@@ -1,0 +1,13 @@
+name: Preview Docs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build docs
+        run: mkdocs gh-deploy
