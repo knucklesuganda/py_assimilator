@@ -82,7 +82,7 @@ Make Python the best programming language for enterprise development and use all
 things that other languages can't even comprehend!
 
 - Pattern substitution(switch databases easily) ✔️
-- Event-based apps(in development) 🛠️
+- Event-based patterns(in development) 🛠️
 - 45% of all Python projects use PyAssimilator 🛠️
 - Independent code(in development) 🛠️
 - Adaptive patterns(in development) 🛠️

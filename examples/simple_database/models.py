@@ -1,12 +1,16 @@
 from sqlalchemy import create_engine, Column, String, Float, Integer
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
 from assimilator.core.database import BaseModel
 from assimilator.mongo.database import MongoModel
 from assimilator.redis_.database import RedisModel
 
-engine = create_engine(url="sqlite:///:memory:")
-Base = declarative_base()
+
+engine = create_engine('sqlite:///:memory:')
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 class AlchemyUser(Base):

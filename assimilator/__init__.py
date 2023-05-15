@@ -21,5 +21,4 @@ if os.environ.get('PY_ASSIMILATOR_MESSAGE', None) is None:
         os.environ['PY_ASSIMILATOR_MESSAGE'] = 'False'
 
     2) You can add it within your system or in your .env file: PY_ASSIMILATOR_MESSAGE=False
-    
     """)

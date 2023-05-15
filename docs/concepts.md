@@ -13,7 +13,7 @@ and make it cleaner. Our patterns can either:
 4. Make it more secure - `UnitOfWork`
 5. Help other patterns - `Specification, SpecificationList, AdaptiveSpecification`
  
-We use these patterns and tick all of the boxes above. That is the whole point of this library. Now, you can start
+We use these patterns and tick all the boxes above. That is the whole point of this library. Now, you can start
 reading [Basic Tutorials](/tutorial/database/).
 
 -------------------------------------

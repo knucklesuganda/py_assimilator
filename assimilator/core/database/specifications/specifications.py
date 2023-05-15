@@ -45,6 +45,7 @@ class FilterSpecification(Specification, ABC):
 
 def specification(func: Callable) -> Callable:
     def create_specification(*args, **kwargs):
+
         @wraps(func)
         def created_specification(query: QueryT, **context) -> QueryT:
             return func(*args, **kwargs, query=query, **context)

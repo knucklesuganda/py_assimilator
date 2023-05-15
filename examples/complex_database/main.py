@@ -78,7 +78,7 @@ def read_user(username: str, balance: int, repository: Repository):
 
 
 def read_user_direct(username: str, repository: Repository):
-    if isinstance(repository, AlchemyRepository):       # Awful! Try to use filtering options
+    if isinstance(repository, AlchemyRepository):  # Awful! Try to use filtering options
         user = repository.get(
             repository.specs.join('balances'),
             repository.specs.filter(User.username == username),
@@ -91,7 +91,7 @@ def read_user_direct(username: str, repository: Repository):
             )
         )
     elif isinstance(repository, MongoRepository):
-        user = repository.get(repository.specs.filter({ "username": username }))
+        user = repository.get(repository.specs.filter({"username": username}))
     else:
         raise ValueError("Direct repository filter not found")
 

@@ -211,18 +211,18 @@ If you want to create your own `SpecificationList`, then be sure to do the follo
 4. Add your custom specification list to your repository.
 
 ```Python
-from sqlalchemy.orm import Query
+from sqlalchemy import Select
 
 from assimilator.alchemy.database import AlchemySpecificationList
 from assimilator.core.database import specification
 
 
 @specification
-def alchemy_validate(validate_vip: bool, query: Query):
+def alchemy_validate(validate_vip: bool, query: Select):
     if validate_vip:
-        return query.filter(is_vip=True, is_validated=True)
+        return query.filter_by(is_vip=True, is_validated=True)
 
-    return query.filter(is_validated=True)
+    return query.filter_by(is_validated=True)
 
 
 class CustomSpecificationList(AlchemySpecificationList):

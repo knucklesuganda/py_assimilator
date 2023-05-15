@@ -29,11 +29,6 @@ class CRUDService(Service):
         with self.uow:
             if isinstance(update_obj, dict):
                 obj = self.get(*filters, **kwargs_filters)
-
-                update_obj = self.uow.repository.update(
-                    
-                )
-
                 obj.__dict__.update(update_obj.__dict__)
                 update_obj = obj
 

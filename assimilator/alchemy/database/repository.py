@@ -1,15 +1,15 @@
 from typing import Type, Union, Optional, TypeVar, Collection
 
-from sqlalchemy import func, select, update, delete
-from sqlalchemy.orm import Session, Query
+from sqlalchemy.orm import Session
 from sqlalchemy.inspection import inspect
+from sqlalchemy import func, select, update, delete, Select
 
-from assimilator.alchemy.database.model_utils import dict_to_alchemy_models
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.database.exceptions import InvalidQueryError
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
-from assimilator.alchemy.database.specifications.specifications import AlchemySpecificationList
+from assimilator.alchemy.database.model_utils import dict_to_alchemy_models
 from assimilator.core.database import Repository, LazyCommand, SpecificationType
+from assimilator.alchemy.database.specifications.specifications import AlchemySpecificationList
 
 
 AlchemyModelT = TypeVar("AlchemyModelT")
@@ -23,7 +23,7 @@ class AlchemyRepository(Repository):
         self,
         session: Session,
         model: Type[AlchemyModelT],
-        initial_query: Query = None,
+        initial_query: Select = None,
         specifications: Type[AlchemySpecificationList] = AlchemySpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
@@ -39,7 +39,7 @@ class AlchemyRepository(Repository):
         self,
         *specifications: SpecificationType,
         lazy: bool = False,
-        initial_query: Query = None,
+        initial_query: Select = None,
     ) -> Union[AlchemyModelT, LazyCommand[AlchemyModelT]]:
         query = self._apply_specifications(
             query=initial_query,
@@ -51,7 +51,7 @@ class AlchemyRepository(Repository):
         self,
         *specifications: SpecificationType,
         lazy: bool = False,
-        initial_query: Query = None,
+        initial_query: Select = None,
     ) -> Union[Collection[AlchemyModelT], LazyCommand[Collection[AlchemyModelT]]]:
         query = self._apply_specifications(
             query=initial_query,
@@ -123,7 +123,7 @@ class AlchemyRepository(Repository):
         self,
         *specifications: SpecificationType,
         lazy: bool = False,
-        initial_query: Query = None
+        initial_query: Select = None
     ) -> Union[LazyCommand[int], int]:
         primary_keys = inspect(self.model).primary_key
 

@@ -1,9 +1,16 @@
 import json
 from uuid import uuid4, UUID
 from typing import (
-    Type, TypeVar, ClassVar, Union,
-    Optional, Callable, Any, AbstractSet,
-    Mapping, Dict,
+    Type,
+    TypeVar,
+    ClassVar,
+    Union,
+    Optional,
+    Callable,
+    Any,
+    AbstractSet,
+    Mapping,
+    Dict,
 )
 
 from pydantic import BaseModel as PydanticBaseModel, Extra, ValidationError, Field
@@ -59,7 +66,7 @@ class BaseModel(PydanticBaseModel):
     def loads(cls: Type['T'], data: str) -> 'T':
         try:
             return cls(**json.loads(data))
-        except (ValidationError, TypeError) as exc:
+        except (ValidationError, TypeError, json.JSONDecodeError) as exc:
             raise ParsingError(exc)
 
     def json(
