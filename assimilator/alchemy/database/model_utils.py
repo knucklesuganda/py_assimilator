@@ -17,10 +17,7 @@ def dict_to_alchemy_models(data: dict, model: Type[T]) -> T:
         if foreign_data is None:
             continue
 
-        foreign_model, is_list = get_model_from_relationship(
-            model=model,
-            relationship_name=relationship,
-        )
+        foreign_model, is_list = get_model_from_relationship(model=model, relationship_name=relationship)
 
         if not is_list and isinstance(foreign_data, dict):
             foreign_data = dict_to_alchemy_models(data=foreign_data, model=foreign_model)

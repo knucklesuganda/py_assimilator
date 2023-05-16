@@ -8,6 +8,7 @@ from assimilator.core.database.specifications.types import (
     PaginateSpecificationProtocol,
     OnlySpecificationProtocol,
     JoinSpecificationProtocol,
+    GroupBySpecificationProtocol,
 )
 
 QueryT = TypeVar("QueryT")
@@ -62,6 +63,7 @@ class SpecificationList:
     paginate: PaginateSpecificationProtocol
     join: JoinSpecificationProtocol
     only: OnlySpecificationProtocol
+    group_by: GroupBySpecificationProtocol
 
 
 SpecificationType = Union[Callable, Specification]

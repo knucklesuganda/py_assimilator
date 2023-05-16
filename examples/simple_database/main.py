@@ -179,6 +179,17 @@ def check_users_not_saved(uow: UnitOfWork):
         print("User 2 changes were discarded!")
 
 
+def get_users_analytics(repository: Repository):
+    from sqlalchemy import select, func
+
+    repository.filter(
+        repository.specs.group_by('email'),
+    )
+
+    # data = repository.session.execute(select(User, func.count(User.id)))
+    # print(data)
+
+
 if __name__ == '__main__':
     create_user__kwargs(get_uow())
     create_user_model(get_uow())
@@ -209,3 +220,5 @@ if __name__ == '__main__':
     filter_users(persistent_uow.repository)
     count_users(persistent_uow.repository)
     filter_users_lazy(persistent_uow.repository)
+
+    get_users_analytics(persistent_uow.repository)

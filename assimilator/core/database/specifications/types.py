@@ -23,9 +23,15 @@ class OnlySpecificationProtocol(Protocol):
         ...
 
 
+class GroupBySpecificationProtocol(Protocol):
+    def __call__(self, *groupings: Iterable[str], havings: Iterable[str] = ()):
+        ...
+
+
 __all__ = [
     'OrderSpecificationProtocol',
     'PaginateSpecificationProtocol',
     'JoinSpecificationProtocol',
     'OnlySpecificationProtocol',
+    'GroupBySpecificationProtocol',
 ]

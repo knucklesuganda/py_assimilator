@@ -12,6 +12,7 @@ from assimilator.core.database.specifications.specifications import (
     SpecificationType,
     FilterSpecification,
 )
+from assimilator.core.database.model_utils import extract_fields
 
 
 class AlchemyFilter(FilterSpecification):
@@ -36,11 +37,10 @@ class AlchemyFilter(FilterSpecification):
 
         for filter_ in named_filters:
             for field, value in filter_.items():
-                self.filters.append(
-                    self.filtering_options.parse_field(
-                        raw_field=field, value=value,
-                    )
-                )
+                self.filters.append(self.filtering_options.parse_field(
+                    raw_field=field,
+                    value=value,
+                ))
 
             self.filters.remove(filter_)
 
@@ -114,10 +114,7 @@ def alchemy_join(
             target = model
 
             for entity in entities:
-                target, _ = get_model_from_relationship(
-                    model=target,
-                    relationship_name=entity,
-                )
+                target, _ = get_model_from_relationship(model=target, relationship_name=entity)
 
         query = query.join_from(model, target, **join_data)\
             .add_columns(target).select_from(model)
@@ -172,12 +169,28 @@ def alchemy_only(
     return query
 
 
+@specification
+def alchemy_group_by(*groupings: Iterable[str], query: Select, model, havings: Iterable[str] = (), **_):
+    fields = extract_fields(
+        fields=groupings,
+        model=model,
+        get_relationships=lambda model_: set(inspect(model_).relationships.keys()),
+        get_model=get_model_from_relationship,
+    )
+
+    for grouping in fields:
+        query = query.group_by(grouping)
+
+    return query
+
+
 class AlchemySpecificationList(SpecificationList):
     filter = AlchemyFilter
     order = alchemy_order
     paginate = alchemy_paginate
     join = alchemy_join
     only = alchemy_only
+    group_by = alchemy_group_by
 
 
 __all__ = [
