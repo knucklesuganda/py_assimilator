@@ -1,7 +1,9 @@
 from typing import List
 
-from sqlalchemy import create_engine, Column, String, Float,\
-    Integer, ForeignKey, UniqueConstraint, Table
+from sqlalchemy import (
+    create_engine, Column, String, Float,
+    Integer, ForeignKey, UniqueConstraint, Table,
+)
 from sqlalchemy.orm import relationship, registry
 
 from assimilator.core.database import BaseModel
@@ -57,7 +59,7 @@ mapper_registry.map_imperatively(
     AlchemyUser,
     users,
     properties={
-        "balances": relationship(AlchemyBalance, backref='user', uselist=True, lazy='joined'),
+        "balances": relationship(AlchemyBalance, back_populates='user', uselist=True, lazy='select'),
     },
 )
 
@@ -65,13 +67,13 @@ mapper_registry.map_imperatively(
     AlchemyBalance,
     balances,
     properties={
-        "currency": relationship(AlchemyCurrency, uselist=False, lazy='joined'),
-        "user": relationship(AlchemyUser, backref="balances", lazy='joined'),
+        "currency": relationship(AlchemyCurrency, uselist=False, lazy='select'),
+        "user": relationship(AlchemyUser, back_populates='balances', lazy='select'),
     },
 )
 
 mapper_registry.map_imperatively(AlchemyCurrency, currency)
-mapper_registry.metadata.create_all(engine)
+mapper_registry.metadata.create_all(bind=engine, tables=[users, balances, currency])
 
 
 class InternalCurrency(BaseModel):

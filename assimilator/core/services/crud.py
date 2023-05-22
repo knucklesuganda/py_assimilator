@@ -1,4 +1,4 @@
-from typing import TypeVar, Iterable, Union
+from typing import TypeVar, Iterable, Union, List
 
 from assimilator.core.database import UnitOfWork, SpecificationList
 from assimilator.core.services.base import Service
@@ -28,14 +28,18 @@ class CRUDService(Service):
     def update(self, update_obj: Union[dict, ModelT], *filters, **kwargs_filters) -> ModelT:
         with self.uow:
             if isinstance(update_obj, dict):
-                obj = self.get(*filters, **kwargs_filters)
+                old_obj = self.get(*filters, **kwargs_filters)
 
-                update_obj = self.uow.repository.update(
-                    
-                )
+                for updated_key, updated_value in update_obj.items():
+                    old_value = getattr(old_obj, updated_key)
 
-                obj.__dict__.update(update_obj.__dict__)
-                update_obj = obj
+                    if not isinstance(old_value, List):
+                        setattr(old_obj, updated_key, updated_value)
+                    else:
+                        for i in range(len(old_value)):
+                            setattr(old_obj, updated_key, updated_value[i])
+
+                update_obj = old_obj
 
             self.uow.repository.update(update_obj)
             self.uow.commit()

@@ -10,22 +10,20 @@ from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
 from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
 from assimilator.core.services import CRUDService
 
-from examples.complex_database.models import (
-    engine, AlchemyUser, AlchemyUserBalance, AlchemyBalanceCurrency,
+from examples.fastapi_crud_example.models import (
+    engine, AlchemyUser, AlchemyCurrency, AlchemyBalance,
     InternalUser, InternalBalance, InternalCurrency,
     RedisUser, RedisBalance, RedisCurrency,
     MongoUser, MongoCurrency, MongoBalance,
 )
-from examples.fastapi_crud_example.models import mapper_registry
 
 storage = os.environ.get('storage', 'alchemy')
 
 
 if storage == "alchemy":
     User = AlchemyUser
-    Balance = AlchemyUserBalance
-    Currency = AlchemyBalanceCurrency
-    mapper_registry.metadata.create_all(engine)
+    Balance = AlchemyBalance
+    Currency = AlchemyCurrency
 
     def get_uow():
         DatabaseSession = sessionmaker(bind=engine)
@@ -62,8 +60,7 @@ elif storage == "mongo":
     Balance = MongoBalance
     Currency = MongoCurrency
     mongo_client = pymongo.MongoClient()
-
-    mongo_client['assimilator_complex'].drop_collection(MongoUser.AssimilatorConfig.collection)
+    mongo_client['assimilator_fastapi'].drop_collection(MongoUser.AssimilatorConfig.collection)
 
     def get_uow():
         repository = MongoRepository(session=mongo_client, model=User, database='assimilator_complex')
