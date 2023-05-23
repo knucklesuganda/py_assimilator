@@ -103,12 +103,12 @@ class RedisRepository(Repository):
 
         return list(self._apply_specifications(specifications=specifications, query=query))
 
-    def dict_to_models(self, data: dict) -> dict:
-        return dict_to_internal_models(data=data, model=self.model)
+    def dict_to_models(self, data: dict) -> RedisModelT:
+        return self.model(**dict_to_internal_models(data=data, model=self.model))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:
-            obj = self.model(**self.dict_to_models(data=obj_data))
+            obj = self.dict_to_models(data=obj_data)
 
         self.transaction.set(
             name=obj.id,

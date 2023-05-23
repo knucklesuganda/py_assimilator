@@ -1,4 +1,4 @@
-from typing import TypeVar, Iterable, Union, List
+from typing import TypeVar, Iterable, Union
 
 from assimilator.core.database import UnitOfWork, SpecificationList
 from assimilator.core.services.base import Service
@@ -25,19 +25,14 @@ class CRUDService(Service):
         self.uow.repository.refresh(obj)
         return obj
 
-    def update(self, update_obj: Union[dict, ModelT], *filters, **kwargs_filters) -> ModelT:
+    def update(self, obj_data: Union[dict, ModelT], *filters, **kwargs_filters) -> ModelT:
         with self.uow:
-            if isinstance(update_obj, dict):
+            if isinstance(obj_data, dict):
                 old_obj = self.get(*filters, **kwargs_filters)
+                parsed_obj = self.uow.repository.dict_to_models(obj_data)
 
-                for updated_key, updated_value in update_obj.items():
-                    old_value = getattr(old_obj, updated_key)
-
-                    if not isinstance(old_value, List):
-                        setattr(old_obj, updated_key, updated_value)
-                    else:
-                        for i in range(len(old_value)):
-                            setattr(old_obj, updated_key, updated_value[i])
+                for updated_key in obj_data:
+                    setattr(old_obj, updated_key, getattr(parsed_obj, updated_key))
 
                 update_obj = old_obj
 
@@ -48,7 +43,7 @@ class CRUDService(Service):
         return update_obj
 
     def list(
-        self, *filters, lazy: bool = False, **kwargs_filters,
+        self, *filters, lazy: bool = False, **kwargs_filters
     ) -> Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]]:
         return self.uow.repository.filter(self._specs.filter(*filters, **kwargs_filters), lazy=lazy)
 

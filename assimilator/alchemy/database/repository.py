@@ -78,7 +78,6 @@ class AlchemyRepository(Repository):
                 query=update(self.model),
                 specifications=specifications,
             )
-
             self.session.execute(
                 query.values(update_values).execution_options(synchronize_session=False)
             )
@@ -86,15 +85,14 @@ class AlchemyRepository(Repository):
         elif obj is not None:
             if obj not in self.session:
                 obj = self.session.merge(obj)
+                self.session.add(obj)
 
-            self.session.add(obj)
-
-    def dict_to_models(self, data: dict) -> dict:
-        return dict_to_alchemy_models(data=data, model=self.model)
+    def dict_to_models(self, data: dict) -> AlchemyModelT:
+        return self.model(**dict_to_alchemy_models(data=data, model=self.model))
 
     def save(self, obj: Optional[AlchemyModelT] = None, **data) -> AlchemyModelT:
         if obj is None:
-            obj = self.model(**self.dict_to_models(data))
+            obj = self.dict_to_models(data)
 
         self.session.add(obj)
         return obj

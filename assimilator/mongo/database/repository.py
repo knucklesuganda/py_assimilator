@@ -38,8 +38,8 @@ class MongoRepository(Repository):
     def get_initial_query(self, override_query: Optional[dict] = None) -> dict:
         return dict(super(MongoRepository, self).get_initial_query(override_query))
 
-    def dict_to_models(self, data: dict) -> dict:
-        return dict_to_internal_models(data, model=self.model)
+    def dict_to_models(self, data: dict) -> ModelT:
+        return self.model(**dict_to_internal_models(data, model=self.model))
 
     @property
     def _collection_name(self):

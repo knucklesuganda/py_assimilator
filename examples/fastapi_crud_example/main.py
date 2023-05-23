@@ -41,4 +41,4 @@ def user_delete_route(id: int, service: CRUDService = Depends(get_service)):
 
 @app.put('/{id}')
 def user_update_route(user_data: UserSchema, id: int, service: CRUDService = Depends(get_service)):
-    return service.update(id=id, update_obj=user_data.dict())
+    return service.update(id=id, obj_data=user_data.dict())

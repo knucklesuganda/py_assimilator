@@ -74,12 +74,12 @@ class InternalRepository(Repository):
             specifications=specifications,
         ))
 
-    def dict_to_models(self, data: dict) -> dict:
-        return dict_to_internal_models(data=data, model=self.model)
+    def dict_to_models(self, data: dict) -> ModelT:
+        return self.model(**dict_to_internal_models(data=data, model=self.model))
 
     def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         if obj is None:
-            obj = self.model(**self.dict_to_models(obj_data))
+            obj = self.dict_to_models(obj_data)
 
         self.session[obj.id] = obj
         return obj

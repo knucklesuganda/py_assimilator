@@ -90,7 +90,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         return {"model": self.model, "repository": self}
 
     @abstractmethod
-    def dict_to_models(self, data: dict) -> dict:
+    def dict_to_models(self, data: dict) -> ModelT:
         """
         Converts data from Python dictionaries to models that Repository uses.
         You don't need to use that function directly 99% of the times.

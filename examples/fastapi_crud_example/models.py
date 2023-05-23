@@ -10,7 +10,7 @@ from assimilator.core.database import BaseModel
 from assimilator.mongo.database import MongoModel
 from assimilator.redis_.database import RedisModel
 
-engine = create_engine(url="sqlite:///:memory:")
+engine = create_engine(url="sqlite:///crud_database.db")
 mapper_registry = registry()
 
 users = Table(
@@ -59,7 +59,7 @@ mapper_registry.map_imperatively(
     AlchemyUser,
     users,
     properties={
-        "balances": relationship(AlchemyBalance, back_populates='user', uselist=True, lazy='select'),
+        "balances": relationship(AlchemyBalance, uselist=True, lazy='select'),
     },
 )
 
@@ -68,7 +68,6 @@ mapper_registry.map_imperatively(
     balances,
     properties={
         "currency": relationship(AlchemyCurrency, uselist=False, lazy='select'),
-        "user": relationship(AlchemyUser, back_populates='balances', lazy='select'),
     },
 )
 
