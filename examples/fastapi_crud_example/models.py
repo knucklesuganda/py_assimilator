@@ -1,8 +1,10 @@
+import uuid
 from typing import List
 
 from sqlalchemy import (
     create_engine, Column, String, Float,
-    Integer, ForeignKey, UniqueConstraint, Table,
+    Integer, ForeignKey, UniqueConstraint,
+    Table, UUID, Text,
 )
 from sqlalchemy.orm import relationship, registry
 
@@ -16,7 +18,7 @@ mapper_registry = registry()
 users = Table(
     "users",
     mapper_registry.metadata,
-    Column("id", Integer(), primary_key=True),
+    Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
     Column("username", String()),
     Column("email", String()),
 )
@@ -25,7 +27,7 @@ users = Table(
 balances = Table(
     "balances",
     mapper_registry.metadata,
-    Column('id', Integer(), primary_key=True),
+    Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
     Column('user_id', ForeignKey("users.id", ondelete="CASCADE")),
     Column('balance', Float(), server_default='0'),
     Column('currency_id', ForeignKey("currency.id")),
@@ -37,7 +39,7 @@ balances = Table(
 currency = Table(
     "currency",
     mapper_registry.metadata,
-    Column('id', Integer(), primary_key=True),
+    Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
     Column('currency', String(length=20)),
     Column('country', String(length=20)),
 )

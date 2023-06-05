@@ -57,11 +57,7 @@ class RedisRepository(Repository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[RedisModelT], RedisModelT]:
-        query = self._apply_specifications(
-            query=initial_query,
-            specifications=specifications,
-        ) or '*'
-
+        query = self._apply_specifications(query=initial_query, specifications=specifications) or '*'
         found_objects = self.session.mget(self.session.keys(query))
 
         if not all(found_objects):
@@ -73,7 +69,8 @@ class RedisRepository(Repository):
         ))
 
         if not parsed_objects:
-            raise NotFoundError(f"{self} repository get() did not find any results with this query: {query}")
+            raise NotFoundError(f"{self} repository get() did not find "
+                                f"any results with this query: {query}")
         elif len(parsed_objects) != 1:
             raise MultipleResultsError(f"{self} repository get() did not"
                                        f" find any results with this query: {query}")

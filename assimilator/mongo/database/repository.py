@@ -1,4 +1,4 @@
-from typing import Union, Optional, Collection, Type, TypeVar
+from typing import Union, Optional, Collection, Type, TypeVar, Any
 
 from pymongo import MongoClient
 
@@ -14,6 +14,7 @@ ModelT = TypeVar("ModelT", bound=MongoModel)
 
 
 class MongoRepository(Repository):
+    id: str = "_id"
     session: MongoClient
     model: Type[MongoModel]
 
@@ -40,6 +41,11 @@ class MongoRepository(Repository):
 
     def dict_to_models(self, data: dict) -> ModelT:
         return self.model(**dict_to_internal_models(data, model=self.model))
+
+    @property
+    def _model_id_name(self):
+        config = getattr(self.model, 'AssimilatorConfig', None)
+        return "_id" if config is None else config.id_name
 
     @property
     def _collection_name(self):
@@ -77,15 +83,12 @@ class MongoRepository(Repository):
         lazy: bool = False,
         initial_query: dict = None
     ) -> Union[Collection[ModelT], LazyCommand[Collection[ModelT]]]:
-        query = self._apply_specifications(
-            query=initial_query,
-            specifications=specifications,
-        )
+        query = self._apply_specifications(query=initial_query, specifications=specifications)
         return [self.model(**data) for data in self._collection.find(**query)]
 
     def save(self, obj: Optional[ModelT] = None, **obj_data) -> ModelT:
         if obj is None:
-            obj = self.model(**self.dict_to_models(data=obj_data))
+            obj = self.dict_to_models(data=obj_data)
 
         self._collection.insert_one(obj.dict())
         return obj
@@ -94,12 +97,15 @@ class MongoRepository(Repository):
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
+            id_name = self._model_id_name
             results = self._collection.find(**self._apply_specifications(
                 query=self.get_initial_query(),
-                specifications=(*specifications, self.specs.only('_id')),
+                specifications=(*specifications, self.specs.only(id_name)),
             ))
 
-            self._collection.delete_many({"_id": {"$in": [result['_id'] for result in results]}})
+            self._collection.delete_many({
+                id_name: {"$in": [result[id_name] for result in results]}
+            })
         elif obj is not None:
             self._collection.delete_one(obj.dict())
 
@@ -114,16 +120,18 @@ class MongoRepository(Repository):
         if specifications:
             results = self._collection.find(**self._apply_specifications(
                 query=self.get_initial_query(),
-                specifications=(*specifications, self.specs.only('_id')),
+                specifications=(*specifications, self.specs.only(self._model_id_name)),
             ))
 
             self._collection.update_many(
-                filter={"_id": {"$in": [result['_id'] for result in results]}},
+                filter={self._model_id_name: {"$in": [
+                    result[self._model_id_name] for result in results
+                ]}},
                 update={'$set': update_values},
             )
         elif obj is not None:
             self._collection.update_one(
-                {"id": obj.id},
+                {self._model_id_name: obj.id},
                 update={'$set': obj.dict()},
                 upsert=getattr('obj', 'upsert', False),
             )

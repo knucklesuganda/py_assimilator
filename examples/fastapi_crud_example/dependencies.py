@@ -17,7 +17,7 @@ from examples.fastapi_crud_example.models import (
     MongoUser, MongoCurrency, MongoBalance,
 )
 
-storage = os.environ.get('storage', 'alchemy')
+storage = os.environ.get('storage', 'internal')
 
 
 if storage == "alchemy":
@@ -53,17 +53,14 @@ elif storage == "redis":
         repository = RedisRepository(redis_session, model=User)
         return RedisUnitOfWork(repository)
 
-    redis_session.flushdb()
-
 elif storage == "mongo":
     User = MongoUser
     Balance = MongoBalance
     Currency = MongoCurrency
     mongo_client = pymongo.MongoClient()
-    mongo_client['assimilator_fastapi'].drop_collection(MongoUser.AssimilatorConfig.collection)
 
     def get_uow():
-        repository = MongoRepository(session=mongo_client, model=User, database='assimilator_complex')
+        repository = MongoRepository(session=mongo_client, model=User, database='assimilator_fastapi')
         return MongoUnitOfWork(repository)
 
 
