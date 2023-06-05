@@ -1,11 +1,14 @@
-from typing import List
+from typing import List, Union
+from uuid import UUID
 
+from bson import ObjectId
 from pydantic import BaseModel
 
 
 class BaseSchema(BaseModel):
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 
 class CurrencySchema(BaseSchema):
@@ -18,6 +21,7 @@ class BalanceSchema(BaseSchema):
     currency: CurrencySchema
 
 
-class UserSchema(BaseSchema):
+class UserCreateSchema(BaseSchema):
     username: str
     balances: List[BalanceSchema]
+    email: str

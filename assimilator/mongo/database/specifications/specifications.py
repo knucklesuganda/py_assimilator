@@ -1,5 +1,6 @@
 from typing import Any, Optional, Collection
 
+from assimilator.mongo.database.specifications.utils import rename_mongo_id
 from assimilator.mongo.database.specifications.filtering_options import MongoFilteringOptions
 from assimilator.core.database import SpecificationList, FilterSpecification, specification, AdaptiveFilter
 
@@ -51,7 +52,7 @@ mongo_filter = MongoFilter
 def mongo_order(*clauses: str, query: dict, **_) -> dict:
     query['sort'] = query.get('sort', []) + [
         (column, -1 if column.startswith("-") else 1)
-        for column in clauses
+        for column in map(rename_mongo_id, clauses)
     ]
     return query
 
@@ -79,7 +80,7 @@ def mongo_join(*targets: Collection, query: dict, **join_args: dict) -> dict:
 
 @specification
 def mongo_only(*only_fields: str, query: dict, **_) -> dict:
-    query['projection'] = only_fields
+    query['projection'] = list(map(rename_mongo_id, only_fields))
     return query
 
 
