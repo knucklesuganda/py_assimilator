@@ -983,18 +983,18 @@ typing that allows us to specify what arguments we need for specific pre-built s
 <li>Add your custom specifications.</li>
 <li>Add your custom specification list to your repository.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">Query</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Select</span>
 
 <span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemySpecificationList</span>
 <span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
 
 
 <span class="nd">@specification</span>
-<span class="k">def</span> <span class="nf">alchemy_validate</span><span class="p">(</span><span class="n">validate_vip</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Query</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">alchemy_validate</span><span class="p">(</span><span class="n">validate_vip</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Select</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">validate_vip</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_vip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_validated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">is_vip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_validated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_validated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">is_validated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">CustomSpecificationList</span><span class="p">(</span><span class="n">AlchemySpecificationList</span><span class="p">):</span>
@@ -1190,5 +1190,50 @@ rewrite it to work with their data types and create a new SpecificationList that
       
     
     
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    .floating-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 1em;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        z-index: 9999;
+        background: #673ab6;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 0 0 0.2rem #0000001a, 0 0.2rem 0.4rem #0003;
+    }
+
+    .floating-container a {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    .floating-container img {
+        width: 30px;
+    }
+
+    .floating_icon{
+        font-size: 28px;
+        color: white;
+    }
+</style>
+
+<div class="floating-container">
+    <a href="https://github.com/knucklesuganda/py_assimilator" target="_blank">
+        <i class="floating_icon fab fa-github"></i>
+    </a>
+    <a href="https://discord.gg/WErywR7ert" target="_blank">
+        <i class="floating_icon fab fa-discord"></i>
+    </a>
+    <a href="https://t.me/your-telegram-channel" target="_blank">
+        <i class="floating_icon fab fa-telegram" aria-hidden="true"></i>
+    </a>
+</div>
+
   </body>
 </html>
