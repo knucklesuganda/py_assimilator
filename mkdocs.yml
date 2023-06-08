@@ -2,6 +2,7 @@ site_name: Assimilator - the best Python patterns
 site_description: Assimilator Python framework, Domain-Driven Design, DDD, high performance, easy to learn, fast to code
 theme:
   name: material
+  custom_dir: docs/docs_theme
   logo: images/logo.png
   favicon: images/icon.png
   features:
@@ -51,6 +52,7 @@ nav:
   - Video Tutorials: video_tutorials.md
   - Help us make the future🤩: help_framework.md
   - ✨New in 1.2.0✨: new_changes.md
+  - 🕢Next update🕢: next_update.md
 
 repo_url: https://github.com/knucklesuganda/py_assimilator
 repo_name: knucklesuganda/py_assimilator

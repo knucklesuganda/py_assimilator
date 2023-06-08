@@ -1,51 +1,51 @@
 import sys
 
+import redis
 import pymongo
-from redis.client import Redis
 from sqlalchemy.orm import sessionmaker
 
-from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
-from assimilator.internal.database import InternalRepository, InternalUnitOfWork
-from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
+from core.usability.pattern_creator import create_uow
 from examples.simple_database.models import engine, AlchemyUser, InternalUser, RedisUser, MongoUser
-from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
 
-if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
-    User = AlchemyUser
 
-    def get_uow():
-        DatabaseSession = sessionmaker(bind=engine)
-        repository = AlchemyRepository(
-            session=DatabaseSession(),
-            model=User,
-        )
-        return AlchemyUnitOfWork(repository)
+alchemy_session_creator = sessionmaker(bind=engine)
+internal_session = {}
 
-elif sys.argv[1] == "internal":
-    User = InternalUser
-    internal_session = {
-        'users': {}     # You can also give keys to show save entities
+
+database_registry = {   # That is just one way of doing it, you can try whatever!
+    'alchemy': {
+        'model': AlchemyUser,
+        'session_creator': lambda: alchemy_session_creator(),
+        'init_kwargs': {},
+    },
+    'internal': {
+        'model': InternalUser,
+        'session_creator': lambda: internal_session,
+        'init_kwargs': {},
+    },
+    'redis': {
+        'model': RedisUser,
+        'session_creator': lambda: redis.Redis(),
+        'init_kwargs': {},
+    },
+    'mongo': {
+        'model': MongoUser,
+        'session_creator': lambda: pymongo.MongoClient(),
+        'init_kwargs': {
+            'database': 'assimilator_users',
+        },
     }
+}
 
-    def get_uow():
-        repository = InternalRepository(internal_session['users'], model=InternalUser)
-        return InternalUnitOfWork(repository)
+database_provider = sys.argv[1] if len(sys.argv) > 1 else "alchemy"
+User = database_registry[database_provider]['model']
 
-elif sys.argv[1] == "redis":
-    User = RedisUser
-    redis_session = Redis()
-    redis_session.flushdb()
 
-    def get_uow():
-        repository = RedisRepository(redis_session, model=RedisUser)
-        return RedisUnitOfWork(repository)
-
-elif sys.argv[1] == "mongo":
-    User = MongoUser
-    client = pymongo.MongoClient()
-
-    client['test'].drop_collection(MongoUser.AssimilatorConfig.collection)
-
-    def get_uow():
-        repository = MongoRepository(session=client, model=MongoUser, database='test')
-        return MongoUnitOfWork(repository)
+def get_uow():
+    dependencies = database_registry[database_provider]
+    return create_uow(
+        provider=database_provider,
+        model=dependencies['model'],
+        session=dependencies['session_creator'](),
+        **dependencies['init_kwargs'],
+    )
