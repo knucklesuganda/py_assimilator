@@ -25,17 +25,16 @@ class CRUDService(Service):
         self.uow.repository.refresh(obj)
         return obj
 
-    def update(self, update_obj: Union[dict, ModelT], *filters, **kwargs_filters) -> ModelT:
+    def update(self, obj_data: Union[dict, ModelT], *filters, **kwargs_filters) -> ModelT:
         with self.uow:
-            if isinstance(update_obj, dict):
-                obj = self.get(*filters, **kwargs_filters)
+            if isinstance(obj_data, dict):
+                old_obj = self.get(*filters, **kwargs_filters)
+                parsed_obj = self.uow.repository.dict_to_models(obj_data)
 
-                update_obj = self.uow.repository.update(
-                    
-                )
+                for updated_key in obj_data:
+                    setattr(old_obj, updated_key, getattr(parsed_obj, updated_key))
 
-                obj.__dict__.update(update_obj.__dict__)
-                update_obj = obj
+                update_obj = old_obj
 
             self.uow.repository.update(update_obj)
             self.uow.commit()
@@ -44,7 +43,7 @@ class CRUDService(Service):
         return update_obj
 
     def list(
-        self, *filters, lazy: bool = False, **kwargs_filters,
+        self, *filters, lazy: bool = False, **kwargs_filters
     ) -> Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]]:
         return self.uow.repository.filter(self._specs.filter(*filters, **kwargs_filters), lazy=lazy)
 

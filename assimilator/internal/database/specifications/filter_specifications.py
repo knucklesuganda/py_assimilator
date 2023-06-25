@@ -25,7 +25,7 @@ class InternalFilter(FilterSpecification):
 
     def __call__(self, query: QueryT, **context) -> Union[str, Generator[BaseModel, Any, None]]:
         if isinstance(query, str):
-            return f'{query}{"".join(self.text_filters)}'
+            return f'{query}{"".join(str(filter_) for filter_ in self.text_filters)}'
         elif not self.filters:
             return query
 

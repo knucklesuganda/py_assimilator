@@ -26,7 +26,11 @@ class ErrorWrapper:
         return self
 
     def is_already_wrapped(self, exc_type: Type[Exception]) -> bool:
-        return any(issubclass(exc_type, error) for error in self.skipped_errors)
+        return any(
+            issubclass(exc_type, error)
+            for error in self.skipped_errors
+            if issubclass(error, Exception)
+        )
 
     def create_error(self, original_error: Exception, wrapped_error_type: Type[Exception]):
         _, _, tb = sys.exc_info()

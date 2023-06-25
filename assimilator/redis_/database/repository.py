@@ -57,11 +57,7 @@ class RedisRepository(Repository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[RedisModelT], RedisModelT]:
-        query = self._apply_specifications(
-            query=initial_query,
-            specifications=specifications,
-        ) or '*'
-
+        query = self._apply_specifications(query=initial_query, specifications=specifications) or '*'
         found_objects = self.session.mget(self.session.keys(query))
 
         if not all(found_objects):
@@ -73,7 +69,8 @@ class RedisRepository(Repository):
         ))
 
         if not parsed_objects:
-            raise NotFoundError(f"{self} repository get() did not find any results with this query: {query}")
+            raise NotFoundError(f"{self} repository get() did not find "
+                                f"any results with this query: {query}")
         elif len(parsed_objects) != 1:
             raise MultipleResultsError(f"{self} repository get() did not"
                                        f" find any results with this query: {query}")
@@ -103,12 +100,12 @@ class RedisRepository(Repository):
 
         return list(self._apply_specifications(specifications=specifications, query=query))
 
-    def dict_to_models(self, data: dict) -> dict:
-        return dict_to_internal_models(data=data, model=self.model)
+    def dict_to_models(self, data: dict) -> RedisModelT:
+        return self.model(**dict_to_internal_models(data=data, model=self.model))
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:
-            obj = self.model(**self.dict_to_models(data=obj_data))
+            obj = self.dict_to_models(data=obj_data)
 
         self.transaction.set(
             name=obj.id,

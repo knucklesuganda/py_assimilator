@@ -15,7 +15,7 @@ class MongoErrorWrapper(ErrorWrapper):
                 InvalidOperation: InvalidQueryError,
                 WriteError: InvalidQueryError,
             },
-            skipped_errors={NotFoundError},
+            skipped_errors={NotFoundError, DataLayerError},
             default_error=DataLayerError,
         )
 

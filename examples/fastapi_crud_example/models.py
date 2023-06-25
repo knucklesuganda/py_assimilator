@@ -1,20 +1,24 @@
+import uuid
 from typing import List
 
-from sqlalchemy import create_engine, Column, String, Float,\
-    Integer, ForeignKey, UniqueConstraint, Table
+from sqlalchemy import (
+    create_engine, Column, String, Float,
+    Integer, ForeignKey, UniqueConstraint,
+    Table, UUID, Text,
+)
 from sqlalchemy.orm import relationship, registry
 
 from assimilator.core.database import BaseModel
 from assimilator.mongo.database import MongoModel
 from assimilator.redis_.database import RedisModel
 
-engine = create_engine(url="sqlite:///:memory:")
+engine = create_engine(url="sqlite:///crud_database.db")
 mapper_registry = registry()
 
 users = Table(
     "users",
     mapper_registry.metadata,
-    Column("id", Integer(), primary_key=True),
+    Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
     Column("username", String()),
     Column("email", String()),
 )
@@ -23,7 +27,7 @@ users = Table(
 balances = Table(
     "balances",
     mapper_registry.metadata,
-    Column('id', Integer(), primary_key=True),
+    Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
     Column('user_id', ForeignKey("users.id", ondelete="CASCADE")),
     Column('balance', Float(), server_default='0'),
     Column('currency_id', ForeignKey("currency.id")),
@@ -35,7 +39,7 @@ balances = Table(
 currency = Table(
     "currency",
     mapper_registry.metadata,
-    Column('id', Integer(), primary_key=True),
+    Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
     Column('currency', String(length=20)),
     Column('country', String(length=20)),
 )
@@ -57,7 +61,7 @@ mapper_registry.map_imperatively(
     AlchemyUser,
     users,
     properties={
-        "balances": relationship(AlchemyBalance, backref='user', uselist=True, lazy='joined'),
+        "balances": relationship(AlchemyBalance, uselist=True, lazy='select'),
     },
 )
 
@@ -65,13 +69,12 @@ mapper_registry.map_imperatively(
     AlchemyBalance,
     balances,
     properties={
-        "currency": relationship(AlchemyCurrency, uselist=False, lazy='joined'),
-        "user": relationship(AlchemyUser, backref="balances", lazy='joined'),
+        "currency": relationship(AlchemyCurrency, uselist=False, lazy='select'),
     },
 )
 
 mapper_registry.map_imperatively(AlchemyCurrency, currency)
-mapper_registry.metadata.create_all(engine)
+mapper_registry.metadata.create_all(bind=engine, tables=[users, balances, currency])
 
 
 class InternalCurrency(BaseModel):
