@@ -1,84 +1,69 @@
-## Adaptive specifications
+## The problem
 
-While working with different queries, you are going to use specifications. However, accessing them from repository can
-be challenging. That is why we created Adaptive Specifications. Here is what they do:
+We had a problem with pattern creation. You had to write three or more functions just to create a pattern, and we assume
+that this was too much for an average user. So, that is why we changed the way you create your patterns in the
+Usability update!
 
-That is the code from PyAssimilator version 1.1.0:
+> You can read the full documentation on Pattern creation here: [How to create patterns](/tutorial/how_to_create/)
 
-```Python
-from assimilator.core.database import Repository
+Here is an example on how we **used to** create CRUDService pattern:
 
+```python
 
-def filter_users(repository: Repository):
-    return repository.filter(
-        repository.specs.filter(
-            age__gt=18,
-        ),
-        repository.specs.join(
-            "balances",
-            "balances.currency",
-        ),
-        repository.specs.only(
-            "balances.currency.symbol",
-            "balances.amount",
-        ),
-        repository.specs.paginate(
-            limit=10,
-            offset=18,
-        )
+def get_repository():
+    return MongoRepository(
+        session=mongo_client,
+        model=User,
+        database='assimilator_complex'
     )
-```
-
-Here is that same code using 1.2.0 Adaptive Specifications:
-
-```Python
-from assimilator.core.database import Repository, only, join, filter_, paginate
 
 
-def filter_users(repository: Repository):
-    return repository.filter(
-        filter_(age__gt=18),
-        join("balances", "balances.currency"),
-        only("balances.currency.symbol", "balances.amount"),
-        paginate(limit=10, offset=18),
-    )
-```
-
-We removed more than 30% of our code! These specifications are going to change depending on your repository, so that
-means that you can write them like that and use pattern substitution easily!
+def get_uow():
+    return MongoUnitOfWork(repository=get_repository())
 
 
-## Specification Fixes
+def get_crud():
+    return CRUDService(uow=get_uow())
 
-We fixed all the specifications that relate to foreign keys. Now, you can easily use `order()` specification with foreign
-values:
 
-```Python
-# Order by foreign entity `balances` and `amount` column
-order('balances.amount')
+crud = get_crud()
 
-# Or using specification from the repository
-repository.specs.order('balances.amount')
-```
-
-We also fixed all the composite filter specification operations:
-
-```Python
-# Filter AND filter OR NOT filter
-repository.specs.filter(...) & repository.specs.filter(...) | ~repository.specs.filter(...)
-
-# They also work with adaptive specifications!
-filter_(...) & filter_(...) | ~filter_(...)
 ```
 
 
-## Specification refactoring
+----------------------------------------------
 
-Now, we don't use `apply()` function in `Specification` class, we just call `__call__()` straight away.
+## Our solution
+
+Now, instead of writing three functions just to create a pattern, you can just call a function and pass all the parameters
+inside it. For example, here is how we create a CRUDService:
+
+```python
+
+crud = create_crud(
+    provider='alchemy',         # External library that we are using.
+    model=User,                 # Model your CRUDService is going to work with.
+    session=session_creator(),  # Database session.
+)
+
+```
 
 
-## Other minor fixes
+## In-depth look
 
-- Better imports
-- Better type hints
-- Quicker internal filters
+There are other functions that allow us to fully inject all the patterns into our new update. Firstly, we have
+a pattern registry. Pattern registry is a dictionary that contains all the possible patterns with their provider names.
+When we want to create a pattern, we use that pattern registry to find the class that we want to use.
+
+You don't want to interact with pattern registry directly(it is a dictionary, and they do not have any structure in Python).
+That is why we have the following functions:
+
+- `register_provider()` - Allows you to register a new provider of your own. 
+If you are developing a library that interacts with PyAssimilator, it is a good practice to register your provider.
+This way, anyone can easily import your patterns with our new functions.
+- `find_provider()` - Allows you to provide a module that should find and register your provider.
+- `get_pattern_list()` - Returns a list of all patterns for a provider.
+- `unregister_provider()` - Deletes a provider from the registry.
+- `get_pattern()` - Low-level function that returns a pattern class.
+
+To find out more about these functions, go to [How to create patterns](/tutorial/how_to_create/)

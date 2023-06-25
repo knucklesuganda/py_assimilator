@@ -8,10 +8,10 @@ You will see how your code becomes easier step-by-step by using CRUDService patt
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from assimilator.core.usability.pattern_creator import create_crud
-from assimilator.core.usability.registry import find_patterns
+from assimilator.core.usability.registry import find_provider
 
 
-find_patterns('assimilator.alchemy')    # Import SQLAlchemy patterns
+find_provider('assimilator.alchemy')    # Import SQLAlchemy patterns
 
 # Firstly, we need to create our User model. That code is just normal SQLAlchemy:
 engine = create_engine(url="sqlite:///:memory:")

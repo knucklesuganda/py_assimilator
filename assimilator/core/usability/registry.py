@@ -20,11 +20,11 @@ class PatternList(BaseModel):
 registry: Dict[str, PatternList] = {}
 
 
-def register_pattern(provider: str, pattern_list: PatternList):
+def register_provider(provider: str, pattern_list: PatternList):
     registry[provider] = pattern_list
 
 
-def find_patterns(provider_path: str):
+def find_provider(provider_path: str):
     """ Imports a module that has automatic pattern registration """
     importlib.import_module(provider_path)
 
@@ -33,8 +33,11 @@ def get_pattern_list(provider: str):
     return registry[provider]
 
 
-def unregister_pattern(name: str):
-    del registry[name]
+def unregister_provider(provider: str):
+    try:
+        del registry[provider]
+    except KeyError:
+        raise ProviderNotFoundError(f"Provider {provider} was not found")
 
 
 def get_pattern(provider: str, pattern_name: str) -> Type[Union[Repository, UnitOfWork, CRUDService]]:
@@ -50,10 +53,10 @@ def get_pattern(provider: str, pattern_name: str) -> Type[Union[Repository, Unit
 
 
 __all__ = [
-    'register_pattern',
-    'unregister_pattern',
+    'register_provider',
+    'unregister_provider',
     'PatternList',
     'get_pattern_list',
     'get_pattern',
-    'find_patterns',
+    'find_provider',
 ]

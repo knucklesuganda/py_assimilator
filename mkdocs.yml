@@ -32,6 +32,7 @@ nav:
     - Important things: tutorial/important.md
     - Database tutorial: tutorial/database.md
     - Advanced database tutorial: tutorial/advanced_database.md
+    - How to create patterns: tutorial/how_to_create.md
     - Architecture tutorial: tutorial/architecture_tutorial.md
     # - Events tutorial: tutorial/events.md
   - SQLAlchemy:
@@ -51,7 +52,7 @@ nav:
   - Unidentified Patterns: unidentified_patterns.md
   - Video Tutorials: video_tutorials.md
   - Help us make the future🤩: help_framework.md
-  - ✨New in 1.2.0✨: new_changes.md
+  - ✨Usability Update(1.3.0)✨: new_changes.md
   - 🕢Next update🕢: next_update.md
 
 repo_url: https://github.com/knucklesuganda/py_assimilator

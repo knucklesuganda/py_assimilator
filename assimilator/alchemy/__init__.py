@@ -1,7 +1,7 @@
 import sqlalchemy
 
 from assimilator.core.services import CRUDService
-from assimilator.core.usability.registry import register_pattern, PatternList
+from assimilator.core.usability.registry import register_provider, PatternList
 from assimilator.alchemy.database import AlchemyRepository, AlchemyUnitOfWork
 
 
@@ -12,7 +12,7 @@ if sqlalchemy.__version__ < "2.0.0":
     )
 
 
-register_pattern(provider='alchemy', pattern_list=PatternList(
+register_provider(provider='alchemy', pattern_list=PatternList(
     repository=AlchemyRepository,
     uow=AlchemyUnitOfWork,
     crud=CRUDService
