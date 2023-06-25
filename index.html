@@ -290,15 +290,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#code-comparison" class="md-nav__link">
-    Code comparison
+  <a href="#what-is-that-all-about" class="md-nav__link">
+    What is that all about?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-that-all-about" class="md-nav__link">
-    What is that all about?
+  <a href="#code-comparison" class="md-nav__link">
+    Code comparison
   </a>
   
 </li>
@@ -446,6 +446,20 @@
     <li class="md-nav__item">
       <a href="tutorial/advanced_database/" class="md-nav__link">
         Advanced database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorial/how_to_create/" class="md-nav__link">
+        How to create patterns
       </a>
     </li>
   
@@ -733,7 +747,7 @@
   
     <li class="md-nav__item">
       <a href="new_changes/" class="md-nav__link">
-        ✨New in 1.2.0✨
+        ✨Usability Update(1.3.0)✨
       </a>
     </li>
   
@@ -788,15 +802,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#code-comparison" class="md-nav__link">
-    Code comparison
+  <a href="#what-is-that-all-about" class="md-nav__link">
+    What is that all about?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-that-all-about" class="md-nav__link">
-    What is that all about?
+  <a href="#code-comparison" class="md-nav__link">
+    Code comparison
   </a>
   
 </li>
@@ -898,217 +912,6 @@
 <ul>
 <li><code>pip install py-assimilator</code></li>
 </ul>
-<h2 id="code-comparison">Code comparison</h2>
-<p><link href="styles/code_examples.css" rel="stylesheet"></p>
-<div class="overlay">
-  <div class="overlay__inner"></div>
-</div>
-
-<div class="code_preview_container">
-<div class="code_example_buttons">
-    <button class="code_switch_button">Database Example</button>
-    <button class="code_switch_button">CRUD Example</button>
-    <button class="code_switch_button">Independent Code Example</button>
-    <a href="https://github.com/knucklesuganda/py_assimilator/tree/master/examples">
-        <button class="code_switch_button" style="background: none">Full examples</button>
-    </a>
-</div>
-
-<div class="code_examples">
-
-    <div class="code_example" style="display: none">
-        <div>
-            Common database problems:
-
-            <ul>
-                <li>Dependencies - lots of external dependencies!</li>
-                <li>Bad query management - long queries, bad queries, no ACID transactions!</li>
-                <li>Only one database choice - spend 10 hours of your life to go from MySQL to MongoDB!</li> 
-                <li>Hard to understand - code is either bad or hard to get!</li>
-                <li>Complicated refactoring - spend 20 more hours on trying to make your code better!</li>
-            </ul>
-
-            <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">session</span> <span class="o">=</span> <span class="n">db_session</span><span class="p">()</span>      <span class="c1"># DEPENDENCY!</span>
-    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
-    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># NO ACID TRANSACTIONS!</span>
-    <span class="k">return</span> <span class="n">new_user</span>
-</code></pre></div>
-        </div>
-
-        <div>
-            PyAssimilator solutions:
-
-            <ul> 
-                <li>Independent code - no dependencies at all!</li>
-                <li>Automatic query management - queries are automatically optimized, easy ACID transactions!</li>
-                <li>Multiple databases - change your storage without changing your code!</li>
-                <li>Fast - spend 10 minutes instead of 10 hours!</li>
-                <li>Easy to understand - you don't even need to know the underlying library!</li>
-                <li>Extensible - complex queries for your industry are not a problem!</li>
-            </ul>
-
-            <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># ACID TRANSACTIONS IN ANY DATABASE</span>
-        <span class="n">new_user</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
-            <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>  <span class="c1"># NO MODEL DEPENDENCIES</span>
-            <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span>
-            <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># AUTO ROLLBACK</span>
-
-    <span class="k">return</span> <span class="n">new_user</span>
-</code></pre></div>
-        </div>
-    </div>
-
-    <div class="code_example"> 
-        <div>
-            Common CRUD problems:
-
-            <ul>
-                <li>Boilerplate - you repeat yourself!</li> 
-                <li>Dependencies - lots of external dependencies!</li>
-                <li>Coding mistakes - bugs and errors!</li>
-                <li>Readability - no easy way to read your code!</li>
-                <li>Boring - repeat this boring process over and over again!</li>
-            </ul>
-
-
-            <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_user</span><span class="p">():</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span>
-    <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span>  <span class="c1"># DEPENDENCY!</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>     <span class="c1"># DEPENDENCY!</span>
-    <span class="k">return</span> <span class="n">new_user</span>
-
-<span class="k">def</span> <span class="nf">get_all_users</span><span class="p">():</span>
-    <span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c1"># DEPENDENCY!</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>  <span class="c1"># BOILERPLATE!</span>
-        <span class="n">user_data</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">users</span>
-
-<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get_or_404</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>   <span class="c1"># DEPENDENCY!</span>
-    <span class="n">user_data</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>   <span class="c1"># BOILERPLATE!</span>
-    <span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="c1"># BOILERPLATE!</span>
-    <span class="k">return</span> <span class="n">user_data</span>
-
-<span class="k">def</span> <span class="nf">update_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get_or_404</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>   <span class="c1"># DEPENDENCY!</span>
-    <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>    <span class="c1"># BOILERPLATE!</span>
-    <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span>  <span class="c1"># BOILERPLATE!</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>     <span class="c1"># NO ACID! DEPENDENCY!</span>
-    <span class="k">return</span> <span class="n">user</span>
-
-<span class="k">def</span> <span class="nf">delete_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get_or_404</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>   <span class="c1"># DEPENDENCY!</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="c1"># NO ACID!</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span> <span class="c1"># DEPENDENCY!</span>
-    <span class="k">return</span> <span class="kc">True</span>
-</code></pre></div>
-        </div>
-
-        <div>
-            PyAssimilator CRUD solutions:
-
-            <ul>
-                <li>One pattern - get all the functions from CRUDService class</li> 
-                <li>Independent code - no dependencies at all!</li>
-                <li>Coding mistakes - common bugs and errors are fixes!</li>
-                <li>Multiple databases - change your storage without changing your code!</li>
-                <li>Fast - spend 10 minutes instead of 10 hours!</li>
-                <li>Extensible - make CRUDService pattern suit your needs!</li>
-            </ul>
-
-            <div class="highlight"><pre><span></span><code><span class="n">service</span> <span class="o">=</span> <span class="n">create_crud_service</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">user_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">list_users</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">update_user</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">new_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">is_admin</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">update_data</span><span class="o">=</span><span class="n">new_data</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">delete_user</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Tom&quot;</span><span class="p">)</span>
-
-<span class="c1"># Full FastAPI CRUD example on Github</span>
-<span class="c1"># https://github.com/knucklesuganda/py_assimilator/tree/master/examples/fastapi_crud_example</span>
-</code></pre></div>
-        </div>
-    </div>
-
-    <div class="code_example">
-        <div>
-            Why do we hate dependencies:
-
-            <ul>
-                <li>We depend on other people and their bugs!</li>
-                <li>It's hard to update our code!</li>
-                <li>We cannot use new technologies!</li> 
-                <li>Complicated refactoring!</li>
-            </ul>
-
-            You can try to rewrite this code from sqlaclhemy to MongoDB and see why dependencies are bad yourself.
-
-            <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span><span class="o">...</span>
-<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">Friend</span><span class="p">,</span> <span class="n">Like</span><span class="p">,</span><span class="o">...</span>
-<span class="kn">from</span> <span class="nn">database_init</span> <span class="kn">import</span> <span class="n">init</span><span class="p">,</span> <span class="n">session_create</span><span class="o">...</span>
-<span class="kn">from</span> <span class="nn">database_filters</span> <span class="kn">import</span> <span class="n">my_filter</span><span class="o">...</span>
-
-<span class="k">def</span> <span class="nf">bad_code</span><span class="p">():</span>
-    <span class="n">init</span><span class="p">()</span>
-    <span class="n">session</span> <span class="o">=</span> <span class="n">session_create</span><span class="p">()</span>
-
-    <span class="n">my_user</span> <span class="o">=</span> <span class="n">session</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="n">Friend</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="n">Like</span><span class="o">.</span><span class="n">post</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">my_user</span><span class="o">.</span><span class="n">username</span>
-</code></pre></div>
-        </div>
-
-        <div>
-            PyAssimilator independent code:
-
-            <ul>
-                <li>We use patterns to hide dependencies from other modules!</li>
-                <li>It's easy to update our code since we have no dependencies!</li>
-                <li>We can easily use new technologies!</li> 
-                <li>Refactoring is easy!</li>
-                <li>Patterns are extensible to your specific needs!</li>
-            </ul>
-
-            We use Repository pattern. We don't need to change our code to go from sqlalchemy to mongodb or any
-            other supported database.
-
-            <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span><span class="p">,</span> <span class="n">filter_</span>
-
-<span class="k">def</span> <span class="nf">independent_code</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="n">filter_</span><span class="p">(</span><span class="n">friend__id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">like__post</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="p">)</span>
-</code></pre></div>
-        </div>
-    </div>
-</div>
-</div>
-
-<script src="scripts/code_examples.js"></script>
-
 <h2 id="what-is-that-all-about">What is that all about?</h2>
 <ol>
 <li>We want to write the best code.</li>
@@ -1121,6 +924,36 @@
 <li>We learn PyAssimilator once and use it forever!</li>
 <li><strong>And most importantly, we make Python projects better!</strong></li>
 </ol>
+<h2 id="code-comparison">Code comparison</h2>
+<p>Before PyAssimilator:
+<div class="highlight"><pre><span></span><code><span class="c1"># BAD CODE :(</span>
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># NO PATTERNS!</span>
+    <span class="c1"># ONLY ONE DATABASE CHOICE!</span>
+    <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># DEPENDENCY!</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">db_session</span><span class="p">()</span>  <span class="c1"># DEPENDENCY!</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># NO ACID TRANSACTIONS!</span>
+    <span class="k">return</span> <span class="n">new_user</span>
+</code></pre></div></p>
+<p>After:
+<div class="highlight"><pre><span></span><code><span class="c1"># GOOD CODE :)</span>
+
+<span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
+    <span class="c1"># BEST DDD PATTERNS</span>
+    <span class="c1"># PATTERN SUBSTITUTION/MULTIPLE DATABASES AT ONCE</span>
+
+    <span class="k">with</span> <span class="n">uow</span><span class="p">:</span>   <span class="c1"># ACID TRANSACTIONS IN ANY DATABASE</span>
+        <span class="n">new_user</span> <span class="o">=</span> <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>  <span class="c1"># NO MODEL DEPENDENCIES</span>
+            <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span>
+            <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># AUTO ROLLBACK</span>
+
+    <span class="k">return</span> <span class="n">new_user</span>
+</code></pre></div></p>
 <h2 id="so-do-i-really-need-it">So, do I really need it?</h2>
 <p>If you want to spend less time writing your code, but write better code - then you must use PyAssimilator.
 It can be hard to start if you have no experience with good code, so you can watch creator's <a href="https://knucklesuganda.github.io/py_assimilator/video_tutorials/">video tutorials</a>.</p>

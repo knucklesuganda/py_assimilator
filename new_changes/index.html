@@ -17,7 +17,7 @@
     
     
       
-        <title>✨New in 1.2.0✨ - Assimilator - the best Python patterns</title>
+        <title>✨Usability Update(1.3.0)✨ - Assimilator - the best Python patterns</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#adaptive-specifications" class="md-skip">
+        <a href="#the-problem" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ✨New in 1.2.0✨
+              ✨Usability Update(1.3.0)✨
             
           </span>
         </div>
@@ -335,6 +335,20 @@
     <li class="md-nav__item">
       <a href="../tutorial/advanced_database/" class="md-nav__link">
         Advanced database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/how_to_create/" class="md-nav__link">
+        How to create patterns
       </a>
     </li>
   
@@ -629,12 +643,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          ✨New in 1.2.0✨
+          ✨Usability Update(1.3.0)✨
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        ✨New in 1.2.0✨
+        ✨Usability Update(1.3.0)✨
       </a>
       
         
@@ -651,29 +665,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#adaptive-specifications" class="md-nav__link">
-    Adaptive specifications
+  <a href="#the-problem" class="md-nav__link">
+    The problem
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#specification-fixes" class="md-nav__link">
-    Specification Fixes
+  <a href="#our-solution" class="md-nav__link">
+    Our solution
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#specification-refactoring" class="md-nav__link">
-    Specification refactoring
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#other-minor-fixes" class="md-nav__link">
-    Other minor fixes
+  <a href="#in-depth-look" class="md-nav__link">
+    In-depth look
   </a>
   
 </li>
@@ -726,29 +733,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#adaptive-specifications" class="md-nav__link">
-    Adaptive specifications
+  <a href="#the-problem" class="md-nav__link">
+    The problem
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#specification-fixes" class="md-nav__link">
-    Specification Fixes
+  <a href="#our-solution" class="md-nav__link">
+    Our solution
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#specification-refactoring" class="md-nav__link">
-    Specification refactoring
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#other-minor-fixes" class="md-nav__link">
-    Other minor fixes
+  <a href="#in-depth-look" class="md-nav__link">
+    In-depth look
   </a>
   
 </li>
@@ -773,72 +773,60 @@
   </a>
 
 
-  <h1>✨New in 1.2.0✨</h1>
+  <h1>✨Usability Update(1.3.0)✨</h1>
 
-<h2 id="adaptive-specifications">Adaptive specifications</h2>
-<p>While working with different queries, you are going to use specifications. However, accessing them from repository can
-be challenging. That is why we created Adaptive Specifications. Here is what they do:</p>
-<p>That is the code from PyAssimilator version 1.1.0:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
-
-
-<span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="s2">&quot;balances&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;balances.currency&quot;</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">only</span><span class="p">(</span>
-            <span class="s2">&quot;balances.currency.symbol&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;balances.amount&quot;</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span>
-            <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-            <span class="n">offset</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
-        <span class="p">)</span>
+<h2 id="the-problem">The problem</h2>
+<p>We had a problem with pattern creation. You had to write three or more functions just to create a pattern, and we assume
+that this was too much for an average user. So, that is why we changed the way you create your patterns in the
+Usability update!</p>
+<blockquote>
+<p>You can read the full documentation on Pattern creation here: <a href="/tutorial/how_to_create/">How to create patterns</a></p>
+</blockquote>
+<p>Here is an example on how we <strong>used to</strong> create CRUDService pattern:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_repository</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">MongoRepository</span><span class="p">(</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">mongo_client</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="s1">&#39;assimilator_complex&#39;</span>
     <span class="p">)</span>
-</code></pre></div>
-<p>Here is that same code using 1.2.0 Adaptive Specifications:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span><span class="p">,</span> <span class="n">only</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">paginate</span>
 
 
-<span class="k">def</span> <span class="nf">filter_users</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="n">filter_</span><span class="p">(</span><span class="n">age__gt</span><span class="o">=</span><span class="mi">18</span><span class="p">),</span>
-        <span class="n">join</span><span class="p">(</span><span class="s2">&quot;balances&quot;</span><span class="p">,</span> <span class="s2">&quot;balances.currency&quot;</span><span class="p">),</span>
-        <span class="n">only</span><span class="p">(</span><span class="s2">&quot;balances.currency.symbol&quot;</span><span class="p">,</span> <span class="s2">&quot;balances.amount&quot;</span><span class="p">),</span>
-        <span class="n">paginate</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">18</span><span class="p">),</span>
-    <span class="p">)</span>
-</code></pre></div>
-<p>We removed more than 30% of our code! These specifications are going to change depending on your repository, so that
-means that you can write them like that and use pattern substitution easily!</p>
-<h2 id="specification-fixes">Specification Fixes</h2>
-<p>We fixed all the specifications that relate to foreign keys. Now, you can easily use <code>order()</code> specification with foreign
-values:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Order by foreign entity `balances` and `amount` column</span>
-<span class="n">order</span><span class="p">(</span><span class="s1">&#39;balances.amount&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_uow</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">MongoUnitOfWork</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="n">get_repository</span><span class="p">())</span>
 
-<span class="c1"># Or using specification from the repository</span>
-<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s1">&#39;balances.amount&#39;</span><span class="p">)</span>
-</code></pre></div>
-<p>We also fixed all the composite filter specification operations:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Filter AND filter OR NOT filter</span>
-<span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="c1"># They also work with adaptive specifications!</span>
-<span class="n">filter_</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">filter_</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">filter_</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_crud</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">CRUDService</span><span class="p">(</span><span class="n">uow</span><span class="o">=</span><span class="n">get_uow</span><span class="p">())</span>
+
+
+<span class="n">crud</span> <span class="o">=</span> <span class="n">get_crud</span><span class="p">()</span>
 </code></pre></div>
-<h2 id="specification-refactoring">Specification refactoring</h2>
-<p>Now, we don't use <code>apply()</code> function in <code>Specification</code> class, we just call <code>__call__()</code> straight away.</p>
-<h2 id="other-minor-fixes">Other minor fixes</h2>
+<hr />
+<h2 id="our-solution">Our solution</h2>
+<p>Now, instead of writing three functions just to create a pattern, you can just call a function and pass all the parameters
+inside it. For example, here is how we create a CRUDService:</p>
+<div class="highlight"><pre><span></span><code><span class="n">crud</span> <span class="o">=</span> <span class="n">create_crud</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s1">&#39;alchemy&#39;</span><span class="p">,</span>         <span class="c1"># External library that we are using.</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>                 <span class="c1"># Model your CRUDService is going to work with.</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">session_creator</span><span class="p">(),</span>  <span class="c1"># Database session.</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="in-depth-look">In-depth look</h2>
+<p>There are other functions that allow us to fully inject all the patterns into our new update. Firstly, we have
+a pattern registry. Pattern registry is a dictionary that contains all the possible patterns with their provider names.
+When we want to create a pattern, we use that pattern registry to find the class that we want to use.</p>
+<p>You don't want to interact with pattern registry directly(it is a dictionary, and they do not have any structure in Python).
+That is why we have the following functions:</p>
 <ul>
-<li>Better imports</li>
-<li>Better type hints</li>
-<li>Quicker internal filters</li>
+<li><code>register_provider()</code> - Allows you to register a new provider of your own. 
+If you are developing a library that interacts with PyAssimilator, it is a good practice to register your provider.
+This way, anyone can easily import your patterns with our new functions.</li>
+<li><code>find_provider()</code> - Allows you to provide a module that should find and register your provider.</li>
+<li><code>get_pattern_list()</code> - Returns a list of all patterns for a provider.</li>
+<li><code>unregister_provider()</code> - Deletes a provider from the registry.</li>
+<li><code>get_pattern()</code> - Low-level function that returns a pattern class.</li>
 </ul>
+<p>To find out more about these functions, go to <a href="/tutorial/how_to_create/">How to create patterns</a></p>
 
 
   

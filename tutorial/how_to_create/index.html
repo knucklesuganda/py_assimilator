@@ -17,7 +17,7 @@
     
     
       
-        <title>Advanced database tutorial - Assimilator - the best Python patterns</title>
+        <title>How to create patterns - Assimilator - the best Python patterns</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#advanced-database-patterns-usage" class="md-skip">
+        <a href="#pattern-registry" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Advanced database tutorial
+              How to create patterns
             
           </span>
         </div>
@@ -333,6 +333,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../advanced_database/" class="md-nav__link">
+        Advanced database tutorial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -341,16 +355,14 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Advanced database tutorial
+          How to create patterns
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Advanced database tutorial
+        How to create patterns
       </a>
       
         
@@ -358,8 +370,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -369,37 +379,23 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unit-of-work" class="md-nav__link">
-    Unit of work
+  <a href="#pattern-registry" class="md-nav__link">
+    Pattern registry
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#writing-your-own-specifications" class="md-nav__link">
-    Writing your own specifications
-  </a>
-  
-    <nav class="md-nav" aria-label="Writing your own specifications">
+    <nav class="md-nav" aria-label="Pattern registry">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#how-do-specifications-work" class="md-nav__link">
-    How do specifications work?
+  <a href="#registering-the-patterns" class="md-nav__link">
+    Registering the patterns
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#functional-specifications" class="md-nav__link">
-    Functional specifications
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#class-based-specifications" class="md-nav__link">
-    Class-based specifications
+  <a href="#interacting-with-the-registry" class="md-nav__link">
+    Interacting with the registry
   </a>
   
 </li>
@@ -410,9 +406,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-specificationlist-pattern" class="md-nav__link">
-    Using SpecificationList pattern
+  <a href="#creating-the-patterns" class="md-nav__link">
+    Creating the patterns
   </a>
+  
+    <nav class="md-nav" aria-label="Creating the patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-creation-arguments" class="md-nav__link">
+    Custom creation arguments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -420,20 +429,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../how_to_create/" class="md-nav__link">
-        How to create patterns
-      </a>
     </li>
   
 
@@ -758,8 +753,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -768,37 +761,23 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unit-of-work" class="md-nav__link">
-    Unit of work
+  <a href="#pattern-registry" class="md-nav__link">
+    Pattern registry
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#writing-your-own-specifications" class="md-nav__link">
-    Writing your own specifications
-  </a>
-  
-    <nav class="md-nav" aria-label="Writing your own specifications">
+    <nav class="md-nav" aria-label="Pattern registry">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#how-do-specifications-work" class="md-nav__link">
-    How do specifications work?
+  <a href="#registering-the-patterns" class="md-nav__link">
+    Registering the patterns
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#functional-specifications" class="md-nav__link">
-    Functional specifications
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#class-based-specifications" class="md-nav__link">
-    Class-based specifications
+  <a href="#interacting-with-the-registry" class="md-nav__link">
+    Interacting with the registry
   </a>
   
 </li>
@@ -809,9 +788,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-specificationlist-pattern" class="md-nav__link">
-    Using SpecificationList pattern
+  <a href="#creating-the-patterns" class="md-nav__link">
+    Creating the patterns
   </a>
+  
+    <nav class="md-nav" aria-label="Creating the patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-creation-arguments" class="md-nav__link">
+    Custom creation arguments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -829,228 +821,115 @@
                 
                   
 
-  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/tutorial/advanced_database.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/knucklesuganda/py_assimilator/edit/master/docs/tutorial/how_to_create.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="advanced-database-patterns-usage">Advanced database patterns usage</h1>
-<h2 id="unit-of-work">Unit of work</h2>
-<p>When you are using <code>UnitOfWork</code> pattern you will typically call context managers(<code>with</code> statement) and <code>commit()</code> function. 
-But, if you want to use all the functions of this pattern manually, you can do it like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">UnitOfWork</span>
+  <h1>How to create patterns</h1>
 
-
-<span class="k">def</span> <span class="nf">example</span><span class="p">(</span><span class="n">uow</span><span class="p">:</span> <span class="n">UnitOfWork</span><span class="p">):</span>
-    <span class="n">uow</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>     <span class="c1"># begin the transaction</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">uow</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;Andrey&quot;</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-        <span class="n">uow</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># apply the changes</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">uow</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>  <span class="c1"># remove all the changes if there is an exception</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">uow</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>     <span class="c1"># close the transaction</span>
-</code></pre></div>
+<p>Right now you know how to interact with database using patterns from <a href="/tutorial/database/">Basic Tutorials</a>. But,
+some information in these tutorials is not completely correct. One of the latest updates called Usability Update allowed
+us to create patterns instantly without using functions described in tutorials.</p>
 <blockquote>
-<p>However, most of the time, there is no need in doing that, and we recommend using <code>with uow:</code> instead.</p>
+<p>It is still important to know how to create patterns using your own functions, and some applications may prefer to use 
+that instead of new functions.</p>
 </blockquote>
 <hr />
-<h2 id="writing-your-own-specifications">Writing your own specifications</h2>
-<p>Sometimes you are copying your specifications. That is bad, and can lead to many bugs and legacy code. Instead, you need
-to identify the places where you copy your specifications, and your own specification that can be used easily.
-Now, let's see how to do that.</p>
-<h3 id="how-do-specifications-work">How do specifications work?</h3>
-<p>Specification is a class or a function that does the following: it gets your initial query, changes it, and returns the
-new version. That is a simplified version of the source code for one of the internal specifications:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<h2 id="pattern-registry">Pattern registry</h2>
+<p>Pattern registry is a dictionary that contains all the providers and respective patterns. Provider is an external library,
+data source or basically a set of patterns that you are using. Example of providers are: SQLAlchemy, Redis, MongoDB, Cassandra, etc.</p>
+<p>Each provider corresponds to a <code>PatternList</code> which is basically a class that has our patterns.
+In order to use the functions that create our patterns, we must register our provider first.</p>
+<hr />
+<h4 id="registering-the-patterns">Registering the patterns</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.usability.registry</span> <span class="kn">import</span> <span class="n">register_provider</span><span class="p">,</span> <span class="n">PatternList</span>
+<span class="kn">from</span> <span class="nn">assimilator.internal.database</span> <span class="kn">import</span> <span class="n">InternalRepository</span><span class="p">,</span> <span class="n">InternalUnitOfWork</span>
+<span class="kn">from</span> <span class="nn">assimilator.core.services</span> <span class="kn">import</span> <span class="n">CRUDService</span>
 
-<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
+<span class="c1"># Our pattern list:</span>
+<span class="n">internal_patterns</span> <span class="o">=</span> <span class="n">PatternList</span><span class="p">(</span>
+    <span class="n">repository</span><span class="o">=</span><span class="n">InternalRepository</span><span class="p">,</span>
+    <span class="n">uow</span><span class="o">=</span><span class="n">InternalUnitOfWork</span><span class="p">,</span>
+    <span class="n">crud</span><span class="o">=</span><span class="n">CRUDService</span><span class="p">,</span>
+<span class="p">)</span>
 
+<span class="c1"># Register the patterns with provider&#39;s name:</span>
+<span class="n">register_provider</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="n">pattern_list</span><span class="o">=</span><span class="n">internal_patterns</span><span class="p">)</span>
+</code></pre></div>
+<p>Fortunately, you don't have to do that most of the time. All providers inside PyAssimilator are already registered,
+and other libraries which interact with PyAssimilator must register them as well. But, that is an option for you if you
+want to change the registry.</p>
+<p>The function that you will probably use a lot is <code>find_provider</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.usability.registry</span> <span class="kn">import</span> <span class="n">find_provider</span>
 
-<span class="nd">@specification</span>  <span class="c1"># specification decorator</span>
-<span class="k">def</span> <span class="nf">internal_paginate</span><span class="p">(</span>
-    <span class="n">query</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>    <span class="c1"># query from the repository</span>
-    <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-    <span class="c1"># we update the query with Python slices and return new variant</span>
-    <span class="k">return</span> <span class="n">query</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">limit</span><span class="p">]</span>
-</code></pre></div></p>
-<p>Each specification must return an updated version of the query, or something that can be used logically with other specifications.
-In this case, we get our query as a list of object, change the list, and return the updated version. 
-So, each specification adds something to the query, and that updated query goes to the next specification.
-After that, our <code>Repository</code> pattern applies the specifications and returns our new result!</p>
+<span class="c1"># Finds and imports the module if it is not in the registry yet.</span>
+<span class="n">find_provider</span><span class="p">(</span><span class="n">provider_path</span><span class="o">=</span><span class="s1">&#39;assimilator.alchemy&#39;</span><span class="p">)</span>
+</code></pre></div>
 <blockquote>
-<p><strong><strong>SUPER IMPORTANT</strong></strong>. You are probably wondering: when do we get this query argument and how will the users pass 
-it to the specification? The <code>initial_query</code> argument that you provide in the <code>Repository</code> is your query, and you NEVER use
-query when you call specifications in your repository. The query is supplied automatically.</p>
+<p><code>find_provider()</code> is a function that just imports the module. If you are developing a library you still have to use
+<code>register_provider()</code>.</p>
 </blockquote>
-<p>If you want to write your own specification, then you must choose between functional specifications and class-based
-specifications. <strong>We would suggest to use functional specifications whenever you can!</strong></p>
 <hr />
-<h3 id="functional-specifications">Functional specifications</h3>
-<p>Functional specifications are created with <code>@specification</code> decorator.
-You must do the following to create a functional specification:</p>
-<ol>
-<li>Create a function with <code>@specification</code> pattern.</li>
-<li>Add any parameters and add query parameter as the last one.</li>
-<li>Do something with the query in the function.</li>
-<li>Return an updated query.</li>
-</ol>
-<p>Let's say that we want to create a specification that only allows validated objects from a list:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
+<h4 id="interacting-with-the-registry">Interacting with the registry</h4>
+<p>You can find a provider using <code>get_pattern_list()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.usability.registry</span> <span class="kn">import</span> <span class="n">get_pattern_list</span>
 
-<span class="nd">@specification</span>
-<span class="k">def</span> <span class="nf">validated_only</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">validated</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
-</code></pre></div></p>
-<p>Now, we can use that specification in our patterns:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
-
-<span class="kn">from</span> <span class="nn">specifications</span> <span class="kn">import</span> <span class="n">validated_only</span>
-
-
-<span class="k">def</span> <span class="nf">filter_all_validated</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="n">validated_only</span><span class="p">()</span>    <span class="c1"># always call the specification.</span>
-    <span class="p">)</span>
-</code></pre></div></p>
-<p>If we want to add some arguments, we can easily do it. But, you must be sure that you are adding your arguments
-before the <code>query</code> parameter:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
-
-<span class="nd">@specification</span>
-<span class="k">def</span> <span class="nf">validated_only</span><span class="p">(</span><span class="n">check_vip</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">check_vip</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">validated</span> <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_vip</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">validated</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
-</code></pre></div></p>
-<p>We can use our updated specification like this:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
-
-<span class="kn">from</span> <span class="nn">specifications</span> <span class="kn">import</span> <span class="n">validated_only</span>
-
-
-<span class="k">def</span> <span class="nf">filter_all_validated</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="c1"># We do not pass our query parameter. It is added automatically.</span>
-        <span class="n">validated_only</span><span class="p">(</span><span class="n">is_vip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="p">)</span>
-</code></pre></div></p>
-<hr />
-<h3 id="class-based-specifications">Class-based specifications</h3>
-<p>Class-based specifications are a little more advanced. You use them when you need auxiliary methods, inheritance, 
-abstractions or anything else that classes can offer.</p>
-<p>You can create them with these steps:</p>
-<ol>
-<li>Create a class that inherits from <code>Specification</code>.</li>
-<li>Add all the arguments that you need in the <code>__init__()</code> function.</li>
-<li>Add <code>apply()</code> function from the <code>Specification</code> class.</li>
-<li>Change the query and return it.</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Specification</span>
-
-
-<span class="k">class</span> <span class="nc">ValidatedOnly</span><span class="p">(</span><span class="n">Specification</span><span class="p">):</span>   <span class="c1"># inherits from Specification abstract class</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_vip</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>    <span class="c1"># all the arguments go here</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ValidatedOnly</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_vip</span> <span class="o">=</span> <span class="n">check_vip</span>
-
-    <span class="c1"># apply() will only get query as the argument.</span>
-    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_vip</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">validated</span> <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_vip</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">validated</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
+<span class="n">alchemy_patterns</span> <span class="o">=</span> <span class="n">get_pattern_list</span><span class="p">(</span><span class="s1">&#39;alchemy&#39;</span><span class="p">)</span>
 </code></pre></div>
-<p>We can use our class-based specification like this:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">Repository</span>
+<p>You can also unregister patterns using <code>unregister_provider()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.usability.registry</span> <span class="kn">import</span> <span class="n">unregister_provider</span>
 
-<span class="kn">from</span> <span class="nn">specifications</span> <span class="kn">import</span> <span class="n">ValidatedOnly</span>
+<span class="n">unregister_provider</span><span class="p">(</span><span class="s1">&#39;alchemy&#39;</span><span class="p">)</span>
+<span class="c1"># Now, you will not be able to find SQLAlchemy patterns</span>
+</code></pre></div>
+<p>You can also get a pattern class by its name using <code>get_pattern()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.usability.registry</span> <span class="kn">import</span> <span class="n">get_pattern</span>
 
+<span class="n">alchemy_uow_cls</span> <span class="o">=</span> <span class="n">get_pattern</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;alchemy&#39;</span><span class="p">,</span> <span class="n">pattern_name</span><span class="o">=</span><span class="s1">&#39;uow&#39;</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>However, this is a usability update, meaning that you won't have to use most of these functions. They are low-level,
+and are only useful when developing an extension library for PyAssimilator or for very specific tasks. </p>
+</blockquote>
+<h2 id="creating-the-patterns">Creating the patterns</h2>
+<p>Let's finally create our patterns using Usability Update:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.core.usability.pattern_creator</span> <span class="kn">import</span> <span class="n">create_uow</span><span class="p">,</span> <span class="n">create_repository</span><span class="p">,</span> <span class="n">create_crud</span>
 
-<span class="k">def</span> <span class="nf">filter_all_validated</span><span class="p">(</span><span class="n">repository</span><span class="p">:</span> <span class="n">Repository</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="n">ValidatedOnly</span><span class="p">(</span><span class="n">is_vip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>        <span class="c1"># Usage techniques are the same</span>
-    <span class="p">)</span>
-</code></pre></div></p>
-<hr />
-<h2 id="using-specificationlist-pattern">Using SpecificationList pattern</h2>
-<p>What is the problem with our custom specifications? They are direct. We cannot use them if the query type changes,
-so that means that we cannot use them with different repositories.</p>
-<p>We can solve that issue with another pattern called <code>SpecificationList</code>. It allows you to map your specifications to
-classes that can call different specifications for different repositories. When you use <code>repository.specifications</code> or
-<code>repository.specs</code>, you are using <code>SpecificationList</code> objects from these repositories.</p>
-<p>The most basic SpecificationList looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+<span class="c1"># Create repository:</span>
+<span class="n">repository</span> <span class="o">=</span> <span class="n">create_repository</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;alchemy&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">alchemy_session</span><span class="p">())</span>
 
-<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">FilterSpecification</span>
-<span class="kn">from</span> <span class="nn">assimilator.core.database.specifications.types</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">OrderSpecificationProtocol</span><span class="p">,</span>
-    <span class="n">PaginateSpecificationProtocol</span><span class="p">,</span>
-    <span class="n">OnlySpecificationProtocol</span><span class="p">,</span>
-    <span class="n">JoinSpecificationProtocol</span><span class="p">,</span>
+<span class="c1"># Create unit of work:</span>
+<span class="n">uow</span> <span class="o">=</span> <span class="n">create_uow</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s1">&#39;mongo&#39;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">Product</span><span class="p">,</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">pymongo</span><span class="o">.</span><span class="n">client_session</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(),</span>
+    <span class="n">kwargs_repository</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;database&quot;</span><span class="p">:</span> <span class="s2">&quot;my_db&quot;</span>
+    <span class="p">}</span>
 <span class="p">)</span>
 
-
-<span class="k">class</span> <span class="nc">SpecificationList</span><span class="p">:</span>
-    <span class="nb">filter</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">FilterSpecification</span><span class="p">]</span>
-    <span class="n">order</span><span class="p">:</span> <span class="n">OrderSpecificationProtocol</span>
-    <span class="n">paginate</span><span class="p">:</span> <span class="n">PaginateSpecificationProtocol</span>
-    <span class="n">join</span><span class="p">:</span> <span class="n">JoinSpecificationProtocol</span>
-    <span class="n">only</span><span class="p">:</span> <span class="n">OnlySpecificationProtocol</span>
+<span class="c1"># Create crud service:</span>
+<span class="n">crud</span> <span class="o">=</span> <span class="n">create_crud</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">CustomModel</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="p">{})</span>
 </code></pre></div>
-<p>We have all the specifications that we talked about, and each specification has a <a href="https://docs.python.org/3/library/typing.html#typing.Protocol">Protocol</a>
-typing that allows us to specify what arguments we need for specific pre-built specifications.</p>
-<p>If you want to create your own <code>SpecificationList</code>, then be sure to do the following:</p>
-<ol>
-<li>Create a class that inherits from <code>SpecificationList</code>.</li>
-<li>Add all the pre-built specifications if your base class doesn't specify them.</li>
-<li>Add your custom specifications.</li>
-<li>Add your custom specification list to your repository.</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">Query</span>
-
-<span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemySpecificationList</span>
-<span class="kn">from</span> <span class="nn">assimilator.core.database</span> <span class="kn">import</span> <span class="n">specification</span>
-
-
-<span class="nd">@specification</span>
-<span class="k">def</span> <span class="nf">alchemy_validate</span><span class="p">(</span><span class="n">validate_vip</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Query</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">validate_vip</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_vip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_validated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_validated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">CustomSpecificationList</span><span class="p">(</span><span class="n">AlchemySpecificationList</span><span class="p">):</span>
-    <span class="c1"># We don&#39;t need to specify pre-built specifications, </span>
-    <span class="c1"># we already have them in the AlchemySpecificationList</span>
-    <span class="n">validated</span> <span class="o">=</span> <span class="n">alchemy_validate</span>
+<p>So, instead of writing three separate functions with all the configurations, we can just use a create_PATTERN NAME function
+and easily add a new pattern to our code!</p>
+<hr />
+<h4 id="custom-creation-arguments">Custom creation arguments</h4>
+<p>Some patterns have custom arguments in init function, and you can also provide them like this:</p>
+<div class="highlight"><pre><span></span><code><span class="n">uow</span> <span class="o">=</span> <span class="n">create_uow</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s1">&#39;mongo&#39;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">Product</span><span class="p">,</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">pymongo</span><span class="o">.</span><span class="n">client_session</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(),</span>
+    <span class="n">kwargs_repository</span><span class="o">=</span><span class="p">{</span>     <span class="c1"># Custom kwargs for repository</span>
+        <span class="s2">&quot;database&quot;</span><span class="p">:</span> <span class="s2">&quot;my_db&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">kwargs_uow</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;custom_argument&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 </code></pre></div>
-<p>Then, we can use that specification list with any repository that works with alchemy:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">assimilator.alchemy.database</span> <span class="kn">import</span> <span class="n">AlchemyRepository</span>
-
-<span class="kn">from</span> <span class="nn">specifications</span> <span class="kn">import</span> <span class="n">CustomSpecificationList</span>
-
-
-<span class="n">repository</span> <span class="o">=</span> <span class="n">AlchemyRepository</span><span class="p">(</span>
-    <span class="n">session</span><span class="o">=</span><span class="n">DatabaseSession</span><span class="p">(),</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">User</span><span class="p">,</span>
-    <span class="n">specifications</span><span class="o">=</span><span class="n">CustomSpecificationList</span><span class="p">,</span>     <span class="c1"># Change specifications list</span>
-<span class="p">)</span>
-
-
-<span class="n">repository</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-    <span class="n">repository</span><span class="o">.</span><span class="n">specs</span><span class="o">.</span><span class="n">validated</span><span class="p">()</span>    <span class="c1"># use the specification indirectly</span>
-<span class="p">)</span>
-</code></pre></div></p>
-<p>But, how do we make it so that the specification can work with other repositories? We have to write different specifications
-and specification lists. There is just no other way(yet😎). So, if you want to use your specification with other patterns,
-rewrite it to work with their data types and create a new SpecificationList that is going to be supplied in the Repository.</p>
 
 
   
@@ -1075,7 +954,7 @@ rewrite it to work with their data types and create a new SpecificationList that
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../database/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Database tutorial" rel="prev">
+        <a href="../advanced_database/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Advanced database tutorial" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1084,20 +963,20 @@ rewrite it to work with their data types and create a new SpecificationList that
               <span class="md-footer__direction">
                 Previous
               </span>
-              Database tutorial
+              Advanced database tutorial
             </div>
           </div>
         </a>
       
       
         
-        <a href="../how_to_create/" class="md-footer__link md-footer__link--next" aria-label="Next: How to create patterns" rel="next">
+        <a href="../architecture_tutorial/" class="md-footer__link md-footer__link--next" aria-label="Next: Architecture tutorial" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              How to create patterns
+              Architecture tutorial
             </div>
           </div>
           <div class="md-footer__button md-icon">
