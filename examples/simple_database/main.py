@@ -3,15 +3,15 @@ import operator
 import os
 os.environ['PY_ASSIMILATOR_MESSAGE'] = 'False'
 
-from assimilator.alchemy.database import AlchemyRepository
+from assimilator.core.database import filter_
 from assimilator.core.patterns import LazyCommand
 from assimilator.redis_.database import RedisRepository
 from assimilator.core.database import UnitOfWork, Repository
-from assimilator.internal.database import InternalRepository
-from assimilator.internal.database.specifications.filtering_options import find_attribute
 from assimilator.mongo.database import MongoRepository
-from assimilator.core.database import filter_
 from assimilator.core.database import NotFoundError
+from assimilator.internal.database import InternalRepository
+from assimilator.alchemy.database import AlchemyRepository
+from assimilator.internal.database.specifications.filtering_options import find_attribute
 
 from dependencies import get_uow, User
 

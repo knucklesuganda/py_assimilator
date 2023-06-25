@@ -1,6 +1,6 @@
-from typing import TypeVar, Any, Callable
+from typing import TypeVar, Any, Type, Dict
 
-from assimilator.core.usability.registry import create_pattern
+from assimilator.core.usability.registry import get_pattern
 from assimilator.core.database import Repository, UnitOfWork
 from assimilator.core.services import CRUDService
 
@@ -9,45 +9,44 @@ ModelT = TypeVar("ModelT")
 
 def create_repository(
     provider: str,
-    model: ModelT,
+    model: Type[ModelT],
     session: Any,
-    **kwargs,
+    kwargs_repository: Dict[str, Any] = None,
 ) -> Repository:
-    return create_pattern(
-        provider=provider,
-        pattern_name='repository',
-        model=model,
-        session=session,
-        **kwargs,
-    )
+    repository_cls: Type[Repository] = get_pattern(provider=provider, pattern_name='repository')
+    return repository_cls(model=model, session=session, **(kwargs_repository or {}))
 
 
 def create_uow(
     provider: str,
-    model: ModelT,
+    model: Type[ModelT],
     session: Any,
-    repository_creator: Callable = create_repository,   # TODO: fix annotation
-    **kwargs,
+    kwargs_repository: Dict[str, Any] = None,
+    kwargs_uow: Dict[str, Any] = None,
 ) -> UnitOfWork:
-    repository = repository_creator(provider=provider, model=model, session=session)
-    return create_pattern(
+    repository = create_repository(
         provider=provider,
-        pattern_name='uow',
-        repository=repository,
-        **kwargs,
+        model=model,
+        session=session,
+        kwargs_repository=kwargs_repository,
     )
+    uow_cls: Type[UnitOfWork] = get_pattern(provider=provider, pattern_name='uow')
+    return uow_cls(repository=repository, **(kwargs_uow or {}))
 
 
-def create_crud_service(
+def create_crud(
     provider: str,
-    model: ModelT,
+    model: Type[ModelT],
     session: Any,
-    **kwargs,
+    kwargs_repository: Dict[str, Any] = None,
+    kwargs_uow: Dict[str, Any] = None,
 ) -> CRUDService:
-    uow = create_uow(provider=provider, model=model, session=session)
-    return create_pattern(
+    uow = create_uow(
         provider=provider,
-        pattern_name='crud',
-        uow=uow,
-        **kwargs,
+        model=model,
+        session=session,
+        kwargs_repository=kwargs_repository,
+        kwargs_uow=kwargs_uow,
     )
+    crud_cls: Type[CRUDService] = get_pattern(provider=provider, pattern_name='crud')
+    return crud_cls(uow=uow)
