@@ -1,51 +1,57 @@
 import sys
 
+import redis
 import pymongo
-from redis.client import Redis
 from sqlalchemy.orm import sessionmaker
 
-from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
-from assimilator.internal.database import InternalRepository, InternalUnitOfWork
-from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
+from core.usability.pattern_creator import create_uow
 from examples.simple_database.models import engine, AlchemyUser, InternalUser, RedisUser, MongoUser
-from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
 
-if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
-    User = AlchemyUser
 
-    def get_uow():
-        DatabaseSession = sessionmaker(bind=engine)
-        repository = AlchemyRepository(
-            session=DatabaseSession(),
-            model=User,
-        )
-        return AlchemyUnitOfWork(repository)
+alchemy_session_creator = sessionmaker(bind=engine)
+internal_session = {}
 
-elif sys.argv[1] == "internal":
-    User = InternalUser
-    internal_session = {
-        'users': {}     # You can also give keys to show save entities
+
+# Database registry contains all the possible patterns and their settings.
+# We do that just as an example, you can try or do whatever you want!
+database_registry = {
+    'alchemy': {
+        'model': AlchemyUser,   # Model to be used
+        'session_creator': lambda: alchemy_session_creator(),   # function that can create sessions
+        'kwargs_repository': {},    # Additional settings for the repository
+    },
+    'internal': {
+        'model': InternalUser,
+        'session_creator': lambda: internal_session,
+        'kwargs_repository': {},
+    },
+    'redis': {
+        'model': RedisUser,
+        'session_creator': lambda: redis.Redis(),
+        'kwargs_repository': {},
+    },
+    'mongo': {
+        'model': MongoUser,
+        'session_creator': lambda: pymongo.MongoClient(),
+        'kwargs_repository': {
+            'database': 'assimilator_users',
+        },
     }
+}
 
-    def get_uow():
-        repository = InternalRepository(internal_session['users'], model=InternalUser)
-        return InternalUnitOfWork(repository)
+database_provider = sys.argv[1] if len(sys.argv) > 1 else "alchemy"     # get the provider from args
+User = database_registry[database_provider]['model']    # get the model
 
-elif sys.argv[1] == "redis":
-    User = RedisUser
-    redis_session = Redis()
-    redis_session.flushdb()
 
-    def get_uow():
-        repository = RedisRepository(redis_session, model=RedisUser)
-        return RedisUnitOfWork(repository)
+def get_uow():
+    dependencies = database_registry[database_provider]
+    model = dependencies['model']
+    session = dependencies['session_creator']()     # create a new connection to the database
+    kwargs_repository = dependencies['kwargs_repository']
 
-elif sys.argv[1] == "mongo":
-    User = MongoUser
-    client = pymongo.MongoClient()
-
-    client['test'].drop_collection(MongoUser.AssimilatorConfig.collection)
-
-    def get_uow():
-        repository = MongoRepository(session=client, model=MongoUser, database='test')
-        return MongoUnitOfWork(repository)
+    return create_uow(
+        provider=database_provider,
+        model=model,
+        session=session,
+        kwargs_repository=kwargs_repository,
+    )
