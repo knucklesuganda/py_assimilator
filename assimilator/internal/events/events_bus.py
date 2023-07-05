@@ -1,34 +1,23 @@
+from typing import Iterable
+
 from assimilator.core.events.events import Event
 from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 
 class InternalEventConsumer(EventConsumer):
-    def __init__(self, event_storage: list):
-        self.event_storage = event_storage
-
-    def close(self):
-        pass
-
-    def start(self):
-        pass
-
-    def consume(self):
-        while self.event_storage:
-            yield self.event_storage.pop()
+    """ Consumer for internal events """
 
 
 class InternalEventProducer(EventProducer):
-    def __init__(self, event_storage: list):
-        self.event_storage = event_storage
+    def __init__(self, consumer: EventConsumer):
+        self.consumer = consumer
 
     def produce(self, event: Event):
-        self.event_storage.append(event)
+        self.consumer.consume(event)
 
-    def start(self):
-        pass
-
-    def close(self):
-        pass
+    def mass_produce(self, events: Iterable[Event]) -> None:
+        for event in events:
+            self.consumer.consume(event)
 
 
 __all__ = [

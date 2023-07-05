@@ -1,6 +1,16 @@
-from assimilator.core.events import Event
+from pydantic import Field
+
+from assimilator.core.events.events import Event
 
 
-class RecordCreated(Event):
+class MusicRecordCreated(Event):
+    event_name: str = "music_record_created"
+
     record_name: str
-    event_name = "record_created"
+    album: str
+    length: int = Field(min=1)
+
+
+class UserNotified(Event):
+    event_name: str = "user_notified"
+    username: str

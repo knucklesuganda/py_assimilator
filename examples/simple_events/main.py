@@ -1,20 +1,27 @@
-from assimilator.core.events import EventProducer, EventConsumer
-from examples.simple_events.dependencies import get_producer, get_consumer
-from examples.simple_events.events import RecordCreated
+from examples.simple_events.dependencies import event_bus
+from examples.simple_events.events import MusicRecordCreated, UserNotified
 
 
-def emit_event(producer: EventProducer):
-    with producer:
-        record_event = RecordCreated(record_name="firstRecord")
-        producer.produce(record_event)
+def create_record():
+    event_bus.producer.produce(
+        MusicRecordCreated(
+            record_name="My song name",
+            album="New music album",
+            length=12,
+        )
+    )
 
 
-def consume_events(consumer: EventConsumer):
-    with consumer:
-        for event in consumer.consume():
-            print(event)
+@event_bus.consumer.register_callback(MusicRecordCreated)
+def on_record_created(event: MusicRecordCreated, **_):
+    print("New record:", event.record_name, "for album", event.album)
+    event_bus.producer.produce(UserNotified(username="Andrey"))
+
+
+@event_bus.consumer.register_callback(UserNotified)
+def on_user_notified(event: UserNotified, **_):
+    print("User with username", event.username, "was notified")
 
 
 if __name__ == '__main__':
-    emit_event(get_producer())
-    consume_events(get_consumer())
+    create_record()
