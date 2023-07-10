@@ -1,15 +1,20 @@
 from abc import abstractmethod
-from typing import Callable, Optional, final, List, Iterable, Union, Dict, Any
+from typing import Callable, Optional, Iterable, Iterable, Union, Dict, Any, List, Type
 
-from assimilator.core.events.events import Event
+from assimilator.core.events.events import Event, ExternalEvent
 from assimilator.core.events.types import EventCallbackContainer, EventCallback, EventRegistrator
 from assimilator.core.events.utils import get_event_name
 
 
 class EventConsumer:
-    def __init__(self, callbacks: Optional[EventCallbackContainer] = None):
+    def __init__(
+        self,
+        callbacks: Optional[EventCallbackContainer] = None,
+        events: Optional[Iterable[Type[Event]]] = None,
+    ):
         super(EventConsumer, self).__init__()
         self._callbacks: EventCallbackContainer = callbacks or {}
+        self._events = {event.get_event_name(): event for event in (events or [])}
 
     def decorate_callback(self, event: EventRegistrator):
 
@@ -19,7 +24,9 @@ class EventConsumer:
 
         return _callback_decorator
 
-    def register_callback(self, event: EventRegistrator, callback: EventCallback = None) -> Union[None, Callable]:
+    def register_callback(
+        self, event: EventRegistrator, callback: EventCallback = None,
+    ) -> Union[None, Callable]:
         if callback is None:    # TODO: should I do this because no overload in Python?
             return self.decorate_callback(event)
 
@@ -29,6 +36,8 @@ class EventConsumer:
             self._callbacks[event_name].add(callback)
         else:
             self._callbacks[event_name] = {callback}
+
+        self._events[event_name] = event
 
     def unregister_callback(self, event: EventRegistrator, callback: EventCallback):
         self._callbacks[event].remove(callback)
@@ -41,8 +50,14 @@ class EventConsumer:
     def consume(self, event: Event):
         context = self._get_context()
 
+        if isinstance(event, ExternalEvent):
+            event_cls = self._events.get(event.event_name)
+
+            if event_cls is not None:
+                event = event_cls(**event.data)
+
         for callback in self.get_callbacks(event):
-            callback(event, **context)
+            callback(event, is_external=True, **context)
 
     def get_callbacks(self, event: EventRegistrator) -> List[EventCallback]:
         return self._callbacks.get(get_event_name(event), [])

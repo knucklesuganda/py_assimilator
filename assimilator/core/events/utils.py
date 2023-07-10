@@ -6,7 +6,7 @@ from assimilator.core.events.types import EventRegistrator
 
 def get_event_name(event: EventRegistrator):
     if inspect.isclass(event):
-        return event.event_name
+        return event.get_event_name()
 
     return event.event_name if isinstance(event, Event) else event
 

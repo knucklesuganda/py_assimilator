@@ -4,7 +4,9 @@ from assimilator.core.events.events import Event
 
 
 class MusicRecordCreated(Event):
-    event_name: str = "music_record_created"
+    @classmethod
+    def get_event_name(cls):
+        return "music_record_created"
 
     record_name: str
     album: str
@@ -12,5 +14,8 @@ class MusicRecordCreated(Event):
 
 
 class UserNotified(Event):
-    event_name: str = "user_notified"
+    @classmethod
+    def get_event_name(cls):
+        return "user_notified"
+
     username: str
