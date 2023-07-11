@@ -12,8 +12,11 @@ if sqlalchemy.__version__ < "2.0.0":
     )
 
 
-register_provider(provider='alchemy', pattern_list=PatternList(
-    repository=AlchemyRepository,
-    uow=AlchemyUnitOfWork,
-    crud=CRUDService
-))
+register_provider(
+    provider='alchemy',
+    pattern_list=PatternList(
+        repository=AlchemyRepository,
+        uow=AlchemyUnitOfWork,
+        crud=CRUDService,
+    ),
+)

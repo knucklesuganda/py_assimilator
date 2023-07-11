@@ -1,11 +1,12 @@
-from assimilator.core.services import CRUDService
 from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
 from assimilator.core.usability.registry import register_provider, PatternList
+from assimilator.redis_.events.events_bus import RedisEventConsumer, RedisEventProducer
 
 pattern_list = PatternList(
     repository=RedisRepository,
     uow=RedisUnitOfWork,
-    crud=CRUDService,
+    event_consumer=RedisEventConsumer,
+    event_producer=RedisEventProducer,
 )
 
 register_provider(provider='redis', pattern_list=pattern_list)

@@ -24,4 +24,5 @@ def on_user_notified(event: UserNotified, **_):
 
 
 if __name__ == '__main__':
+    event_bus.consumer.start(threaded=True)
     create_record()

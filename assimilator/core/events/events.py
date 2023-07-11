@@ -1,3 +1,4 @@
+import re
 from abc import ABC
 from typing import Any, Optional
 
@@ -7,7 +8,7 @@ from assimilator.core.database.models import BaseModel
 
 
 class Event(BaseModel):
-    event_name: Optional[str] = Field()
+    event_name: Optional[str] = Field(default_factory=lambda: Event.get_event_name())
 
     def __new__(cls, *args, **kwargs):
         event_cls = super().__new__(cls)
@@ -16,7 +17,7 @@ class Event(BaseModel):
 
     @classmethod
     def get_event_name(cls):
-        raise NotImplementedError(f"get_event_name() is not implemented in {cls.__name__}")
+        return re.sub(r'(?<!^)(?=[A-Z])', '_', cls.__name__).lower()
 
 
 class ExternalEvent(ABC, Event):
@@ -29,12 +30,7 @@ class ExternalEvent(ABC, Event):
         self.event_name = kwargs.get('event_name', None)
 
 
-class AckEvent(ABC, Event):
-    acknowledged: bool = False
-
-
 __all__ = [
     'Event',
     'ExternalEvent',
-    'AckEvent',
 ]

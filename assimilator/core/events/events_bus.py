@@ -1,12 +1,13 @@
 from abc import abstractmethod
-from typing import Callable, Optional, Iterable, Iterable, Union, Dict, Any, List, Type
+from typing import Callable, Optional, Iterable, Union, Dict, Any, List, Type
 
 from assimilator.core.events.events import Event, ExternalEvent
 from assimilator.core.events.types import EventCallbackContainer, EventCallback, EventRegistrator
 from assimilator.core.events.utils import get_event_name
+from assimilator.core.patterns import StartCloseContextMixin
 
 
-class EventConsumer:
+class EventConsumer(StartCloseContextMixin):
     def __init__(
         self,
         callbacks: Optional[EventCallbackContainer] = None,
@@ -15,6 +16,10 @@ class EventConsumer:
         super(EventConsumer, self).__init__()
         self._callbacks: EventCallbackContainer = callbacks or {}
         self._events = {event.get_event_name(): event for event in (events or [])}
+
+    @abstractmethod
+    def start(self, threaded: bool = False):
+        raise NotImplementedError("start() is not implemented")
 
     def decorate_callback(self, event: EventRegistrator):
 

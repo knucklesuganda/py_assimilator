@@ -17,7 +17,7 @@ MappingIntStrAny = Mapping[Union[int, str], Any]
 
 
 class BaseModel(PydanticBaseModel):
-    id: str = Field(allow_mutation=False)
+    id: str = Field(allow_mutation=False, default_factory=lambda: BaseModel.generate_id())
 
     class AssimilatorConfig(PydanticBaseModel, extra=Extra.allow):
         autogenerate_id: ClassVar[bool] = True
@@ -46,14 +46,9 @@ class BaseModel(PydanticBaseModel):
 
         return cls
 
-    def generate_id(self, **kwargs) -> str:
+    @staticmethod
+    def generate_id(**kwargs) -> str:
         return str(uuid4())
-
-    def __init__(self, **kwargs):
-        if self.AssimilatorConfig.autogenerate_id and kwargs.get('id') is None:
-            kwargs['id'] = self.generate_id(**kwargs)
-
-        super(BaseModel, self).__init__(**kwargs)
 
     @classmethod
     def loads(cls: Type['T'], data: str) -> 'T':

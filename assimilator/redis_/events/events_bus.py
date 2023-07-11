@@ -1,5 +1,5 @@
 from threading import Thread
-from typing import Iterable, Optional, Set
+from typing import Iterable, Optional, Set, Type
 
 from redis import Redis
 from redis.client import PubSub
@@ -17,8 +17,9 @@ class RedisEventConsumer(EventConsumer):
         session: Redis,
         message_timeout: float = 1,
         callbacks: Optional[EventCallbackContainer] = None,
+        events: Optional[Iterable[Type[Event]]] = None,
     ):
-        super(RedisEventConsumer, self).__init__(callbacks=callbacks)
+        super(RedisEventConsumer, self).__init__(callbacks=callbacks, events=events)
         self.session = session
         self._redis_channel: PubSub = session.pubsub()
         self._channels: Set[str] = set() if callbacks is None else set(callbacks.keys())
@@ -48,9 +49,11 @@ class RedisEventConsumer(EventConsumer):
             elif message.get('type') == 'message':
                 self.consume(ExternalEvent.loads(message.get('data')))
 
-    def stop(self):
+    def close(self):
         self._is_listening = False
-        self._thread.join()
+
+        if self._thread is not None:
+            self._thread.join()
 
     def start(self, threaded: bool = False):
         self._is_listening = True

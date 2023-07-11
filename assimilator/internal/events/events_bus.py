@@ -7,6 +7,12 @@ from assimilator.core.events.events_bus import EventConsumer, EventProducer
 class InternalEventConsumer(EventConsumer):
     """ Consumer for internal events """
 
+    def close(self) -> None:
+        pass
+
+    def start(self, threaded: bool = False):
+        pass
+
 
 class InternalEventProducer(EventProducer):
     def __init__(self, consumer: EventConsumer):
@@ -18,6 +24,9 @@ class InternalEventProducer(EventProducer):
     def mass_produce(self, events: Iterable[Event]) -> None:
         for event in events:
             self.consumer.consume(event)
+
+    def start(self):
+        pass
 
 
 __all__ = [

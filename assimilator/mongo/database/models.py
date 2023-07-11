@@ -34,7 +34,8 @@ class MongoModel(BaseModel):
     def __hash__(self):
         return int(str(self.id), base=16)
 
-    def generate_id(self, **kwargs) -> ObjectId:
+    @staticmethod
+    def generate_id(**kwargs) -> ObjectId:
         return ObjectId()
 
     def json(self, *args, by_alias: bool = True, **kwargs) -> str:
