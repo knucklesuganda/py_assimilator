@@ -957,7 +957,7 @@ pattern.  You can also find a full <a href="https://github.com/knucklesuganda/py
 
 <span class="n">service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
     <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># user with ID 1</span>
-    <span class="n">update_obj</span><span class="o">=</span><span class="p">{</span>
+    <span class="n">obj_data</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;Andrey-2&quot;</span><span class="p">,</span>  <span class="c1"># will have this new username</span>
     <span class="p">},</span>
 <span class="p">)</span>
@@ -1180,6 +1180,18 @@ Also, if you have an idea on how to improve update() or any other thing in Assim
         font-size: 28px;
         color: white;
     }
+
+    .glowup:hover{
+      transform: scale(1.1);
+      transition: 200ms;
+      box-shadow: 4px 4px 16px 0 #673ab6;
+    }
+
+    .glowup_forced{
+      transform: scale(1.1);
+      transition: 200ms;
+      box-shadow: 4px 4px 16px 0 #673ab6;
+    }
 </style>
 
 <div class="floating-container">
@@ -1194,5 +1206,22 @@ Also, if you have an idea on how to improve update() or any other thing in Assim
     </a>
 </div>
 
+    <a href="https://www.donationalerts.com/r/pyassimilator"
+       class="floating-container glowup" style="left: 20px; right: initial">
+      <h1>Donate and make your own library!</h1>
+    </a>
+
+
+    <script>
+      const glowUp = document.querySelector(".glowup");
+
+      setInterval(() => {
+        glowUp.classList.add('glowup_forced');
+
+        setTimeout(() => {
+          glowUp.classList.remove('glowup_forced');
+        }, 3000);
+      }, 60000 * 5);
+    </script>
   </body>
 </html>

@@ -837,6 +837,18 @@
         font-size: 28px;
         color: white;
     }
+
+    .glowup:hover{
+      transform: scale(1.1);
+      transition: 200ms;
+      box-shadow: 4px 4px 16px 0 #673ab6;
+    }
+
+    .glowup_forced{
+      transform: scale(1.1);
+      transition: 200ms;
+      box-shadow: 4px 4px 16px 0 #673ab6;
+    }
 </style>
 
 <div class="floating-container">
@@ -851,5 +863,22 @@
     </a>
 </div>
 
+    <a href="https://www.donationalerts.com/r/pyassimilator"
+       class="floating-container glowup" style="left: 20px; right: initial">
+      <h1>Donate and make your own library!</h1>
+    </a>
+
+
+    <script>
+      const glowUp = document.querySelector(".glowup");
+
+      setInterval(() => {
+        glowUp.classList.add('glowup_forced');
+
+        setTimeout(() => {
+          glowUp.classList.remove('glowup_forced');
+        }, 3000);
+      }, 60000 * 5);
+    </script>
   </body>
 </html>
