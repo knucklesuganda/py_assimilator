@@ -1136,10 +1136,20 @@ and easily add a new pattern to our code!</p>
       box-shadow: 4px 4px 16px 0 #673ab6;
     }
 
+    .glowup{
+      display: block;
+    }
+
     .glowup_forced{
       transform: scale(1.1);
       transition: 200ms;
       box-shadow: 4px 4px 16px 0 #673ab6;
+    }
+
+    @media(max-width: 480px) {
+      .glowup{
+        display: none;
+      }
     }
 </style>
 
@@ -1157,9 +1167,8 @@ and easily add a new pattern to our code!</p>
 
     <a href="https://www.donationalerts.com/r/pyassimilator"
        class="floating-container glowup" style="left: 20px; right: initial">
-      <h1>Donate and make your own library!</h1>
+      <h2>Donate and make your own library!</h2>
     </a>
-
 
     <script>
       const glowUp = document.querySelector(".glowup");
