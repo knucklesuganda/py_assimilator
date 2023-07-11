@@ -100,6 +100,7 @@ free - and that will not be the case either.
 * [Author's YouTube RU](https://www.youtube.com/channel/UCSNpJHMOU7FqjD4Ttux0uuw)
 * [Author's YouTube ENG](https://www.youtube.com/channel/UCeC9LNDwRP9OfjyOFHaSikA)
 * [Discord channel](https://discord.gg/gTVaGu7DHN)
+* [Donations](https://www.donationalerts.com/r/pyassimilator)
 
  ## Contributors
 
@@ -110,6 +111,11 @@ free - and that will not be the case either.
 ## Stars history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=knucklesuganda/py_assimilator&type=Date)](https://star-history.com/#knucklesuganda/py_assimilator&Date)
+
+
+# Donate and create your own framework!
+
+[Donate using this link](https://www.donationalerts.com/r/pyassimilator) and help PyAssimilator prosper! You can also request a feature that you want to see in our framework and we will have it in our priority list!
 
 
 ## ⭐Stargazers⭐
