@@ -35,6 +35,8 @@ class CRUDService(Service):
                     setattr(old_obj, updated_key, getattr(parsed_obj, updated_key))
 
                 update_obj = old_obj
+            else:
+                update_obj = obj_data
 
             self.uow.repository.update(update_obj)
             self.uow.commit()

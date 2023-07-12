@@ -5,7 +5,7 @@ from assimilator.core.services import CRUDService
 from assimilator.core.usability.registry import get_pattern
 from assimilator.core.database import Repository, UnitOfWork
 from assimilator.core.events.types import EventCallbackContainer
-from assimilator.core.events.events_bus import EventConsumer, EventProducer
+from assimilator.core.events.events_bus import EventConsumer, EventProducer, EventBus
 
 ModelT = TypeVar("ModelT")
 
@@ -72,3 +72,22 @@ def create_event_consumer(
 def create_event_producer(provider: str, kwargs_producer: Dict[str, Any] = None) -> EventProducer:
     producer_cls: Type[EventProducer] = get_pattern(provider=provider, pattern_name='event_producer')
     return producer_cls(**(kwargs_producer or {}))
+
+
+def create_event_bus(
+    provider: str,
+    callbacks: Optional[EventCallbackContainer] = None,
+    events: Optional[Iterable[Type[Event]]] = None,
+    kwargs_consumer: Dict[str, Any] = None,
+    kwargs_producer: Dict[str, Any] = None,
+):
+    producer = create_event_producer(provider=provider, kwargs_producer=kwargs_producer)
+    consumer = create_event_consumer(
+        provider=provider,
+        callbacks=callbacks,
+        events=events,
+        kwargs_consumer=kwargs_consumer,
+    )
+
+    event_bus_cls: Type[EventBus] = get_pattern(provider=provider, pattern_name='event_bus')
+    return event_bus_cls(producer=producer, consumer=consumer)

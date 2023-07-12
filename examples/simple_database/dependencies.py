@@ -3,8 +3,8 @@ import sys
 import redis
 import pymongo
 from sqlalchemy.orm import sessionmaker
+from assimilator.core.usability.pattern_creator import create_uow
 
-from core.usability.pattern_creator import create_uow
 from examples.simple_database.models import engine, AlchemyUser, InternalUser, RedisUser, MongoUser
 
 

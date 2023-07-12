@@ -22,7 +22,9 @@ class AlchemyUnitOfWork(UnitOfWork):
         )
 
     def begin(self):
-        self.repository.session.begin()
+        if not self.repository.session.is_active:
+            self.repository.session.begin()
+
 
     def rollback(self):
         self.repository.session.rollback()

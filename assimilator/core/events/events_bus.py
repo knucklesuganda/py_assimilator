@@ -1,10 +1,10 @@
 from abc import abstractmethod
 from typing import Callable, Optional, Iterable, Union, Dict, Any, List, Type
 
-from assimilator.core.events.events import Event, ExternalEvent
-from assimilator.core.events.types import EventCallbackContainer, EventCallback, EventRegistrator
 from assimilator.core.events.utils import get_event_name
 from assimilator.core.patterns import StartCloseContextMixin
+from assimilator.core.events.events import Event, ExternalEvent
+from assimilator.core.events.types import EventCallbackContainer, EventCallback, EventRegistrator
 
 
 class EventConsumer(StartCloseContextMixin):
@@ -62,7 +62,7 @@ class EventConsumer(StartCloseContextMixin):
                 event = event_cls(**event.data)
 
         for callback in self.get_callbacks(event):
-            callback(event, is_external=True, **context)
+            callback(event, **context)
 
     def get_callbacks(self, event: EventRegistrator) -> List[EventCallback]:
         return self._callbacks.get(get_event_name(event), [])
