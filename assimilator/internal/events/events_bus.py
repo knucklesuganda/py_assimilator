@@ -7,10 +7,7 @@ from assimilator.core.events.events_bus import EventConsumer, EventProducer
 class InternalEventConsumer(EventConsumer):
     """ Consumer for internal events """
 
-    def close(self) -> None:
-        pass
-
-    def start(self, threaded: bool = False):
+    def run(self):
         pass
 
 

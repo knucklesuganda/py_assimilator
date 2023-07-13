@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class StartCloseContextMixin(ABC):
     @abstractmethod
-    def close(self) -> None:
+    def stop(self) -> None:
         raise NotImplementedError("close() is not implemented")
 
     @abstractmethod
@@ -15,7 +15,7 @@ class StartCloseContextMixin(ABC):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
+        self.stop()
 
         if exc_type is not None:
             raise exc_val

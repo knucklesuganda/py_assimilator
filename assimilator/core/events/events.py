@@ -29,6 +29,10 @@ class ExternalEvent(ABC, Event):
         self.data = kwargs
         self.event_name = kwargs.get('event_name', None)
 
+    @classmethod
+    def get_event_name(cls):
+        return cls.event_name
+
 
 __all__ = [
     'Event',

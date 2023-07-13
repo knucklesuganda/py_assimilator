@@ -26,29 +26,17 @@ class KafkaEventConsumer(EventConsumer):
         self._is_listening = False
         self.manual_commit = manual_commit
 
-    def _listen_events(self):
+    def run(self):
         self._kafka_client.subscribe([get_event_name(event) for event in self._events.keys()])
 
         for message in self._kafka_client:
+            if not self.is_running:
+                break
+
             self.consume(ExternalEvent.loads(message.value))
 
             if self.manual_commit:
                 self._kafka_client.commit()
-
-    def start(self, threaded: bool = False):
-        self._is_listening = True
-
-        if threaded:
-            self._thread = Thread(target=self._listen_events)
-            self._thread.start()
-        else:
-            self._listen_events()
-
-    def close(self) -> None:
-        self._is_listening = False
-
-        if self._thread is not None:
-            self._thread.join()
 
 
 class KafkaEventProducer(EventProducer):

@@ -1,4 +1,3 @@
-from threading import Thread
 from typing import Iterable, Optional, Set, Type
 
 from redis import Redis
@@ -23,10 +22,7 @@ class RedisEventConsumer(EventConsumer):
         self.session = session
         self._redis_channel: PubSub = session.pubsub()
         self._channels: Set[str] = set() if callbacks is None else set(callbacks.keys())
-
         self.message_timeout = message_timeout
-        self._thread: Optional[Thread] = None
-        self._is_listening = False
 
     def register_callback(self, event: EventRegistrator, callback: EventCallback = None):
         event_name = get_event_name(event)
@@ -37,8 +33,8 @@ class RedisEventConsumer(EventConsumer):
 
         return super(RedisEventConsumer, self).register_callback(event=event, callback=callback)
 
-    def _listen_events(self):
-        while self._is_listening:
+    def run(self):
+        while self.is_running:
             message = self._redis_channel.get_message(
                 ignore_subscribe_messages=True,
                 timeout=self.message_timeout,
@@ -48,21 +44,6 @@ class RedisEventConsumer(EventConsumer):
                 continue
             elif message.get('type') == 'message':
                 self.consume(ExternalEvent.loads(message.get('data')))
-
-    def close(self):
-        self._is_listening = False
-
-        if self._thread is not None:
-            self._thread.join()
-
-    def start(self, threaded: bool = False):
-        self._is_listening = True
-
-        if threaded:
-            self._thread = Thread(target=self._listen_events)
-            self._thread.start()
-        else:
-            self._listen_events()
 
 
 class RedisEventProducer(EventProducer):
