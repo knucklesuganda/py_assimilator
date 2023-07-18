@@ -3,8 +3,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from assimilator.core.services import CRUDService
 from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.database import NotFoundError
-from examples.fastapi_crud_example.dependencies import get_service
-from examples.fastapi_crud_example.schema import UserCreateSchema
+from examples.databases.fastapi_crud_example.dependencies import get_service
+from examples.databases.fastapi_crud_example.schema import UserCreateSchema
 
 app = FastAPI()
 

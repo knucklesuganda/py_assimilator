@@ -25,7 +25,6 @@ class AlchemyUnitOfWork(UnitOfWork):
         if not self.repository.session.is_active:
             self.repository.session.begin()
 
-
     def rollback(self):
         self.repository.session.rollback()
 

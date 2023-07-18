@@ -1,5 +1,5 @@
-from examples.simple_events.dependencies import event_bus
-from examples.simple_events.events import MusicRecordCreated, UserNotified
+from examples.databases.simple_events.dependencies import event_bus
+from examples.databases.simple_events.events import MusicRecordCreated, UserNotified
 
 
 def create_record():

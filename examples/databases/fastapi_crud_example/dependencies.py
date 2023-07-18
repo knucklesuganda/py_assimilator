@@ -1,4 +1,4 @@
-import sys
+import os
 
 import pymongo
 from redis.client import Redis
@@ -8,19 +8,22 @@ from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
 from assimilator.internal.database import InternalRepository, InternalUnitOfWork
 from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
 from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
+from assimilator.core.services import CRUDService
 
-from examples.complex_database.models import (
-    engine, AlchemyUser, AlchemyUserBalance, AlchemyBalanceCurrency,
+from examples.databases.fastapi_crud_example.models import (
+    engine, AlchemyUser, AlchemyCurrency, AlchemyBalance,
     InternalUser, InternalBalance, InternalCurrency,
     RedisUser, RedisBalance, RedisCurrency,
     MongoUser, MongoCurrency, MongoBalance,
 )
 
-if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
-    User = AlchemyUser
-    Balance = AlchemyUserBalance
-    Currency = AlchemyBalanceCurrency
+storage = os.environ.get('storage', 'internal')
 
+
+if storage == "alchemy":
+    User = AlchemyUser
+    Balance = AlchemyBalance
+    Currency = AlchemyCurrency
 
     def get_uow():
         DatabaseSession = sessionmaker(bind=engine)
@@ -30,7 +33,7 @@ if len(sys.argv) == 1 or sys.argv[1] == "alchemy":
         )
         return AlchemyUnitOfWork(repository)
 
-elif sys.argv[1] == "internal":
+elif storage == "internal":
     User = InternalUser
     Balance = InternalBalance
     Currency = InternalCurrency
@@ -40,29 +43,26 @@ elif sys.argv[1] == "internal":
         repository = InternalRepository(internal_session, model=InternalUser)
         return InternalUnitOfWork(repository)
 
-elif sys.argv[1] == "redis":
+elif storage == "redis":
     redis_session = Redis()
     User = RedisUser
     Balance = RedisBalance
     Currency = RedisCurrency
 
-
     def get_uow():
         repository = RedisRepository(redis_session, model=User)
         return RedisUnitOfWork(repository)
 
-
-    redis_session.flushdb()
-
-elif sys.argv[1] == "mongo":
+elif storage == "mongo":
     User = MongoUser
     Balance = MongoBalance
     Currency = MongoCurrency
     mongo_client = pymongo.MongoClient()
 
-    mongo_client['assimilator_complex'].drop_collection(MongoUser.AssimilatorConfig.collection)
-
-
     def get_uow():
-        repository = MongoRepository(session=mongo_client, model=User, database='assimilator_complex')
+        repository = MongoRepository(session=mongo_client, model=User, database='assimilator_fastapi')
         return MongoUnitOfWork(repository)
+
+
+def get_service():
+    return CRUDService(uow=get_uow())

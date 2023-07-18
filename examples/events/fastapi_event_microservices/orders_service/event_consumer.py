@@ -1,5 +1,5 @@
-from examples.fastapi_event_microservices.common.events import UserBilled
-from examples.fastapi_event_microservices.orders_service.dependencies import event_bus, get_orders_crud
+from examples.events.fastapi_event_microservices.common.events import UserBilled
+from examples.events.fastapi_event_microservices.orders_service.dependencies import event_bus, get_orders_crud
 
 
 @event_bus.consumer.register_callback(UserBilled)

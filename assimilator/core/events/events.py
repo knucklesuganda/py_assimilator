@@ -33,6 +33,10 @@ class ExternalEvent(ABC, Event):
     def get_event_name(cls):
         return cls.event_name
 
+    def json(self, *args, **kwargs) -> str:
+        data = super(ExternalEvent, self).dict(*args, **kwargs)
+        return self.__class__.__config__.json_dumps(data.get('data'))
+
 
 __all__ = [
     'Event',

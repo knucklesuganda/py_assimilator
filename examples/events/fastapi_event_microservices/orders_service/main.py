@@ -10,7 +10,6 @@ app = FastAPI()
 
 @app.on_event('startup')
 def startup_event():
-    import examples.fastapi_event_microservices.orders_service.event_consumer
     event_bus.consumer.start(threaded=True)
 
 

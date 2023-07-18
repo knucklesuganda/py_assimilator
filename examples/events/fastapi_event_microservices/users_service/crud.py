@@ -2,7 +2,7 @@ from assimilator.core.services.crud import CRUDService
 from assimilator.core.database import UnitOfWork
 from assimilator.core.events.events_bus import EventProducer
 
-from examples.fastapi_event_microservices.common.events import UserCreated
+from examples.events.fastapi_event_microservices.common.events import UserCreated
 
 
 class UsersCRUD(CRUDService):

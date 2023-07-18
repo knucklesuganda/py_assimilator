@@ -5,7 +5,7 @@ import pymongo
 from sqlalchemy.orm import sessionmaker
 from assimilator.core.usability.pattern_creator import create_uow
 
-from examples.simple_database.models import engine, AlchemyUser, InternalUser, RedisUser, MongoUser
+from examples.databases.simple_database.models import engine, AlchemyUser, InternalUser, RedisUser, MongoUser
 
 
 alchemy_session_creator = sessionmaker(bind=engine)

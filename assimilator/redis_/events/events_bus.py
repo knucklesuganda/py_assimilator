@@ -48,6 +48,7 @@ class RedisEventConsumer(EventConsumer):
 
 class RedisEventProducer(EventProducer):
     def __init__(self, session: Redis):
+        super(RedisEventProducer, self).__init__()
         self.session = session
 
     def produce(self, event: Event, event_channel: str = None):
@@ -56,7 +57,7 @@ class RedisEventProducer(EventProducer):
 
     def mass_produce(self, events: Iterable[Event], event_channel: str = None) -> None:
         for event in events:
-            event_name = get_event_name(events) if event_channel is None else event_channel
+            event_name = get_event_name(event) if event_channel is None else event_channel
             self.session.publish(channel=event_name, message=event.json())
 
 

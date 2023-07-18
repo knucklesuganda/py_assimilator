@@ -1,7 +1,7 @@
 from assimilator.core.database import NotFoundError
 
-from examples.fastapi_event_microservices.common.events import OrderCreated, UserBilled
-from examples.fastapi_event_microservices.users_service.dependencies import \
+from examples.events.fastapi_event_microservices.common.events import OrderCreated, UserBilled
+from examples.events.fastapi_event_microservices.users_service.dependencies import \
     get_event_bus, get_users_crud
 
 event_bus = get_event_bus()
