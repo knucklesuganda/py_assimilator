@@ -63,6 +63,8 @@
     
     
     
+    <script>window.yaContextCb=window.yaContextCb||[]</script>
+    <script src="https://yandex.ru/ads/system/context.js" async></script>
   </head>
   
   
@@ -1305,5 +1307,26 @@ rewrite it to work with their data types and create a new SpecificationList that
         }, 3000);
       }, 60000 * 5);
     </script>
+
+    <script>
+      const sidebar = document.querySelector("div.md-container > main > div > div.md-sidebar.md-sidebar--secondary > div > div > nav > ul");
+      const adsBlock = document.createElement('li');
+      adsBlock.className = "md-nav__item";
+      adsBlock.style.marginTop = "2em";
+
+      const adsContainer = document.createElement("div");
+      adsContainer.id = "yandex_rtb_R-A-2569795-1";
+      adsBlock.appendChild(adsContainer);
+
+      sidebar.appendChild(adsBlock);
+
+      window.yaContextCb.push(()=>{
+        Ya.Context.AdvManager.render({
+          "blockId": "R-A-2569795-1",
+          "renderTo": "yandex_rtb_R-A-2569795-1"
+        })
+      })
+    </script>
+
   </body>
 </html>
