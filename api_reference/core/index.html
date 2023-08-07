@@ -1521,7 +1521,12 @@ also use context managers(<code>with uow:</code>) to start the transaction and r
         Ya.Context.AdvManager.render({
           "blockId": "R-A-2569795-1",
           "renderTo": "yandex_rtb_R-A-2569795-1"
-        })
+        });
+
+        Ya.Context.AdvManager.render({
+		  "blockId": "R-A-2569795-2",
+		  "type": "floorAd"
+	    });
       })
     </script>
 
