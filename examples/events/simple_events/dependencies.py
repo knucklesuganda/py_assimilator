@@ -1,6 +1,7 @@
 import sys
 
 import kafka
+import pika
 import pymongo
 import redis
 
@@ -39,6 +40,11 @@ elif provider == "mongo":
             connectTimeoutMS=2000,
             socketTimeoutMS=2000,
         )['assimilator_events']['events'],
+    }
+
+elif provider == "rabbit":
+    kwargs_producer = kwargs_consumer = {
+        "connection": pika.BlockingConnection(parameters=pika.ConnectionParameters()),
     }
 
 else:

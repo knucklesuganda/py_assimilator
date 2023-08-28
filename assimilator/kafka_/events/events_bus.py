@@ -21,9 +21,6 @@ class KafkaEventConsumer(EventConsumer):
     ):
         super(KafkaEventConsumer, self).__init__(callbacks=callbacks, events=events)
         self._kafka_client: kafka.KafkaConsumer = kafka_consumer
-
-        self._thread: Optional[Thread] = None
-        self._is_listening = False
         self.manual_commit = manual_commit
 
     def run(self):

@@ -1,5 +1,6 @@
 site_name: Assimilator - the best Python patterns
 site_description: Assimilator Python framework, Domain-Driven Design, DDD, high performance, easy to learn, fast to code
+site_url: https://knucklesuganda.github.io/py_assimilator/
 theme:
   name: material
   custom_dir: docs/docs_theme
@@ -80,7 +81,7 @@ extra:
     social:
       - icon: fontawesome/solid/paper-plane
         link: mailto:python.on.papyrus@gmail.com
-copyright: Copyright &copy; 2023 Andrey Ivanov
+copyright: Copyright &copy; 2023 PyAssimilator
 extra_javascript:
   - https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8262462913055533
   - scripts/add_footer.js

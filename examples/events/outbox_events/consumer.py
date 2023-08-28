@@ -11,4 +11,5 @@ def handle_event(event: OutboxEvent, **context):
     print(event)
 
 
-consumer.start()
+if __name__ == '__main__':
+    consumer.start()

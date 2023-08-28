@@ -1,5 +1,5 @@
-from examples.databases.simple_events.dependencies import event_bus
-from examples.databases.simple_events.events import MusicRecordCreated, UserNotified
+from examples.events.simple_events.dependencies import event_bus
+from examples.events.simple_events.events import MusicRecordCreated, UserNotified
 
 
 def create_record():
@@ -24,5 +24,5 @@ def on_user_notified(event: UserNotified, **_):
 
 
 if __name__ == '__main__':
-    event_bus.consumer.start(threaded=True)
+    event_bus.consumer.start(threaded=False)
     create_record()

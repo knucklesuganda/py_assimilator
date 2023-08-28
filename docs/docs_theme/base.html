@@ -8,6 +8,7 @@
     {% block site_meta %}
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta name="google-site-verification" content="RgctSBqanOy9ukrrb1lvFgx4-QGhvxbL2zHRyLzpzbQ" />
       {% if page.meta and page.meta.description %}
         <meta name="description" content="{{ page.meta.description }}">
       {% elif config.site_description %}
@@ -74,6 +75,8 @@
       {% endfor %}
     {% endif %}
     {% block extrahead %}{% endblock %}
+    <script>window.yaContextCb=window.yaContextCb||[]</script>
+    <script src="https://yandex.ru/ads/system/context.js" async></script>
   </head>
   {% set direction = config.theme.direction or lang.t('direction') %}
   {% if config.theme.palette %}
@@ -337,5 +340,31 @@
         }, 3000);
       }, 60000 * 5);
     </script>
+
+    <script>
+      const sidebar = document.querySelector("div.md-container > main > div > div.md-sidebar.md-sidebar--secondary > div > div > nav > ul");
+      const adsBlock = document.createElement('li');
+      adsBlock.className = "md-nav__item";
+      adsBlock.style.marginTop = "2em";
+
+      const adsContainer = document.createElement("div");
+      adsContainer.id = "yandex_rtb_R-A-2569795-1";
+      adsBlock.appendChild(adsContainer);
+
+      sidebar.appendChild(adsBlock);
+
+      window.yaContextCb.push(()=>{
+        Ya.Context.AdvManager.render({
+          "blockId": "R-A-2569795-1",
+          "renderTo": "yandex_rtb_R-A-2569795-1"
+        });
+
+        Ya.Context.AdvManager.render({
+		  "blockId": "R-A-2569795-2",
+		  "type": "floorAd"
+	    });
+      })
+    </script>
+
   </body>
 </html>
