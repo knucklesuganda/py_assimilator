@@ -1124,7 +1124,7 @@ free - and that will not be the case either.</p>
 
             for(const stargazer of stargazers.slice(i, i + chunkSize)){
                 chunkHTML += `<a href='${stargazer.url}' class='stargazer'>
-                    <img src='${stargazer.avatar}'  style='width: 4em'>
+                    <img src='${stargazer.avatar}' style='width: 4em'>
                     <span style='display: none'>${stargazer.login}</span>
                 </a>`;
             }
@@ -1156,7 +1156,7 @@ free - and that will not be the case either.</p>
 .stargazer:hover > img{
 
     transition: 100ms;
-    width: 12em!important;
+    width: 6em!important;
 
 }
 
