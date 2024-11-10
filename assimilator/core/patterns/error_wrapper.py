@@ -29,7 +29,7 @@ class ErrorWrapper:
         return any(
             issubclass(exc_type, error)
             for error in self.skipped_errors
-            if issubclass(error, Exception)
+            if not isinstance(error, Callable) and issubclass(error, Exception)
         )
 
     def create_error(self, original_error: Exception, wrapped_error_type: Type[Exception]):

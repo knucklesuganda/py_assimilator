@@ -1,4 +1,4 @@
-from typing import TypeVar, Iterable, Union
+from typing import TypeVar, Iterable, Union, Generic
 
 from assimilator.core.database import UnitOfWork, SpecificationList
 from assimilator.core.services.base import Service
@@ -8,7 +8,7 @@ from assimilator.core.patterns import LazyCommand
 ModelT = TypeVar("ModelT")
 
 
-class CRUDService(Service):
+class CRUDService(Generic[ModelT], Service):
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
         self._specs: SpecificationList = self.uow.repository.specs
@@ -62,4 +62,5 @@ class CRUDService(Service):
 
 __all__ = [
     'CRUDService',
+    'ModelT',
 ]

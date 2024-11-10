@@ -12,7 +12,7 @@ api_error_wrapper = ErrorWrapper(
     error_mappings={
         NotFoundError: lambda error: HTTPException(status_code=404, detail="Not found"),
     },
-    # default_error=lambda error: HTTPException(status_code=500, detail="Unknown error"),
+    default_error=lambda error: HTTPException(status_code=500, detail="Unknown error"),
 )
 
 
