@@ -1,5 +1,3 @@
-
-
 def rename_mongo_id(field: str) -> str:
     return field.replace("id", "_id")
 

@@ -26,8 +26,8 @@ class RedisEventConsumer(EventConsumer):
         message = self._event_channel.get_message(ignore_subscribe_messages=True)
 
         while message is not None:
-            if message['type'] == 'message':
-                yield ExternalEvent.loads(message['data'])
+            if message["type"] == "message":
+                yield ExternalEvent.loads(message["data"])
 
             message = self._event_channel.get_message(ignore_subscribe_messages=True)
 
@@ -48,6 +48,6 @@ class RedisEventProducer(EventProducer):
 
 
 __all__ = [
-    'RedisEventConsumer',
-    'RedisEventProducer',
+    "RedisEventConsumer",
+    "RedisEventProducer",
 ]

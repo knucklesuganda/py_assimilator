@@ -1,13 +1,13 @@
-from functools import wraps
 from abc import ABC
-from typing import Callable, TypeVar, Type, Any, Union
+from functools import wraps
+from typing import Any, Callable, Type, TypeVar, Union
 
 from assimilator.core.database.specifications.filtering_options import FilteringOptions
 from assimilator.core.database.specifications.types import (
+    JoinSpecificationProtocol,
+    OnlySpecificationProtocol,
     OrderSpecificationProtocol,
     PaginateSpecificationProtocol,
-    OnlySpecificationProtocol,
-    JoinSpecificationProtocol,
 )
 
 QueryT = TypeVar("QueryT")
@@ -30,17 +30,17 @@ class FilterSpecification(Specification, ABC):
                 self.filtering_options.parse_field(raw_field=field, value=value)
             )
 
-    def __or__(self, other: 'SpecificationType') -> 'FilterSpecification':
+    def __or__(self, other: "SpecificationType") -> "FilterSpecification":
         raise NotImplementedError("or() is not implemented for FilterSpecification")
 
-    def __and__(self, other: 'SpecificationType') -> 'FilterSpecification':
+    def __and__(self, other: "SpecificationType") -> "FilterSpecification":
         raise NotImplementedError("and() is not implemented for FilterSpecification")
 
     def __invert__(self):
         raise NotImplementedError("invert() is not implemented for FilterSpecification")
 
     def __str__(self):
-        return f'filter_spec({self.filters})'
+        return f"filter_spec({self.filters})"
 
 
 def specification(func: Callable) -> Callable:
@@ -49,7 +49,6 @@ def specification(func: Callable) -> Callable:
         def created_specification(query: QueryT, **context) -> QueryT:
             return func(*args, **kwargs, query=query, **context)
 
-        created_specification: func
         return created_specification
 
     return create_specification
@@ -67,9 +66,9 @@ SpecificationType = Union[Callable, Specification]
 
 
 __all__ = [
-    'SpecificationList',
-    'Specification',
-    'specification',
-    'SpecificationType',
-    'FilterSpecification',
+    "SpecificationList",
+    "Specification",
+    "specification",
+    "SpecificationType",
+    "FilterSpecification",
 ]

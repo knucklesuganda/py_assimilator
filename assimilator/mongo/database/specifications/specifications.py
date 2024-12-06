@@ -1,8 +1,15 @@
-from typing import Any, Optional, Collection
+from typing import Any, Collection, Optional
 
+from assimilator.core.database import (
+    AdaptiveFilter,
+    FilterSpecification,
+    SpecificationList,
+    specification,
+)
+from assimilator.mongo.database.specifications.filtering_options import (
+    MongoFilteringOptions,
+)
 from assimilator.mongo.database.specifications.utils import rename_mongo_id
-from assimilator.mongo.database.specifications.filtering_options import MongoFilteringOptions
-from assimilator.core.database import SpecificationList, FilterSpecification, specification, AdaptiveFilter
 
 
 class MongoFilter(FilterSpecification):
@@ -17,22 +24,22 @@ class MongoFilter(FilterSpecification):
             parsed_filters.update(filter_)
 
         self.filters = parsed_filters
-        if self.filters.get('filter') is not None:
-            self.filters = self.filters['filter']
+        if self.filters.get("filter") is not None:
+            self.filters = self.filters["filter"]
 
-    def __or__(self, other: 'FilterSpecification') -> 'FilterSpecification':
+    def __or__(self, other: "FilterSpecification") -> "FilterSpecification":
         if isinstance(other, AdaptiveFilter):
             other = MongoFilter(*other.fields, **other.kwargs_fields)
 
         return MongoFilter({"$or": [self.filters, other.filters]})
 
-    def __and__(self, other: 'FilterSpecification') -> 'FilterSpecification':
+    def __and__(self, other: "FilterSpecification") -> "FilterSpecification":
         if isinstance(other, AdaptiveFilter):
             other = MongoFilter(*other.fields, **other.kwargs_fields)
 
         return MongoFilter({"$and": [self.filters, other.filters]})
 
-    def __invert__(self) -> 'MongoFilter':
+    def __invert__(self) -> "MongoFilter":
         inverted_filters = []
 
         for column, value in self.filters.items():
@@ -41,7 +48,7 @@ class MongoFilter(FilterSpecification):
         return MongoFilter(*inverted_filters)
 
     def __call__(self, query: dict, **context: Any) -> dict:
-        query['filter'] = {**query.get('filter', {}), **self.filters}
+        query["filter"] = {**query.get("filter", {}), **self.filters}
         return query
 
 
@@ -50,7 +57,7 @@ mongo_filter = MongoFilter
 
 @specification
 def mongo_order(*clauses: str, query: dict, **_) -> dict:
-    query['sort'] = query.get('sort', []) + [
+    query["sort"] = query.get("sort", []) + [
         (column, -1 if column.startswith("-") else 1)
         for column in map(rename_mongo_id, clauses)
     ]
@@ -66,9 +73,9 @@ def mongo_paginate(
     **_,
 ) -> dict:
     if offset is not None:
-        query['skip'] = offset
+        query["skip"] = offset
     if limit is not None:
-        query['limit'] = limit
+        query["limit"] = limit
 
     return query
 
@@ -80,7 +87,7 @@ def mongo_join(*targets: Collection, query: dict, **join_args: dict) -> dict:
 
 @specification
 def mongo_only(*only_fields: str, query: dict, **_) -> dict:
-    query['projection'] = list(map(rename_mongo_id, only_fields))
+    query["projection"] = list(map(rename_mongo_id, only_fields))
     return query
 
 
@@ -93,11 +100,11 @@ class MongoSpecificationList(SpecificationList):
 
 
 __all__ = [
-    'MongoSpecificationList',
-    'MongoFilter',
-    'mongo_filter',
-    'mongo_order',
-    'mongo_paginate',
-    'mongo_join',
-    'mongo_only',
+    "MongoSpecificationList",
+    "MongoFilter",
+    "mongo_filter",
+    "mongo_order",
+    "mongo_paginate",
+    "mongo_join",
+    "mongo_only",
 ]

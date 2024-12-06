@@ -22,5 +22,5 @@ class StartCloseContextMixin(ABC):
 
 
 __all__ = [
-    'StartCloseContextMixin',
+    "StartCloseContextMixin",
 ]

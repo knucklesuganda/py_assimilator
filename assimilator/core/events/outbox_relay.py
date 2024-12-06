@@ -19,5 +19,5 @@ class OutboxRelay(ABC):
 
 
 __all__ = [
-    'OutboxRelay',
+    "OutboxRelay",
 ]

@@ -1,3 +1,1 @@
-
-
-DATABASE_URL = 'sqlite:///database.db'
+DATABASE_URL = "sqlite:///database.db"

@@ -1,7 +1,6 @@
-from typing import Dict, List, Set, Tuple, Iterable
+from typing import Dict, Iterable, List, Set, Tuple
 
 from assimilator.core.database.models import BaseModel
-
 
 InternalContainers = (List, Set, Tuple, map)
 

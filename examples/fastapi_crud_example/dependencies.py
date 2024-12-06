@@ -4,20 +4,28 @@ import pymongo
 from redis.client import Redis
 from sqlalchemy.orm import sessionmaker
 
-from assimilator.alchemy.database import AlchemyUnitOfWork, AlchemyRepository
-from assimilator.internal.database import InternalRepository, InternalUnitOfWork
-from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
-from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
+from assimilator.alchemy.database import AlchemyRepository, AlchemyUnitOfWork
 from assimilator.core.services import CRUDService
-
+from assimilator.internal.database import InternalRepository, InternalUnitOfWork
+from assimilator.mongo.database import MongoRepository, MongoUnitOfWork
+from assimilator.redis_.database import RedisRepository, RedisUnitOfWork
 from examples.fastapi_crud_example.models import (
-    engine, AlchemyUser, AlchemyCurrency, AlchemyBalance,
-    InternalUser, InternalBalance, InternalCurrency,
-    RedisUser, RedisBalance, RedisCurrency,
-    MongoUser, MongoCurrency, MongoBalance,
+    AlchemyBalance,
+    AlchemyCurrency,
+    AlchemyUser,
+    InternalBalance,
+    InternalCurrency,
+    InternalUser,
+    MongoBalance,
+    MongoCurrency,
+    MongoUser,
+    RedisBalance,
+    RedisCurrency,
+    RedisUser,
+    engine,
 )
 
-storage = os.environ.get('storage', 'internal')
+storage = os.environ.get("storage", "internal")
 
 
 if storage == "alchemy":
@@ -60,7 +68,9 @@ elif storage == "mongo":
     mongo_client = pymongo.MongoClient()
 
     def get_uow():
-        repository = MongoRepository(session=mongo_client, model=User, database='assimilator_fastapi')
+        repository = MongoRepository(
+            session=mongo_client, model=User, database="assimilator_fastapi"
+        )
         return MongoUnitOfWork(repository)
 
 

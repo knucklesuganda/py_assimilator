@@ -1,26 +1,26 @@
 import operator
-
 import os
-os.environ['PY_ASSIMILATOR_MESSAGE'] = 'False'
 
-from assimilator.core.database import filter_
-from assimilator.core.patterns import LazyCommand
-from assimilator.redis_.database import RedisRepository
-from assimilator.core.database import UnitOfWork, Repository
-from assimilator.mongo.database import MongoRepository
-from assimilator.core.database import NotFoundError
-from assimilator.internal.database import InternalRepository
+os.environ["PY_ASSIMILATOR_MESSAGE"] = "False"
+
+from dependencies import User, get_uow
+
 from assimilator.alchemy.database import AlchemyRepository
-from assimilator.internal.database.specifications.filtering_options import find_attribute
-
-from dependencies import get_uow, User
+from assimilator.core.database import NotFoundError, Repository, UnitOfWork, filter_
+from assimilator.core.patterns import LazyCommand
+from assimilator.internal.database import InternalRepository
+from assimilator.internal.database.specifications.filtering_options import (
+    find_attribute,
+)
+from assimilator.mongo.database import MongoRepository
+from assimilator.redis_.database import RedisRepository
 
 
 def create_user__kwargs(uow: UnitOfWork):
     with uow:
         uow.repository.save(
-            username='Andrey',
-            email='python.on.papyrus@gmail.com',
+            username="Andrey",
+            email="python.on.papyrus@gmail.com",
             balance=1000,
         )
         uow.commit()
@@ -29,8 +29,8 @@ def create_user__kwargs(uow: UnitOfWork):
 def create_user_model(uow: UnitOfWork):
     with uow:
         user = User(
-            username='Andrey-2',
-            email='python.on.papyrus@gmail.com',
+            username="Andrey-2",
+            email="python.on.papyrus@gmail.com",
             balance=2000,
         )
         uow.repository.save(user)
@@ -38,24 +38,30 @@ def create_user_model(uow: UnitOfWork):
 
 
 def read_user(username: str, repository: Repository):
-    user = repository.get(filter_(username=username, email="python.on.papyrus@gmail.com"))
+    user = repository.get(
+        filter_(username=username, email="python.on.papyrus@gmail.com")
+    )
     print("User:", user.id, user.username, user.email, user.balance)
     return user
 
 
 def read_user_direct(username: str, repository: Repository):
-    if isinstance(repository, AlchemyRepository):       # Awful! Try to use filtering options
+    if isinstance(repository, AlchemyRepository):  # Awful! Try to use filtering options
         user = repository.get(filter_(User.username == username))
     elif isinstance(repository, (InternalRepository, RedisRepository)):
-        user = repository.get(filter_(
-            find_attribute(operator.eq, 'username', username),
-            # will call eq(model.username, username) for every user
-        ))
+        user = repository.get(
+            filter_(
+                find_attribute(operator.eq, "username", username),
+                # will call eq(model.username, username) for every user
+            )
+        )
     elif isinstance(repository, MongoRepository):
-        user = repository.get(filter_(
-            {'username': username},
-            # will call eq(model.username, username) for every user
-        ))
+        user = repository.get(
+            filter_(
+                {"username": username},
+                # will call eq(model.username, username) for every user
+            )
+        )
     else:
         raise ValueError("Direct repository filter not found")
 
@@ -107,7 +113,9 @@ def create_many_users_direct(uow: UnitOfWork):
 
 def filter_users(repository: Repository):
     users = repository.filter(
-        repository.specs.filter(balance__gt=50) & filter_(balance__gt=50) & filter_(balance__eq=10),
+        repository.specs.filter(balance__gt=50)
+        & filter_(balance__gt=50)
+        & filter_(balance__eq=10),
     )
 
     for user in users:
@@ -118,7 +126,7 @@ def count_users(repository: Repository):
     print("Total users:", repository.count())
     print(
         "Users with balance greater than 5000:",
-        repository.count(filter_(balance__gt=5000))
+        repository.count(filter_(balance__gt=5000)),
     )
 
 
@@ -136,12 +144,14 @@ def update_many_users(uow: UnitOfWork):
         uow.repository.update(username_filter, balance=10)
         uow.commit()
 
-    assert all(user.balance == 10 for user in uow.repository.filter(username_filter, lazy=True))
+    assert all(
+        user.balance == 10 for user in uow.repository.filter(username_filter, lazy=True)
+    )
 
 
 def delete_many_users(uow: UnitOfWork):
     with uow:
-        uow.repository.delete(filter_(username__regex=r'User-\w*'))
+        uow.repository.delete(filter_(username__regex=r"User-\w*"))
         uow.commit()
 
     assert uow.repository.count(filter_(balance=10)) == 0
@@ -151,35 +161,39 @@ def delete_many_users(uow: UnitOfWork):
 def create_users_error(uow: UnitOfWork):
     with uow:
         uow.repository.save(
-            username='Not saved',
-            email='not-saved@user.com',
+            username="Not saved",
+            email="not-saved@user.com",
             balance=0,
         )
         uow.repository.save(
-            username='Not saved 2',
-            email='not-saved-2@user.com',
+            username="Not saved 2",
+            email="not-saved-2@user.com",
             balance=0,
         )
 
-        1 / 0   # Error. Changes are discarded
+        1 / 0  # Error. Changes are discarded
         uow.commit()
 
 
 def check_users_not_saved(uow: UnitOfWork):
     try:
-        read_user(username="Not saved", repository=uow.repository)  # Must return NotFound
+        read_user(
+            username="Not saved", repository=uow.repository
+        )  # Must return NotFound
         raise ValueError("User 1 was saved!")
     except NotFoundError:
         print("User 1 changes were discarded!")
 
     try:
-        read_user(username="Not saved 2", repository=uow.repository)  # Must return NotFound
+        read_user(
+            username="Not saved 2", repository=uow.repository
+        )  # Must return NotFound
         raise ValueError("User 2 was saved!")
     except NotFoundError:
         print("User 2 changes were discarded!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     create_user__kwargs(get_uow())
     create_user_model(get_uow())
 

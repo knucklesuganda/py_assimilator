@@ -1,17 +1,24 @@
 import json
-from uuid import uuid4, UUID
 from typing import (
-    Type, TypeVar, ClassVar, Union,
-    Optional, Callable, Any, AbstractSet,
-    Mapping, Dict,
+    AbstractSet,
+    Any,
+    Callable,
+    ClassVar,
+    Dict,
+    Mapping,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
 )
+from uuid import UUID, uuid4
 
-from pydantic import BaseModel as PydanticBaseModel, Extra, ValidationError, Field
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import Extra, Field, ValidationError
 
 from assimilator.core.exceptions import ParsingError
 
-
-T = TypeVar("T", bound='BaseModel')
+T = TypeVar("T", bound="BaseModel")
 AbstractSetIntStr = AbstractSet[Union[int, str]]
 MappingIntStrAny = Mapping[Union[int, str], Any]
 
@@ -35,8 +42,9 @@ class BaseModel(PydanticBaseModel):
 
         if not issubclass(cls.AssimilatorConfig, BaseModel.AssimilatorConfig):
             base_configs = [
-                getattr(base_class, 'AssimilatorConfig') for base_class in cls.mro()
-                if hasattr(base_class, 'AssimilatorConfig')
+                getattr(base_class, "AssimilatorConfig")
+                for base_class in cls.mro()
+                if hasattr(base_class, "AssimilatorConfig")
             ]
 
             class InheritedConfig(*base_configs):
@@ -50,13 +58,13 @@ class BaseModel(PydanticBaseModel):
         return str(uuid4())
 
     def __init__(self, **kwargs):
-        if self.AssimilatorConfig.autogenerate_id and kwargs.get('id') is None:
-            kwargs['id'] = self.generate_id(**kwargs)
+        if self.AssimilatorConfig.autogenerate_id and kwargs.get("id") is None:
+            kwargs["id"] = self.generate_id(**kwargs)
 
         super(BaseModel, self).__init__(**kwargs)
 
     @classmethod
-    def loads(cls: Type['T'], data: str) -> 'T':
+    def loads(cls: Type["T"], data: str) -> "T":
         try:
             return cls(**json.loads(data))
         except (ValidationError, TypeError) as exc:
@@ -65,8 +73,8 @@ class BaseModel(PydanticBaseModel):
     def json(
         self,
         *,
-        include: Optional[Union['AbstractSetIntStr', 'MappingIntStrAny']] = None,
-        exclude: Optional[Union['AbstractSetIntStr', 'MappingIntStrAny']] = None,
+        include: Optional[Union["AbstractSetIntStr", "MappingIntStrAny"]] = None,
+        exclude: Optional[Union["AbstractSetIntStr", "MappingIntStrAny"]] = None,
         by_alias: bool = False,
         skip_defaults: Optional[bool] = None,
         exclude_unset: bool = False,
@@ -92,8 +100,8 @@ class BaseModel(PydanticBaseModel):
     def dict(
         self,
         *,
-        include: Optional[Union['AbstractSetIntStr', 'MappingIntStrAny']] = None,
-        exclude: Optional[Union['AbstractSetIntStr', 'MappingIntStrAny']] = None,
+        include: Optional[Union["AbstractSetIntStr", "MappingIntStrAny"]] = None,
+        exclude: Optional[Union["AbstractSetIntStr", "MappingIntStrAny"]] = None,
         by_alias: bool = False,
         skip_defaults: Optional[bool] = None,
         exclude_unset: bool = False,
@@ -112,5 +120,5 @@ class BaseModel(PydanticBaseModel):
 
 
 __all__ = [
-    'BaseModel',
+    "BaseModel",
 ]

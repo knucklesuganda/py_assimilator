@@ -1,5 +1,4 @@
-from abc import abstractstaticmethod
-from typing import Dict, Protocol, Any, Callable
+from typing import Any, Callable, Dict, Protocol
 
 
 class FilterOptionProtocol(Protocol):
@@ -11,7 +10,7 @@ FILTERING_OPTIONS_SEPARATOR = "__"
 
 
 class FilteringOptions:
-    """ Looks for the filtering option """
+    """Looks for the filtering option"""
 
     def __init__(self):
         self.filter_options: Dict[str, FilterOptionProtocol] = {
@@ -44,49 +43,42 @@ class FilteringOptions:
             filter_func = self.get_default_filter()
         else:
             foreign_field = FILTERING_OPTIONS_SEPARATOR.join(fields[:-1])
-            filter_func = self.filter_options.get(fields[-1])
+            filter_func = self.filter_options[fields[-1]]
 
         return filter_func(foreign_field, value)
 
-    @abstractstaticmethod
-    def _eq(field: str, value):
+    def _eq(self, field: str, value):
         raise NotImplementedError("_eq() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _gt(field: str, value):
+    def _gt(self, field: str, value):
         raise NotImplementedError("_gt() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _gte(field: str, value):
+    def _gte(self, field: str, value):
         raise NotImplementedError("_gte() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _lt(field: str, value):
+    def _lt(self, field: str, value):
         raise NotImplementedError("_lt() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _lte(field: str, value):
+    def _lte(self, field: str, value):
         raise NotImplementedError("_lte() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _not(field: str, value):
+    def _not(self, field: str, value):
         raise NotImplementedError("_not() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _is(field: str, value):
+    def _is(self, field: str, value):
         raise NotImplementedError("_is() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _like(field: str, value):
+    def _like(self, field: str, value):
         raise NotImplementedError("_like() is not implemented in the filtering options")
 
-    @abstractstaticmethod
-    def _regex(field: str, value):
-        raise NotImplementedError("_regex() is not implemented in the filtering options")
+    def _regex(self, field: str, value):
+        raise NotImplementedError(
+            "_regex() is not implemented in the filtering options"
+        )
 
 
 __all__ = [
-    'FilteringOptions',
-    'FilterOptionProtocol',
-    'FILTERING_OPTIONS_SEPARATOR',
+    "FilteringOptions",
+    "FilterOptionProtocol",
+    "FILTERING_OPTIONS_SEPARATOR",
 ]

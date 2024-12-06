@@ -2,23 +2,33 @@ import operator
 import re
 from functools import wraps
 from numbers import Number
-from typing import Any, Callable, Union, Literal
+from typing import Any, Callable, Literal, Union
 
 from assimilator.core.database.models import BaseModel
-from assimilator.core.database.specifications.filtering_options import FILTERING_OPTIONS_SEPARATOR
-from assimilator.internal.database.specifications.utils import InternalContainers, find_model_value
+from assimilator.core.database.specifications.filtering_options import (
+    FILTERING_OPTIONS_SEPARATOR,
+)
+from assimilator.internal.database.specifications.utils import (
+    InternalContainers,
+    find_model_value,
+)
 
 
-def find_attribute(func: callable, field: str, value: Any) -> Callable[[BaseModel], bool]:
+def find_attribute(
+    func: callable, field: str, value: Any
+) -> Callable[[BaseModel], bool]:
     """
-    That decorator is used to get the value of the field from a BaseModel that is provided in the query.
-    We do that because we need to get the value of the field in the internal specifications, not just the name
+    That decorator is used to get the value of the field from
+    a BaseModel that is provided in the query. We do that because
+    we need to get the value of the field in
+    the internal specifications, not just the name
     of it. For example, User(id=1) will use field='id' to get 1 as the result.
 
     :param func: filtering option function that is going to be decorated.
     :param field: field name that is used in getattr(model, field)
     :param value: value of the field.
-    :return: function to be called with a model to find an attribute and call the comparison function.
+    :return: function to be called with a model to find
+        an attribute and call the comparison function.
     """
 
     @wraps(func)
@@ -79,7 +89,6 @@ def like(field: str, value: str):
 
 
 def invert(func: Callable):
-
     @wraps(func)
     def invert_wrapper(model):
         return not func(model)
@@ -89,15 +98,15 @@ def invert(func: Callable):
 
 
 __all__ = [
-    'find_attribute',
-    'eq',
-    'gt',
-    'gte',
-    'lt',
-    'lte',
-    'not_',
-    'is_',
-    'regex',
-    'like',
-    'invert',
+    "find_attribute",
+    "eq",
+    "gt",
+    "gte",
+    "lt",
+    "lte",
+    "not_",
+    "is_",
+    "regex",
+    "like",
+    "invert",
 ]

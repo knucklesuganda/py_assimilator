@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, String, Float, Integer
+from sqlalchemy import Column, Float, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base
 
 from assimilator.core.database import BaseModel

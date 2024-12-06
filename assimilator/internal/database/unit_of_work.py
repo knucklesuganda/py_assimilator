@@ -1,9 +1,9 @@
 from copy import deepcopy
 from typing import Optional
 
-from assimilator.core.database import UnitOfWork, Repository
-from assimilator.internal.database.error_wrapper import InternalErrorWrapper
+from assimilator.core.database import Repository, UnitOfWork
 from assimilator.core.patterns import ErrorWrapper
+from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 
 
 class InternalUnitOfWork(UnitOfWork):
@@ -30,7 +30,9 @@ class InternalUnitOfWork(UnitOfWork):
     def commit(self):
         self._saved_data.update(self.repository.session)
 
-        for deleted_key in set(self._saved_data.keys()) - set(self.repository.session.keys()):
+        for deleted_key in set(self._saved_data.keys()) - set(
+            self.repository.session.keys()
+        ):
             del self._saved_data[deleted_key]
 
         self.repository.session = self._saved_data
@@ -40,5 +42,5 @@ class InternalUnitOfWork(UnitOfWork):
 
 
 __all__ = [
-    'InternalUnitOfWork',
+    "InternalUnitOfWork",
 ]

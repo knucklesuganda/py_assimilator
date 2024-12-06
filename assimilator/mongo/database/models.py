@@ -1,4 +1,4 @@
-from typing import ClassVar, Any, Union, AbstractSet, Mapping, Dict
+from typing import AbstractSet, Any, ClassVar, Dict, Mapping, Union
 
 from bson import ObjectId
 from pydantic import Field
@@ -20,7 +20,7 @@ class MongoModel(BaseModel):
     class AssimilatorConfig:
         collection: ClassVar[str]
         autogenerate_id: ClassVar[bool] = True
-        exclude = {'collection': True, 'upsert': True}
+        exclude = {"collection": True, "upsert": True}
         id_name: ClassVar[str] = "_id"
 
     upsert: bool = False
@@ -28,7 +28,7 @@ class MongoModel(BaseModel):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
-        cls.__fields__['id'].alias = cls.AssimilatorConfig.id_name
+        cls.__fields__["id"].alias = cls.AssimilatorConfig.id_name
         return cls
 
     def __hash__(self):
@@ -44,4 +44,4 @@ class MongoModel(BaseModel):
         return super(BaseModel, self).dict(*args, by_alias=by_alias, **kwargs)
 
 
-__all__ = ['MongoModel']
+__all__ = ["MongoModel"]

@@ -2,9 +2,14 @@ from typing import Any, Tuple
 
 from bson import ObjectId
 
-from assimilator.core.database.specifications.filtering_options import\
-    FilteringOptions, FILTERING_OPTIONS_SEPARATOR
-from assimilator.mongo.database.specifications.utils import rename_mongo_id, contains_mongo_id
+from assimilator.core.database.specifications.filtering_options import (
+    FILTERING_OPTIONS_SEPARATOR,
+    FilteringOptions,
+)
+from assimilator.mongo.database.specifications.utils import (
+    contains_mongo_id,
+    rename_mongo_id,
+)
 
 
 class MongoFilteringOptions(FilteringOptions):
@@ -53,5 +58,5 @@ class MongoFilteringOptions(FilteringOptions):
 
 
 __all__ = [
-    'MongoFilteringOptions',
+    "MongoFilteringOptions",
 ]

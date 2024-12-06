@@ -6,5 +6,5 @@ class Service(ABC):
 
 
 __all__ = [
-    'Service',
+    "Service",
 ]

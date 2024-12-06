@@ -1,5 +1,3 @@
-
-
 class PatternNotFoundError(KeyError):
     pass
 

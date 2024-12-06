@@ -1,18 +1,20 @@
-from typing import Type, Union, Optional, TypeVar, List
+from typing import List, Optional, Type, TypeVar, Union
 
-from assimilator.core.patterns.error_wrapper import ErrorWrapper
-from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 from assimilator.core.database import (
+    BaseModel,
+    InvalidQueryError,
+    LazyCommand,
+    MultipleResultsError,
+    NotFoundError,
     Repository,
     SpecificationType,
-    LazyCommand,
-    InvalidQueryError,
-    BaseModel,
-    NotFoundError,
 )
-from assimilator.core.database import MultipleResultsError
-from assimilator.internal.database.specifications.specifications import InternalSpecificationList
+from assimilator.core.patterns.error_wrapper import ErrorWrapper
+from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 from assimilator.internal.database.models_utils import dict_to_internal_models
+from assimilator.internal.database.specifications.specifications import (
+    InternalSpecificationList,
+)
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -25,7 +27,7 @@ class InternalRepository(Repository):
         self,
         session: dict,
         model: Type[ModelT],
-        initial_query: Optional[str] = '',
+        initial_query: Optional[str] = "",
         specifications: Type[InternalSpecificationList] = InternalSpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
@@ -48,18 +50,22 @@ class InternalRepository(Repository):
             specifications=specifications,
         )
 
-        if query:   # Dict key was not provided, we must use other search parameters
+        if query:  # Dict key was not provided, we must use other search parameters
             return self.session[query]
 
-        found_models = list(self._apply_specifications(
-            query=self.session.values(),
-            specifications=specifications,
-        ))
+        found_models = list(
+            self._apply_specifications(
+                query=self.session.values(),
+                specifications=specifications,
+            )
+        )
 
         if not found_models:
             raise NotFoundError(f"{self} repository did not find an entity")
         elif len(found_models) != 1:
-            raise MultipleResultsError(f"{self} repository found multiple results: {found_models}")
+            raise MultipleResultsError(
+                f"{self} repository found multiple results: {found_models}"
+            )
 
         return found_models[0]
 
@@ -69,10 +75,12 @@ class InternalRepository(Repository):
         lazy: bool = False,
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[List[ModelT]], List[ModelT]]:
-        return list(self._apply_specifications(
-            query=self.session.values(),
-            specifications=specifications,
-        ))
+        return list(
+            self._apply_specifications(
+                query=self.session.values(),
+                specifications=specifications,
+            )
+        )
 
     def dict_to_models(self, data: dict) -> ModelT:
         return self.model(**dict_to_internal_models(data=data, model=self.model))
@@ -84,7 +92,9 @@ class InternalRepository(Repository):
         self.session[obj.id] = obj
         return obj
 
-    def delete(self, obj: Optional[ModelT] = None, *specifications: SpecificationType) -> None:
+    def delete(
+        self, obj: Optional[ModelT] = None, *specifications: SpecificationType
+    ) -> None:
         obj, specifications = self._check_obj_is_specification(obj, specifications)
 
         if specifications:
@@ -129,13 +139,18 @@ class InternalRepository(Repository):
         initial_query: Optional[str] = None,
     ) -> Union[LazyCommand[int], int]:
         if specifications:
-            return len(list(self._apply_specifications(  # We do not call filter() for list() optimization
-                query=self.session.values(),
-                specifications=specifications,
-            )))
+            return len(
+                list(
+                    self._apply_specifications(
+                        # We do not call filter() for list() optimization
+                        query=self.session.values(),
+                        specifications=specifications,
+                    )
+                )
+            )
         return len(self.session)
 
 
 __all__ = [
-    'InternalRepository',
+    "InternalRepository",
 ]

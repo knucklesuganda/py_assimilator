@@ -4,8 +4,8 @@ from pymongo.client_session import ClientSession
 
 from assimilator.core.database import UnitOfWork
 from assimilator.core.patterns import ErrorWrapper
-from assimilator.mongo.database.repository import MongoRepository
 from assimilator.mongo.database.error_wrapper import MongoErrorWrapper
+from assimilator.mongo.database.repository import MongoRepository
 
 
 class MongoUnitOfWork(UnitOfWork):
@@ -39,5 +39,5 @@ class MongoUnitOfWork(UnitOfWork):
 
 
 __all__ = [
-    'MongoUnitOfWork',
+    "MongoUnitOfWork",
 ]

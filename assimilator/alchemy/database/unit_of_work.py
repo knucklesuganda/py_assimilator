@@ -1,7 +1,7 @@
 from typing import Optional
 
-from assimilator.alchemy.database.repository import AlchemyRepository
 from assimilator.alchemy.database.error_wrapper import AlchemyErrorWrapper
+from assimilator.alchemy.database.repository import AlchemyRepository
 from assimilator.core.database.unit_of_work import UnitOfWork
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
@@ -35,5 +35,5 @@ class AlchemyUnitOfWork(UnitOfWork):
 
 
 __all__ = [
-    'AlchemyUnitOfWork',
+    "AlchemyUnitOfWork",
 ]

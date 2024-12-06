@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 
-from assimilator.core.services import CRUDService
-from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.database import NotFoundError
+from assimilator.core.patterns import ErrorWrapper
+from assimilator.core.services import CRUDService
 from examples.fastapi_crud_example.dependencies import get_service
 from examples.fastapi_crud_example.schema import UserCreateSchema
 
@@ -16,28 +16,30 @@ api_error_wrapper = ErrorWrapper(
 )
 
 
-@app.get('/users/')
+@app.get("/users/")
 def user_list_route(service: CRUDService = Depends(get_service)):
     return service.list()
 
 
-@app.get('/users/{id}')
+@app.get("/users/{id}")
 @api_error_wrapper.decorate
 def user_get_route(id: str, service: CRUDService = Depends(get_service)):
     return service.get(id=str(id))
 
 
-@app.post('/users/')
-def user_create_route(user_data: UserCreateSchema, service: CRUDService = Depends(get_service)):
+@app.post("/users/")
+def user_create_route(
+    user_data: UserCreateSchema, service: CRUDService = Depends(get_service)
+):
     return service.create(user_data.dict())
 
 
-@app.delete('/users/{id}')
+@app.delete("/users/{id}")
 def user_delete_route(id: str, service: CRUDService = Depends(get_service)):
     return service.delete(id=id)
 
 
-@app.put('/users/{id}')
+@app.put("/users/{id}")
 def user_update_route(
     user_data: UserCreateSchema,
     id: str,

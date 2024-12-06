@@ -1,9 +1,9 @@
-from typing import Protocol, TypeVar, Optional, Iterable, Any
+from typing import Any, Iterable, Optional, Protocol, TypeVar
 
-QueryT = TypeVar("QueryT")
+QueryT = TypeVar("QueryT", covariant=True)
 
 
-class OrderSpecificationProtocol(Protocol):
+class OrderSpecificationProtocol(Protocol[QueryT]):
     def __call__(self, *clauses: str) -> QueryT:
         ...
 
@@ -14,7 +14,7 @@ class PaginateSpecificationProtocol(Protocol):
 
 
 class JoinSpecificationProtocol(Protocol):
-    def __call__(self, *targets: Any, join_args: Iterable[dict] = None):
+    def __call__(self, *targets: Any, join_args: Iterable[dict] | None = None):
         ...
 
 
@@ -24,8 +24,8 @@ class OnlySpecificationProtocol(Protocol):
 
 
 __all__ = [
-    'OrderSpecificationProtocol',
-    'PaginateSpecificationProtocol',
-    'JoinSpecificationProtocol',
-    'OnlySpecificationProtocol',
+    "OrderSpecificationProtocol",
+    "PaginateSpecificationProtocol",
+    "JoinSpecificationProtocol",
+    "OnlySpecificationProtocol",
 ]

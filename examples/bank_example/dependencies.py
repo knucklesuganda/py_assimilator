@@ -1,11 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from assimilator.alchemy import AlchemyRepository, AlchemyUnitOfWork
 from assimilator.core.database import UnitOfWork
-from examples.bank_example import settings
 from assimilator.core.services import CRUDService
-from assimilator.alchemy import AlchemyUnitOfWork, AlchemyRepository
-from examples.bank_example.models import User, Base as BaseModel, UserTransaction, Base
+from examples.bank_example import settings
+from examples.bank_example.models import Base
+from examples.bank_example.models import Base as BaseModel
+from examples.bank_example.models import User, UserTransaction
 
 engine = create_engine(url=settings.DATABASE_URL)
 SessionCreator = sessionmaker(bind=engine)

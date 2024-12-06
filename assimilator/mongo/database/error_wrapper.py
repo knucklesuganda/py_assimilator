@@ -1,9 +1,9 @@
 from bson.errors import BSONError
 from pymongo.errors import DuplicateKeyError, InvalidOperation, WriteError
 
-from assimilator.core.patterns import ErrorWrapper
-from assimilator.core.exceptions import ParsingError
 from assimilator.core.database import DataLayerError, InvalidQueryError, NotFoundError
+from assimilator.core.exceptions import ParsingError
+from assimilator.core.patterns import ErrorWrapper
 
 
 class MongoErrorWrapper(ErrorWrapper):
@@ -20,4 +20,4 @@ class MongoErrorWrapper(ErrorWrapper):
         )
 
 
-__all__ = ['MongoErrorWrapper']
+__all__ = ["MongoErrorWrapper"]

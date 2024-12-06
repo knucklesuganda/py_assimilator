@@ -1,14 +1,16 @@
-from typing import Callable, Any
+from typing import Any, Callable
 
 from sqlalchemy import column
 from sqlalchemy.sql.elements import ColumnClause
 
-from assimilator.core.database.specifications.filtering_options import \
-    FilteringOptions, FILTERING_OPTIONS_SEPARATOR
+from assimilator.core.database.specifications.filtering_options import (
+    FILTERING_OPTIONS_SEPARATOR,
+    FilteringOptions,
+)
 
 
 class AlchemyFilteringOptions(FilteringOptions):
-    table_name: str = None
+    table_name: str | None = None
 
     @staticmethod
     def _convert_field(field: str) -> ColumnClause:
@@ -30,7 +32,9 @@ class AlchemyFilteringOptions(FilteringOptions):
             filter_func = self.filter_options.get(last_field, self.get_default_filter())
             return filter_func(last_field, value)
 
-        return super(AlchemyFilteringOptions, self).parse_field(raw_field=raw_field, value=value)
+        return super(AlchemyFilteringOptions, self).parse_field(
+            raw_field=raw_field, value=value
+        )
 
     @staticmethod
     def _eq(field, value):
@@ -70,5 +74,5 @@ class AlchemyFilteringOptions(FilteringOptions):
 
 
 __all__ = [
-    'AlchemyFilteringOptions',
+    "AlchemyFilteringOptions",
 ]

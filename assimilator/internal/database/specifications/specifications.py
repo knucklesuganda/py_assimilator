@@ -1,7 +1,9 @@
-from typing import List, Iterable, Union, Optional, Collection
+from typing import Collection, Iterable, List, Optional, Union
 
-from assimilator.core.database import specification, SpecificationList, BaseModel
-from assimilator.internal.database.specifications.filter_specifications import InternalFilter
+from assimilator.core.database import BaseModel, SpecificationList, specification
+from assimilator.internal.database.specifications.filter_specifications import (
+    InternalFilter,
+)
 from assimilator.internal.database.specifications.utils import find_model_value
 
 QueryT = Union[str, List[BaseModel]]
@@ -54,10 +56,14 @@ def internal_join(*targets: Collection, query: QueryT, **join_args: dict) -> Que
 
 
 @specification
-def internal_only(*only_fields: Iterable[str], query: QueryT, **_) -> Iterable[BaseModel]:
+def internal_only(
+    *only_fields: Iterable[str], query: QueryT, **_
+) -> Iterable[BaseModel]:
     """
-    This specification will do nothing since we waste more resources trying to remove all the fields.
-    Also, we must provide a deference mechanisms for fields to be loaded which is impossible.
+    This specification will do nothing since we waste
+    more resources trying to remove all the fields.
+    Also, we must provide a deference mechanisms
+    for fields to be loaded which is impossible.
     """
     return query
 
@@ -71,11 +77,11 @@ class InternalSpecificationList(SpecificationList):
 
 
 __all__ = [
-    'internal_filter',
-    'InternalFilter',
-    'internal_order',
-    'internal_paginate',
-    'internal_join',
-    'internal_only',
-    'InternalSpecificationList',
+    "internal_filter",
+    "InternalFilter",
+    "internal_order",
+    "internal_paginate",
+    "internal_join",
+    "internal_only",
+    "InternalSpecificationList",
 ]

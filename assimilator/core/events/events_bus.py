@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Iterator, Callable, List, Optional, final
+from typing import Callable, Iterator, List, Optional, final
 
 from assimilator.core.events.events import Event
 from assimilator.core.patterns.context_managers import StartCloseContextMixin
@@ -40,7 +40,7 @@ class EventBus:
 
 
 __all__ = [
-    'EventConsumer',
-    'EventProducer',
-    'EventBus',
+    "EventConsumer",
+    "EventProducer",
+    "EventBus",
 ]

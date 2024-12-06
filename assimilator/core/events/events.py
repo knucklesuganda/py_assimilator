@@ -15,7 +15,8 @@ class Event(BaseModel):
 
 
 class ExternalEvent(Event):
-    """ The event type is unknown, so all the fields are in data """
+    """The event type is unknown, so all the fields are in data"""
+
     data: Any
 
 
@@ -24,7 +25,7 @@ class AckEvent(Event):
 
 
 __all__ = [
-    'Event',
-    'ExternalEvent',
-    'AckEvent',
+    "Event",
+    "ExternalEvent",
+    "AckEvent",
 ]

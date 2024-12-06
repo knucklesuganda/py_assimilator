@@ -14,7 +14,7 @@ class EventProducingError(EventError):
 
 
 __all__ = [
-    'EventError',
-    'EventParsingError',
-    'EventProducingError',
+    "EventError",
+    "EventParsingError",
+    "EventProducingError",
 ]

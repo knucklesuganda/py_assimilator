@@ -1,4 +1,4 @@
-from typing import Type, Optional
+from typing import Optional, Type
 
 from sqlalchemy import Table
 from sqlalchemy.orm import Query
@@ -34,5 +34,5 @@ class AlchemyOutboxRepository(AlchemyRepository):
 
 
 __all__ = [
-    'AlchemyOutboxRepository',
+    "AlchemyOutboxRepository",
 ]

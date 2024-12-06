@@ -1,9 +1,9 @@
 from typing import Optional
 
-from assimilator.core.patterns import ErrorWrapper
 from assimilator.core.database.unit_of_work import UnitOfWork
-from assimilator.redis_.database.repository import RedisRepository
+from assimilator.core.patterns import ErrorWrapper
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
+from assimilator.redis_.database.repository import RedisRepository
 
 
 class RedisUnitOfWork(UnitOfWork):
@@ -36,5 +36,5 @@ class RedisUnitOfWork(UnitOfWork):
 
 
 __all__ = [
-    'RedisUnitOfWork',
+    "RedisUnitOfWork",
 ]

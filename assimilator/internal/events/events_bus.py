@@ -32,6 +32,6 @@ class InternalEventProducer(EventProducer):
 
 
 __all__ = [
-    'InternalEventConsumer',
-    'InternalEventProducer',
+    "InternalEventConsumer",
+    "InternalEventProducer",
 ]

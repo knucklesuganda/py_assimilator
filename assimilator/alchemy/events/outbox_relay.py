@@ -1,8 +1,8 @@
-from sqlalchemy import Column, BigInteger, Text, DateTime
+from sqlalchemy import BigInteger, Column, DateTime, Text
 
-from assimilator.core.events.events import Event
 from assimilator.core.database.unit_of_work import UnitOfWork
 from assimilator.core.events import OutboxRelay
+from assimilator.core.events.events import Event
 from assimilator.core.events.events_bus import EventProducer
 
 
@@ -51,6 +51,6 @@ class AlchemyOutboxRelay(OutboxRelay):
 
 
 __all__ = [
-    'create_outbox_event_model',
-    'AlchemyOutboxRelay',
+    "create_outbox_event_model",
+    "AlchemyOutboxRelay",
 ]

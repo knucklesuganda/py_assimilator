@@ -1,7 +1,6 @@
 import sys
 from functools import wraps
-from typing import Dict, Type, Optional, Callable, Container, Union
-
+from typing import Callable, Container, Dict, Optional, Type, Union, cast
 
 ErrorT = Union[Callable[[Exception], Exception], Type[Exception]]
 
@@ -16,10 +15,10 @@ class ErrorWrapper:
         self.error_mappings = error_mappings or {}
         self.default_error = default_error
         self.skipped_errors = {
-            *(skipped_errors or set()),
-            KeyboardInterrupt,
-            SystemExit,
-            *self.error_mappings.values(),  # we want to skip all the mapped values as they are already fixed
+            (skipped_errors if skipped_errors else set())
+            | {KeyboardInterrupt, SystemExit}
+            | set(self.error_mappings.values())
+            # we want to skip all the mapped values as they are already fixed
         }
 
     def __enter__(self):
@@ -29,10 +28,14 @@ class ErrorWrapper:
         return any(
             issubclass(exc_type, error)
             for error in self.skipped_errors
-            if not isinstance(error, Callable) and issubclass(error, Exception)
+            if not callable(error) and issubclass(cast(type, error), Exception)
         )
 
-    def create_error(self, original_error: Exception, wrapped_error_type: Type[Exception]):
+    def create_error(
+        self,
+        original_error: Exception,
+        wrapped_error_type: Union[Type[Exception], Callable[[Exception], Exception]],
+    ):
         _, _, tb = sys.exc_info()
         raise wrapped_error_type(original_error).with_traceback(tb)
 
@@ -55,7 +58,7 @@ class ErrorWrapper:
                 wrapped_error_type=self.default_error,
             )
 
-        return False   # No wrapping error was found
+        return False  # No wrapping error was found
 
     def decorate(self, func: Callable) -> Callable:
         @wraps(func)
@@ -63,11 +66,10 @@ class ErrorWrapper:
             with self:
                 return func(*args, **kwargs)
 
-        wrapper: func
         return wrapper
 
     def __str__(self):
         return f"{type(self).__name__}({self.error_mappings})"
 
 
-__all__ = ['ErrorWrapper']
+__all__ = ["ErrorWrapper"]

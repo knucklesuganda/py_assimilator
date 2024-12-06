@@ -2,11 +2,18 @@ import uuid
 from typing import List
 
 from sqlalchemy import (
-    create_engine, Column, String, Float,
-    Integer, ForeignKey, UniqueConstraint,
-    Table, UUID, Text,
+    UUID,
+    Column,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Table,
+    Text,
+    UniqueConstraint,
+    create_engine,
 )
-from sqlalchemy.orm import relationship, registry
+from sqlalchemy.orm import registry, relationship
 
 from assimilator.core.database import BaseModel
 from assimilator.mongo.database import MongoModel
@@ -28,10 +35,9 @@ balances = Table(
     "balances",
     mapper_registry.metadata,
     Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
-    Column('user_id', ForeignKey("users.id", ondelete="CASCADE")),
-    Column('balance', Float(), server_default='0'),
-    Column('currency_id', ForeignKey("currency.id")),
-
+    Column("user_id", ForeignKey("users.id", ondelete="CASCADE")),
+    Column("balance", Float(), server_default="0"),
+    Column("currency_id", ForeignKey("currency.id")),
     UniqueConstraint("balance", "user_id"),
 )
 
@@ -40,8 +46,8 @@ currency = Table(
     "currency",
     mapper_registry.metadata,
     Column("id", Text(), default=lambda: str(uuid.uuid4()), primary_key=True),
-    Column('currency', String(length=20)),
-    Column('country', String(length=20)),
+    Column("currency", String(length=20)),
+    Column("country", String(length=20)),
 )
 
 
@@ -61,7 +67,7 @@ mapper_registry.map_imperatively(
     AlchemyUser,
     users,
     properties={
-        "balances": relationship(AlchemyBalance, uselist=True, lazy='select'),
+        "balances": relationship(AlchemyBalance, uselist=True, lazy="select"),
     },
 )
 
@@ -69,7 +75,7 @@ mapper_registry.map_imperatively(
     AlchemyBalance,
     balances,
     properties={
-        "currency": relationship(AlchemyCurrency, uselist=False, lazy='select'),
+        "currency": relationship(AlchemyCurrency, uselist=False, lazy="select"),
     },
 )
 

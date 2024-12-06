@@ -1,11 +1,15 @@
 import json
 from typing import Iterable
 
-from kafka import KafkaProducer, KafkaConsumer
+from kafka import KafkaConsumer, KafkaProducer
 from kafka.errors import KafkaError
 
-from assimilator.core.events import Event, ExternalEvent
-from assimilator.core.events import EventParsingError, EventProducingError
+from assimilator.core.events import (
+    Event,
+    EventParsingError,
+    EventProducingError,
+    ExternalEvent,
+)
 from assimilator.core.events.events_bus import EventConsumer, EventProducer
 
 
@@ -18,7 +22,7 @@ class KafkaEventConsumer(EventConsumer):
         self.consumer.close()
 
     def start(self):
-        """ Connected by default """
+        """Connected by default"""
 
     def consume(self) -> Iterable[ExternalEvent]:
         self.consumer.subscribe(self.topics)
@@ -31,7 +35,13 @@ class KafkaEventConsumer(EventConsumer):
 
 
 class KafkaEventProducer(EventProducer):
-    def __init__(self, topic: str, producer: KafkaProducer, sync_produce: bool = False, timeout: int = None):
+    def __init__(
+        self,
+        topic: str,
+        producer: KafkaProducer,
+        sync_produce: bool = False,
+        timeout: int = None,
+    ):
         self.topic = topic
         self.producer = producer
         self.sync_produce = sync_produce
@@ -47,13 +57,13 @@ class KafkaEventProducer(EventProducer):
                 raise EventProducingError(exc)
 
     def start(self):
-        """ Already started """
+        """Already started"""
 
     def close(self):
         self.producer.close()
 
 
 __all__ = [
-    'KafkaEventConsumer',
-    'KafkaEventProducer',
+    "KafkaEventConsumer",
+    "KafkaEventProducer",
 ]
