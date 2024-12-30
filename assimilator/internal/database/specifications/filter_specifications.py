@@ -1,5 +1,5 @@
 from operator import and_, or_
-from typing import Any, Generator, List, Union
+from typing import Any, Callable, Generator, Iterable, List, Literal, Union, cast
 
 from assimilator.core.database import FilterSpecification
 from assimilator.core.database.models import BaseModel
@@ -20,14 +20,14 @@ class InternalFilter(FilterSpecification):
         if named_filters.get("id"):
             self.text_filters.append(named_filters.pop("id"))
 
-        super(InternalFilter, self).__init__(
+        super().__init__(
             *(set(filters) - set(self.text_filters)),
             **named_filters,
         )
 
     def __call__(
         self, query: QueryT, **context
-    ) -> Union[str, Generator[BaseModel, Any, None]]:
+    ) -> Union[str, Generator[BaseModel, Any, None], list[BaseModel]]:
         if isinstance(query, str):
             return f'{query}{"".join(str(filter_) for filter_ in self.text_filters)}'
         elif not self.filters:
@@ -58,17 +58,19 @@ class CompositeFilter(InternalFilter):
         self,
         first: Union[FilterSpecification, "CompositeFilter"],
         second: Union[FilterSpecification, "CompositeFilter"],
-        operation: Union[or_, and_],
+        operation: Callable[[Any, Any], Iterable[Union[str, QueryT]]],
     ):
-        super(CompositeFilter, self).__init__()
+        super().__init__()
         self.first = first
         self.second = second
         self.operation = operation
 
-    def __call__(self, query: QueryT, **context) -> Union[str, QueryT]:
+    def __call__(
+        self, query: QueryT, **context
+    ) -> Union[str, QueryT, list[Union[str, list[BaseModel]]]]:
         if isinstance(query, str):
-            first_result = self.first(query=query, **context)
-            second_result = self.second(query=query, **context)
+            first_result = cast(str, self.first(query=query, **context))
+            second_result = cast(str, self.second(query=query, **context))
             return (
                 f'{query}{first_result.replace(query, "")}'
                 f'{second_result.replace(query, "")}'

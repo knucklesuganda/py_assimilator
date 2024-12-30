@@ -2,8 +2,7 @@ from typing import Any, Callable, Dict, Protocol
 
 
 class FilterOptionProtocol(Protocol):
-    def __call__(self, field: str, value: Any) -> Callable[[], Any]:
-        ...
+    def __call__(self, field: str, value: Any) -> Callable[[], Any]: ...
 
 
 FILTERING_OPTIONS_SEPARATOR = "__"

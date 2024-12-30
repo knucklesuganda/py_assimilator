@@ -15,7 +15,7 @@ from assimilator.internal.database.specifications.utils import (
 
 
 def find_attribute(
-    func: callable, field: str, value: Any
+    func: Callable, field: str, value: Any
 ) -> Callable[[BaseModel], bool]:
     """
     That decorator is used to get the value of the field from
@@ -44,7 +44,6 @@ def find_attribute(
 
         return func(model_val, value)
 
-    find_attribute_wrapper: func
     return find_attribute_wrapper
 
 
@@ -93,7 +92,6 @@ def invert(func: Callable):
     def invert_wrapper(model):
         return not func(model)
 
-    invert_wrapper: func
     return invert_wrapper
 
 

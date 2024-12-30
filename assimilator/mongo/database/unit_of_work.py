@@ -18,7 +18,7 @@ class MongoUnitOfWork(UnitOfWork):
         error_wrapper: Optional[ErrorWrapper] = None,
         autocommit: bool = False,
     ):
-        super(MongoUnitOfWork, self).__init__(
+        super().__init__(
             repository=repository,
             error_wrapper=error_wrapper or MongoErrorWrapper(),
             autocommit=autocommit,

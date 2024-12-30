@@ -13,7 +13,7 @@ def create_outbox_event_model(Base):
         event_date = Column(DateTime(timezone=True))
 
         def __init__(self, event: Event, *args, **kwargs):
-            super(OutboxEvent, self).__init__(
+            super().__init__(
                 event_data=event.json(),
                 event_date=event.event_date,
                 *args,
@@ -25,7 +25,7 @@ def create_outbox_event_model(Base):
 
 class AlchemyOutboxRelay(OutboxRelay):
     def __init__(self, outbox_event_model, uow: UnitOfWork, producer: EventProducer):
-        super(AlchemyOutboxRelay, self).__init__(uow=uow, producer=producer)
+        super().__init__(uow=uow, producer=producer)
         self.outbox_event_model = outbox_event_model
 
     def start(self):

@@ -38,7 +38,7 @@ class RedisRepository(Repository):
         error_wrapper: Optional[ErrorWrapper] = None,
         use_double_filter: bool = True,
     ):
-        super(RedisRepository, self).__init__(
+        super().__init__(
             session=session,
             model=model,
             initial_query=initial_query,
@@ -122,7 +122,7 @@ class RedisRepository(Repository):
         )
 
     def dict_to_models(self, data: dict) -> RedisModelT:
-        return self.model(**dict_to_internal_models(data=data, model=self.model))
+        return self.model.model_validate(data)
 
     def save(self, obj: Optional[RedisModelT] = None, **obj_data) -> RedisModelT:
         if obj is None:
@@ -169,7 +169,9 @@ class RedisRepository(Repository):
                     "to the update() yet provided specifications"
                 )
 
-            models: list[RedisModelT] = self.filter(*specifications, lazy=False)
+            models: list[RedisModelT] = cast(
+                list[RedisModelT], self.filter(*specifications, lazy=False)
+            )
             updated_models = {}
 
             for model in models:

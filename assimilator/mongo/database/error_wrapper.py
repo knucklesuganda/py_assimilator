@@ -8,7 +8,7 @@ from assimilator.core.patterns import ErrorWrapper
 
 class MongoErrorWrapper(ErrorWrapper):
     def __init__(self):
-        super(MongoErrorWrapper, self).__init__(
+        super().__init__(
             error_mappings={
                 BSONError: ParsingError,
                 DuplicateKeyError: InvalidQueryError,

@@ -2,7 +2,7 @@ import os
 
 if os.environ.get("PY_ASSIMILATOR_MESSAGE", None) is None:
     print(
-        """
+        r"""
                  ___              _           _ __      __            
     ____  __  __/   |  __________(_)___ ___  (_) /___ _/ /_____  _____
    / __ \/ / / / /| | / ___/ ___/ / __ `__ \/ / / __ `/ __/ __ \/ ___/

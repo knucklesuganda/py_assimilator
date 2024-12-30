@@ -1,7 +1,7 @@
-from typing import Protocol, TypeVar, Type, Union, Collection, Optional
+from typing import Collection, Optional, Protocol, Type, TypeVar, Union, Any, Literal
 
-from assimilator.core.database import SpecificationType, SpecificationList
-from assimilator.core.patterns import LazyCommand
+from assimilator.core.database.specifications.specifications import SpecificationList, SpecificationType
+from assimilator.core.patterns.lazy_command import LazyCommand
 
 QueryT = TypeVar("QueryT")
 ModelT = TypeVar("ModelT")
@@ -15,8 +15,7 @@ class RepositoryGetProtocol(Protocol):
         *specifications: SpecificationType,
         lazy: bool = False,
         initial_query: QueryT = None,
-    ) -> Union[ModelT, LazyCommand[ModelT]]:
-        ...
+    ) -> Union[ModelT, LazyCommand[ModelT]]: ...
 
 
 class RepositoryFilterProtocol(Protocol):
@@ -25,8 +24,7 @@ class RepositoryFilterProtocol(Protocol):
         *specifications: SpecificationType,
         lazy: bool = False,
         initial_query: QueryT = None,
-    ) -> Union[Collection[ModelT], LazyCommand[Collection[ModelT]]]:
-        ...
+    ) -> Union[Collection[ModelT], LazyCommand[Collection[ModelT]]]: ...
 
 
 class RepositorySaveProtocol(Protocol):
@@ -34,8 +32,7 @@ class RepositorySaveProtocol(Protocol):
         self,
         obj: Optional[ModelT] = None,
         **obj_data: dict,
-    ) -> ModelT:
-        ...
+    ) -> ModelT: ...
 
 
 class RepositoryDeleteProtocol(Protocol):
@@ -43,8 +40,7 @@ class RepositoryDeleteProtocol(Protocol):
         self,
         obj: Optional[ModelT] = None,
         *specifications: SpecificationType,
-    ) -> None:
-        ...
+    ) -> None: ...
 
 
 class RepositoryUpdateProtocol(Protocol):
@@ -53,19 +49,15 @@ class RepositoryUpdateProtocol(Protocol):
         obj: Optional[ModelT] = None,
         *specifications: SpecificationType,
         **update_values,
-    ) -> None:
-        ...
+    ) -> None: ...
 
 
 class RepositoryIsModifiedProtocol(Protocol):
-    def __call__(self, obj: ModelT) -> bool:
-        ...
-
+    def __call__(self, obj: ModelT) -> bool: ...
 
 
 class RepositoryRefreshProtocol(Protocol):
-    def __call__(self, obj: ModelT) -> None:
-        ...
+    def __call__(self, obj: ModelT) -> None: ...
 
 
 class RepositoryCountProtocol(Protocol):
@@ -74,5 +66,13 @@ class RepositoryCountProtocol(Protocol):
         *specifications: SpecificationType,
         lazy: bool = False,
         initial_query: QueryT = None,
-    ) -> Union[LazyCommand[int], int]:
-        ...
+    ) -> Union[LazyCommand[int], int]: ...
+
+
+class RepositoryAggregateProtocol(Protocol):
+    def __call__(
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: QueryT = None,
+        result_type: Literal['single', 'all'] = 'single',
+    ) -> Any: ...

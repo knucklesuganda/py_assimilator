@@ -4,7 +4,7 @@ from assimilator.core.patterns.error_wrapper import ErrorWrapper
 
 class InternalErrorWrapper(ErrorWrapper):
     def __init__(self):
-        super(InternalErrorWrapper, self).__init__(
+        super().__init__(
             error_mappings={
                 KeyError: NotFoundError,
                 TypeError: NotFoundError,

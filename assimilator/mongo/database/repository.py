@@ -1,4 +1,4 @@
-from typing import Collection, Optional, Type, TypeVar, Union
+from typing import Collection, Generic, Optional, Type, TypeVar, Union
 
 from pymongo import MongoClient
 
@@ -18,12 +18,18 @@ from assimilator.mongo.database.specifications.specifications import (
 )
 
 ModelT = TypeVar("ModelT", bound=MongoModel)
+ClientT = TypeVar("ClientT", bound=MongoClient)
+QueryT = TypeVar("QueryT", bound=dict)
+SpecsT = TypeVar("SpecsT", bound=MongoSpecificationList)
 
 
-class MongoRepository(Repository):
+class MongoRepository(
+    Repository[ClientT, ModelT, QueryT, SpecsT],
+    Generic[ClientT, ModelT, QueryT, SpecsT],
+):
     id: str = "_id"
     session: MongoClient
-    model: Type[MongoModel]
+    model: Type[ModelT]
 
     def __init__(
         self,
@@ -34,7 +40,7 @@ class MongoRepository(Repository):
         initial_query: Optional[dict] = None,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
-        super(MongoRepository, self).__init__(
+        super().__init__(
             session=session,
             model=model,
             initial_query=initial_query or {},
@@ -44,10 +50,10 @@ class MongoRepository(Repository):
         self.database = database
 
     def get_initial_query(self, override_query: Optional[dict] = None) -> dict:
-        return dict(super(MongoRepository, self).get_initial_query(override_query))
+        return dict(super().get_initial_query(override_query))
 
     def dict_to_models(self, data: dict) -> ModelT:
-        return self.model(**dict_to_internal_models(data, model=self.model))
+        return self.model.model_validate(data)
 
     @property
     def _model_id_name(self):

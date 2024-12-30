@@ -12,7 +12,8 @@ from typing import (
     Type,
     TypeVar,
     Union,
-    final,
+    cast,
+    final, Literal,
 )
 
 from assimilator.core.database.specifications.specifications import SpecificationType
@@ -28,7 +29,7 @@ from assimilator.core.database.typings import (
     RepositorySaveProtocol,
     RepositoryUpdateProtocol,
     SessionT,
-    SpecsT,
+    SpecsT, RepositoryAggregateProtocol,
 )
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.core.patterns.lazy_command import LazyCommand
@@ -53,7 +54,7 @@ def make_lazy(func: Callable) -> Callable[..., Union["LazyCommand[T]", T]]:
     return make_lazy_wrapper
 
 
-class Repository(Generic[SessionT, ModelT, QueryT], ABC):
+class Repository(Generic[SessionT, ModelT, QueryT, SpecsT], ABC):
     def __init__(
         self,
         session: SessionT,
@@ -68,28 +69,19 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         self.specifications: SpecsT = specifications
 
         self.error_wrapper = error_wrapper or ErrorWrapper()
-        self.get: RepositoryGetProtocol = LazyCommand.decorate(
-            self.error_wrapper.decorate(self.get)
-        )
-        self.filter: RepositoryFilterProtocol = LazyCommand.decorate(
-            self.error_wrapper.decorate(self.filter)
-        )
+        self.get: RepositoryGetProtocol = LazyCommand.decorate(self.error_wrapper.decorate(self.get))
+        self.filter: RepositoryFilterProtocol = LazyCommand.decorate(self.error_wrapper.decorate(self.filter))
         self.save: RepositorySaveProtocol = self.error_wrapper.decorate(self.save)
         self.delete: RepositoryDeleteProtocol = self.error_wrapper.decorate(self.delete)
         self.update: RepositoryUpdateProtocol = self.error_wrapper.decorate(self.update)
-        self.is_modified: RepositoryIsModifiedProtocol = self.error_wrapper.decorate(
-            self.is_modified
-        )
-        self.refresh: RepositoryRefreshProtocol = self.error_wrapper.decorate(
-            self.refresh
-        )
-        self.count: RepositoryCountProtocol = LazyCommand.decorate(
-            self.error_wrapper.decorate(self.count)
-        )
+        self.is_modified: RepositoryIsModifiedProtocol = self.error_wrapper.decorate(self.is_modified)
+        self.refresh: RepositoryRefreshProtocol = self.error_wrapper.decorate(self.refresh)
+        self.count: RepositoryCountProtocol = LazyCommand.decorate(self.error_wrapper.decorate(self.count))
+        self.aggregate: RepositoryAggregateProtocol = LazyCommand.decorate(self.error_wrapper.decorate(self.aggregate))
 
     @final
     def _check_obj_is_specification(
-        self, obj: ModelT, specifications: Iterable[SpecificationType]
+        self, obj: Optional[ModelT], specifications: Iterable[SpecificationType]
     ) -> Tuple[Optional[ModelT], Iterable[SpecificationType]]:
         """
         This function is called for parts of the
@@ -98,7 +90,10 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         """
 
         if not isinstance(obj, self.model) and (obj is not None):
-            return None, (obj, *specifications)  # obj is specification
+            return None, (
+                cast(SpecificationType, obj),
+                *specifications,
+            )  # obj is specification
 
         return obj, specifications
 
@@ -148,7 +143,17 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         lazy: bool = False,
         initial_query: QueryT = None,
     ) -> Union[ModelT, LazyCommand[ModelT]]:
-        raise NotImplementedError("get() is not implemented()")
+        raise NotImplementedError("get() is not implemented")
+
+    @abstractmethod
+    def aggregate(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: QueryT = None,
+        result_type: Literal['single', 'all'] = 'single',
+    ) -> Any:
+        raise NotImplementedError("aggregate() is not implemented")
 
     @abstractmethod
     def filter(
@@ -157,7 +162,7 @@ class Repository(Generic[SessionT, ModelT, QueryT], ABC):
         lazy: bool = False,
         initial_query: QueryT = None,
     ) -> Union[Collection[ModelT], LazyCommand[Collection[ModelT]]]:
-        raise NotImplementedError("filter() is not implemented()")
+        raise NotImplementedError("filter() is not implemented")
 
     @abstractmethod
     def save(self, obj: Optional[ModelT] = None, **obj_data: dict) -> ModelT:

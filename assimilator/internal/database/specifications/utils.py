@@ -1,8 +1,8 @@
-from typing import Dict, Iterable, List, Set, Tuple
+from typing import Iterable
 
 from assimilator.core.database.models import BaseModel
 
-InternalContainers = (List, Set, Tuple, map)
+InternalContainers = (list, set, tuple, map)
 
 
 def find_model_value(fields: Iterable[str], model: BaseModel):
@@ -11,7 +11,7 @@ def find_model_value(fields: Iterable[str], model: BaseModel):
     for foreign_field in fields:
         if isinstance(model_val, InternalContainers):
             model_val = list(getattr(obj, foreign_field) for obj in model_val)
-        elif isinstance(model_val, Dict):
+        elif isinstance(model_val, dict):
             model_val = list(getattr(obj, foreign_field) for obj in model_val.values())
         else:
             model_val = getattr(model_val, foreign_field)

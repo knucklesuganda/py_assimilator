@@ -20,7 +20,7 @@ class AlchemyFilter(FilterSpecification):
     filtering_options_cls = AlchemyFilteringOptions
 
     def __init__(self, *filters, **named_filters):
-        super(AlchemyFilter, self).__init__(*filters)
+        super().__init__(*filters)
         self.filters.append(named_filters)
 
     def __or__(self, other: "FilterSpecification") -> SpecificationType:
@@ -58,7 +58,7 @@ class CompositeFilter(AlchemyFilter):
     def __init__(
         self, *filters: Union[FilterSpecification, "CompositeFilter"], func: Callable
     ):
-        super(CompositeFilter, self).__init__()
+        super().__init__()
         self.filter_specs = filters
         self.func = func
 
@@ -105,8 +105,8 @@ def alchemy_paginate(
 
 @specification
 def alchemy_join(
-    *targets: Collection,
-    join_args: Iterable[dict] = None,
+    *targets: Collection[Any],
+    join_args: Optional[Iterable[dict[str, Any]]] = None,
     query: Select,
     **context,
 ) -> Select:

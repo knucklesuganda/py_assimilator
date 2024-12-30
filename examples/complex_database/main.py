@@ -7,6 +7,7 @@ from assimilator.core.patterns import LazyCommand
 from assimilator.internal.database import InternalRepository, eq
 from assimilator.mongo.database.repository import MongoRepository
 from assimilator.redis_.database import RedisRepository
+from examples.complex_database.specifications import internal_average_balance_specification
 
 
 def create_user__kwargs(uow: UnitOfWork):
@@ -233,6 +234,11 @@ def delete_many_users(uow: UnitOfWork):
     )
 
 
+def count_average_user_balances(repository: Repository):
+    average_balance = repository.aggregate(internal_average_balance_specification())
+    print("Average balance:", average_balance)
+
+
 if __name__ == "__main__":
     create_user__kwargs(get_uow())
     create_user_model(get_uow())
@@ -258,3 +264,5 @@ if __name__ == "__main__":
     filter_users(persistent_uow.repository)
     count_users(persistent_uow.repository)
     filter_users_lazy(persistent_uow.repository)
+
+    count_average_user_balances(repository=persistent_uow.repository)

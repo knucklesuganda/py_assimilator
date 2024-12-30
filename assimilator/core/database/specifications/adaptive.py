@@ -39,7 +39,7 @@ class CompositeAdaptiveFilter(AdaptiveFilter):
         second: Union["AdaptiveFilter", "FilterSpecification"],
         func: Callable[["AdaptiveFilter", "AdaptiveFilter"], Any],
     ):
-        super(CompositeAdaptiveFilter, self).__init__()
+        super().__init__()
         self.first = first
         self.second = second
         self.func = func
@@ -93,7 +93,13 @@ def paginate(
 
 
 @specification
-def join(*targets: str, join_args: Iterable[dict] | Optional = None, query, repository, **context):
+def join(
+    *targets: str,
+    join_args: Optional[Iterable[dict]] = None,
+    query,
+    repository,
+    **context,
+):
     return repository.specs.join(*targets, join_args=join_args)(
         query=query, repository=repository, **context
     )

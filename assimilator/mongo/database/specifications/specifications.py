@@ -17,7 +17,7 @@ class MongoFilter(FilterSpecification):
     filtering_options_cls = MongoFilteringOptions
 
     def __init__(self, *filters, **named_filters):
-        super(MongoFilter, self).__init__(*filters, **named_filters)
+        super().__init__(*filters, **named_filters)
         parsed_filters = {}
 
         for filter_ in self.filters:

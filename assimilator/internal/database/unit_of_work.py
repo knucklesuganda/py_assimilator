@@ -13,7 +13,7 @@ class InternalUnitOfWork(UnitOfWork):
         error_wrapper: Optional[ErrorWrapper] = None,
         autocommit: bool = False,
     ):
-        super(InternalUnitOfWork, self).__init__(
+        super().__init__(
             repository=repository,
             error_wrapper=error_wrapper or InternalErrorWrapper(),
             autocommit=autocommit,

@@ -19,7 +19,7 @@ class AlchemyOutboxRepository(AlchemyRepository):
         specifications: Type[SpecificationList] = AlchemySpecificationList,
         error_wrapper: ErrorWrapper = None,
     ):
-        super(AlchemyOutboxRepository, self).__init__(
+        super().__init__(
             session=session,
             initial_query=initial_query,
             model=model,
@@ -29,8 +29,8 @@ class AlchemyOutboxRepository(AlchemyRepository):
         self.event_model = event_model
 
     def save(self, obj):
-        super(AlchemyOutboxRepository, self).save(obj)
-        super(AlchemyOutboxRepository, self).save(self.event_model(obj.outbox_event))
+        super().save(obj)
+        super().save(self.event_model(obj.outbox_event))
 
 
 __all__ = [

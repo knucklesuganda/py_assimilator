@@ -1,4 +1,4 @@
-from typing import List, Optional, Type, TypeVar, Union
+from typing import List, Optional, Type, TypeVar, Union, Literal, Any
 
 from assimilator.core.database import (
     BaseModel,
@@ -9,6 +9,7 @@ from assimilator.core.database import (
     Repository,
     SpecificationType,
 )
+from assimilator.core.database.typings import QueryT
 from assimilator.core.patterns.error_wrapper import ErrorWrapper
 from assimilator.internal.database.error_wrapper import InternalErrorWrapper
 from assimilator.internal.database.models_utils import dict_to_internal_models
@@ -31,7 +32,7 @@ class InternalRepository(Repository):
         specifications: Type[InternalSpecificationList] = InternalSpecificationList,
         error_wrapper: Optional[ErrorWrapper] = None,
     ):
-        super(InternalRepository, self).__init__(
+        super().__init__(
             model=model,
             session=session,
             initial_query=initial_query,
@@ -81,6 +82,16 @@ class InternalRepository(Repository):
                 specifications=specifications,
             )
         )
+
+    def aggregate(
+        self,
+        *specifications: SpecificationType,
+        lazy: bool = False,
+        initial_query: QueryT = None,
+        result_type: Literal['single', 'all'] = 'single',
+    ) -> Any:
+        specifications = self._apply_specifications(query=self.session.values(), specifications=specifications)
+        return specifications
 
     def dict_to_models(self, data: dict) -> ModelT:
         return self.model(**dict_to_internal_models(data=data, model=self.model))

@@ -14,12 +14,12 @@ class ErrorWrapper:
     ):
         self.error_mappings = error_mappings or {}
         self.default_error = default_error
-        self.skipped_errors = {
-            (skipped_errors if skipped_errors else set())
-            | {KeyboardInterrupt, SystemExit}
-            | set(self.error_mappings.values())
-            # we want to skip all the mapped values as they are already fixed
-        }
+        self.skipped_errors = (
+            ({KeyboardInterrupt, SystemExit} |
+            (skipped_errors if skipped_errors else set())) |
+            set(self.error_mappings.values())
+        )
+        # we want to skip all the mapped values as they are already fixed
 
     def __enter__(self):
         return self

@@ -1,4 +1,4 @@
-from typing import Generic, Iterable, TypeVar, Union
+from typing import Generic, Iterable, TypeVar, Union, cast
 
 from assimilator.core.database import SpecificationList, UnitOfWork
 from assimilator.core.patterns import LazyCommand
@@ -35,7 +35,7 @@ class CRUDService(Generic[ModelT], Service):
                 for updated_key in obj_data:
                     setattr(old_obj, updated_key, getattr(parsed_obj, updated_key))
 
-                update_obj = old_obj
+                update_obj = cast(ModelT, old_obj)
 
             self.uow.repository.update(update_obj)
             self.uow.commit()
@@ -46,8 +46,11 @@ class CRUDService(Generic[ModelT], Service):
     def list(
         self, *filters, lazy: bool = False, **kwargs_filters
     ) -> Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]]:
-        return self.uow.repository.filter(
-            self._specs.filter(*filters, **kwargs_filters), lazy=lazy
+        return cast(
+            Union[Iterable[ModelT], LazyCommand[Iterable[ModelT]]],
+            self.uow.repository.filter(
+                self._specs.filter(*filters, **kwargs_filters), lazy=lazy
+            ),
         )
 
     def get(

@@ -22,7 +22,7 @@ def _internal_ordering(sorting_field: str):
 
 
 @specification
-def internal_order(*clauses: str, query: QueryT, **_) -> Iterable[BaseModel]:
+def internal_order(*clauses: str, query: QueryT, **_) -> str | Iterable[BaseModel]:
     if isinstance(query, str):
         return query
 
@@ -43,7 +43,7 @@ def internal_paginate(
     limit: Optional[int] = None,
     offset: Optional[int] = None,
     **_,
-) -> Iterable[BaseModel]:
+) -> Iterable[BaseModel] | str:
     if isinstance(query, str):
         return query
 
